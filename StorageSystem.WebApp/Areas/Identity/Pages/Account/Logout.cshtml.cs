@@ -26,7 +26,6 @@ namespace StorageSystem.WebApp.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            returnUrl = "/Index";
             if (!_signInManager.IsSignedIn(User)) return RedirectToPage("/Index");
 
             await _signInManager.SignOutAsync();
