@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StorageSystem.Models.Catalog.Categories;
+using StorageSystem.Models.Catalog.ProductImages;
+using StorageSystem.Models.Catalog.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +12,16 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.EntityFrameworkCore.EntityFrameworkCore
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
+
+        public DbSet<Category> Categories => Set<Category>();
+        public DbSet<Product> Products => Set<Product>();
+        public DbSet<ProductImage> ProductImages => Set<ProductImage>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,11 +33,22 @@ namespace StorageSystem.EntityFrameworkCore.EntityFrameworkCore
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
-                if (tableName.StartsWith("AspNet"))
+                if (tableName!.StartsWith("AspNet"))
                 {
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+            builder.Entity<Category>()
+            .Property(f => f.Id)
+            .ValueGeneratedOnAdd();
+
+            builder.Entity<Product>()
+            .Property(f => f.Id)
+            .ValueGeneratedOnAdd();
+
+            builder.Entity<ProductImage>()
+            .Property(f => f.Id)
+            .ValueGeneratedOnAdd();
         }
     }
 }

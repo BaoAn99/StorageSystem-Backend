@@ -24,10 +24,11 @@ namespace StorageSystem.WebApp.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -101,29 +102,24 @@ namespace StorageSystem.WebApp.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // Thử login bằng username/password
-                var result = await _signInManager.PasswordSignInAsync(
-                    Input.UserNameOrEmail,
-                    Input.Password,
-                    Input.RememberMe,
-                    true
-                );
 
-                if (!result.Succeeded)
+                IdentityUser user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
+                if (user == null)
+                    user = await _userManager.FindByNameAsync(Input.UserNameOrEmail);
+
+                if (user == null)
                 {
-                    // Thất bại username/password -> tìm user theo email, nếu thấy thì thử đăng nhập
-                    // bằng user tìm được
-                    var user = await _userManager.FindByEmailAsync(Input.UserNameOrEmail);
-                    if (user != null)
-                    {
-                        result = await _signInManager.PasswordSignInAsync(
-                            user,
-                            Input.Password,
-                            Input.RememberMe,
-                            true
-                        );
-                    }
+                    ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại.");
+                    return Page();
                 }
+
+                var result = await _signInManager.PasswordSignInAsync(
+                        user.UserName,
+                        Input.Password,
+                        Input.RememberMe,
+                        true
+                    );
+
 
                 if (result.Succeeded)
                 {
@@ -152,8 +148,6 @@ namespace StorageSystem.WebApp.Areas.Identity.Pages.Account
                     return Page();
                 }
             }
-
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

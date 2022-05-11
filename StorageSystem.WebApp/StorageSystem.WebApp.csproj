@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.4" />
@@ -33,8 +34,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
+    <ProjectReference Include="..\StorageSystem.DataAccess\StorageSystem.DataAccess.csproj" />
     <ProjectReference Include="..\StorageSystem.EntityFrameworkCore\StorageSystem.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\StorageSystem.Models\StorageSystem.Models.csproj" />
+    <ProjectReference Include="..\StorageSystem.Utilities\StorageSystem.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

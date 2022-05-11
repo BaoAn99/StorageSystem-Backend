@@ -11,7 +11,7 @@ using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
 
 namespace StorageSystem.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20220501035119_Add Identity")]
     partial class AddIdentity
     {
