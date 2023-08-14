@@ -18,10 +18,17 @@ internal class Program
 
         builder.Services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Program));
 
+        // For Entity Framework
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection1")));
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        //For Identity
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+
+        // Adding Authentication
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -42,38 +49,31 @@ internal class Program
             };
         });
 
-        //builder.Services.AddAuthorization();
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            //Thiết lập về Password
+            options.Password.RequireDigit = false; // Không bắt phải có số
+            options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+            options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+            options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+            options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
+            options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
 
-        //Đăng ký Identity
-        //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>()
-        //    .AddDefaultTokenProviders();
+            // Cấu hình Lockout - khóa user
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
+            options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lầ thì khóa
+            options.Lockout.AllowedForNewUsers = true;
 
-        //builder.Services.Configure<IdentityOptions>(options =>
-        //{
-            // Thiết lập về Password
-            //options.Password.RequireDigit = false; // Không bắt phải có số
-            //options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-            //options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
-            //options.Password.RequireUppercase = false; // Không bắt buộc chữ in
-            //options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
-            //options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+            // Cấu hình về User.
+            options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            options.User.RequireUniqueEmail = true; // Email là duy nhất
 
-            //// Cấu hình Lockout - khóa user
-            //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
-            //options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lầ thì khóa
-            //options.Lockout.AllowedForNewUsers = true;
-
-            //// Cấu hình về User.
-            //options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
-            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            //options.User.RequireUniqueEmail = true; // Email là duy nhất
-
-            //// Cấu hình đăng nhập.
+            // Cấu hình đăng nhập.
             //options.SignIn.RequireConfirmedEmail = true; // Cấu hình xác thực địa chỉ email (email phải tồn tại)
-            //options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
+            options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
 
-        //});
+        });
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
