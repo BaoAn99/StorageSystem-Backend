@@ -25,23 +25,25 @@ namespace StorageSystem.WebAPI.Controllers
         {
             Console.WriteLine("vao");
             if(credential.UserName == "admin" && credential.Password == "admin123") {
-                var claims = new List<Claim>
-                {
+                var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, "admin"),
-                    new Claim(ClaimTypes.Email, "admin123@gmail.com"),
-                    new Claim("Departmet", "HR"),
+                    new Claim(ClaimTypes.Email, "admin@gmail.com"),
+                    new Claim("Department", "HR"),
                     new Claim("Admin", "true"),
                     new Claim("Manager", "true"),
-                    new Claim("EmployeeeDate", "2023-08-14")
+                    new Claim("EmploymentDate", "2021-02-01")
                 };
 
-                var expireAt = DateTime.UtcNow.AddMinutes(10);
+                var expiresAt = DateTime.UtcNow.AddMinutes(10);
 
-                return Ok(new { access_tokten = CreateToken(claims, expireAt), expires_at = expireAt });
-                
+                return Ok(new
+                {
+                    access_token = CreateToken(claims, expiresAt),
+                    expires_at = expiresAt
+                });
             }
-            ModelState.AddModelError("Unauthorized", "you are not authorize to access the endpoint");
 
+            ModelState.AddModelError("Unauthorized", "You are not authorized to access the endpoint.");
             return Unauthorized(ModelState);
         }
 
@@ -53,7 +55,9 @@ namespace StorageSystem.WebAPI.Controllers
                 claims: claims,
                 notBefore: DateTime.UtcNow,
                 expires: expireAt,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature));
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(secretKey),
+                    SecurityAlgorithms.HmacSha256Signature));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
