@@ -1,4 +1,5 @@
-﻿using StorageSystem.DataAccess.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using StorageSystem.DataAccess.IRepository;
 using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
 using StorageSystem.Models.Catalog.Categories;
 using System;
@@ -17,11 +18,11 @@ namespace StorageSystem.DataAccess.CategoryRepository
             _dbContext = applicationDbContext;
         }
 
-        public IEnumerable<Category> GetAll()
+        public async Task<IEnumerable<Category>> GetAll()
         {
             try
             {
-                return _dbContext.Categories.Where(x => x.IsDeleted == false).ToList();
+                return await _dbContext.Categories.Where(x => x.IsDeleted == false).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -29,28 +30,27 @@ namespace StorageSystem.DataAccess.CategoryRepository
             }
         }
 
-        public async Task<Category> Create(Category _object)
+        public async Task Create(Category _object)
         {
-            var obj = await _dbContext.Categories.AddAsync(_object);
-            _dbContext.SaveChanges();
-            return obj.Entity;
+            _dbContext.Categories.Add(_object);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Update(Category _object)
+        public async Task Update(Category _object)
         {
             _dbContext.Categories.Update(_object);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Delete(Category _object)
+        public async Task Delete(Category _object)
         {
             _dbContext.Remove(_object);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Category GetById(int Id)
+        public async Task<Category> GetById(int Id)
         {
-            return _dbContext.Categories.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefault();
+            return await _dbContext.Categories.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefaultAsync();
         }
 
     }

@@ -9,5 +9,8 @@ namespace StorageSystem.Application.ProductAppService.Dtos
     public class GetProductForView
     {
         public ProductDto Product { get; set; }
+
+        public GetProductForView() {
+        }
     }
 }

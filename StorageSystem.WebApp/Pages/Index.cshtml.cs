@@ -19,9 +19,9 @@ namespace StorageSystem.WebApp.Pages
             _productAppService = productAppService;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            productList = _productAppService.GetAll().ToList();
+            productList = await _productAppService.GetAll();
             return Page();
         }
     }

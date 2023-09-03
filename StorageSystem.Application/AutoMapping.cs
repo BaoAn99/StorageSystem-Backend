@@ -14,6 +14,8 @@ namespace StorageSystem.Application
         public AutoMapping()
         {
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<CreateOrUpdateProductDto, Product>().ReverseMap();
+
         }
     }
 }

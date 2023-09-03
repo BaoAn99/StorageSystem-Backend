@@ -21,15 +21,15 @@ namespace StorageSystem.Application.ProductAppService
             _mapper = mapper;
         }
 
-        public IEnumerable<GetProductForView> GetAll()
+        public async Task<List<GetProductForView>> GetAll()
         {
             try
             {
-                var listProduct =  _productRepository!.GetAll().ToList();
+                var listProduct =  await _productRepository!.GetAll();
                 var query = listProduct.Select(x => new GetProductForView()
                 {
                     Product = _mapper.Map<ProductDto>(x)
-                }).ToList().DefaultIfEmpty();
+                }).ToList();
 
                 return query;
             }
@@ -44,14 +44,25 @@ namespace StorageSystem.Application.ProductAppService
             throw new NotImplementedException();
         }
 
-        public Task CreateOrEdit(CreateOrEditProductDto input)
-        {
-            throw new NotImplementedException();
+        public async Task CreateProduct(CreateOrUpdateProductDto input) {
+            var product = _mapper.Map<Product>(input);
+            await _productRepository.Create(product);
         }
 
-        public Task Delete(int id)
+        public async Task UpdateProduct(int id, CreateOrUpdateProductDto input)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetById(id);
+            if (product != null)
+            {
+                var mapperdProduct = _mapper.Map(input, product);
+                await _productRepository.Update(mapperdProduct);
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            var product = await _productRepository.GetById(id);
+            await _productRepository.Delete(product);
         }
 
 
