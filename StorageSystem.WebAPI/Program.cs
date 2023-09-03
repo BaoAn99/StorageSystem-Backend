@@ -5,7 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StorageSystem.Application;
+using StorageSystem.Application.ProductAppService;
+using StorageSystem.DataAccess.IRepository;
+using StorageSystem.DataAccess.ProductRepository;
 using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
+using StorageSystem.Models.Catalog.Products;
 using System.Text;
 
 internal class Program
@@ -61,7 +65,7 @@ internal class Program
 
             // Cấu hình Lockout - khóa user
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
-            options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lầ thì khóa
+            options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lần thì khóa
             options.Lockout.AllowedForNewUsers = true;
 
             // Cấu hình về User.
@@ -74,7 +78,8 @@ internal class Program
             options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
 
         });
-
+        builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
+        builder.Services.AddTransient<IProductAppService, ProductAppsService>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

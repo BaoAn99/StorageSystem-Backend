@@ -9,9 +9,10 @@ namespace StorageSystem.Application.ProductAppService
 {
     public interface IProductAppService
     {
-        IEnumerable<GetProductForView> GetAll();
+        Task<List<GetProductForView>> GetAll();
         Task<GetProductForEditOutput> GetDefImportFileForEdit(int id);
-        Task CreateOrEdit(CreateOrEditProductDto input);
+        Task CreateProduct(CreateOrUpdateProductDto input);
+        Task UpdateProduct(int id, CreateOrUpdateProductDto input);
         Task Delete(int id);
     }
 }

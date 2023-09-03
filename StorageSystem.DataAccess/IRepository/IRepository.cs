@@ -8,14 +8,14 @@ namespace StorageSystem.DataAccess.IRepository
 {
     public interface Irepository<T>
     {
-        public Task<T> Create(T _object);
+        public Task Create(T _object);
 
-        public void Update(T _object);
+        public Task Update(T _object);
 
-        public IEnumerable<T> GetAll();
+        public Task<IEnumerable<T>> GetAll();
 
-        public T GetById(int Id);
+        public Task<T> GetById(int Id);
 
-        public void Delete(T _object);
+        public Task Delete(T _object);
     }
 }

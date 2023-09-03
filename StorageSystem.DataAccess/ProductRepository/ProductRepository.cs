@@ -1,4 +1,5 @@
-﻿using StorageSystem.DataAccess.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using StorageSystem.DataAccess.IRepository;
 using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
 using StorageSystem.Models.Catalog.Products;
 using System;
@@ -17,11 +18,11 @@ namespace StorageSystem.DataAccess.ProductRepository
             _dbContext = applicationDbContext;
         }
 
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
             try
             {
-                return _dbContext.Products.Where(x => x.IsDeleted == false).ToList();
+                return await _dbContext.Products.Where(x => x.IsDeleted == false).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -29,28 +30,27 @@ namespace StorageSystem.DataAccess.ProductRepository
             }
         }
 
-        public async Task<Product> Create(Product _object)
+        public async Task Create(Product _object)
         {
-            var obj = await _dbContext.Products.AddAsync(_object);
-            _dbContext.SaveChanges();
-            return obj.Entity;
+            _dbContext.Products.Add(_object);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Update(Product _object)
+        public async Task Update(Product _object)
         {
             _dbContext.Products.Update(_object);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void Delete(Product _object)
+        public async Task Delete(Product _object)
         {
             _dbContext.Remove(_object);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Product GetById(int Id)
+        public async Task<Product> GetById(int Id)
         {
-            return _dbContext.Products.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefault();
+            return await _dbContext.Products.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefaultAsync();
         }
 
     }
