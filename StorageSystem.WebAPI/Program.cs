@@ -16,7 +16,18 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+
+        var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              policy =>
+                              {
+                                  policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
+                              });
+        });
 
         // Add services to the container.
 
@@ -25,7 +36,7 @@ internal class Program
         // For Entity Framework
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
+                    builder.Configuration.GetConnectionString("DefaultConnection1")));
 
         //For Identity
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -95,10 +106,11 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseCors(MyAllowSpecificOrigins);
 
-        //app.MapControllers();
+        app.MapControllers();
 
-        
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
