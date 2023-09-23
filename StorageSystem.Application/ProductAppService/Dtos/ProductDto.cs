@@ -11,6 +11,7 @@ namespace StorageSystem.Application.ProductAppService.Dtos
         public int Id { set; get; }
         public string Name { set; get; }
         public decimal Price { set; get; }
+        public int Quantity { set; get; }
         public decimal OriginalPrice { set; get; }
         public int Stock { set; get; }
         public DateTime DateCreated { set; get; }
