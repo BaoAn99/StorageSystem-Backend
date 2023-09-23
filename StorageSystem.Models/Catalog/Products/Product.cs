@@ -15,6 +15,7 @@ namespace StorageSystem.Models.Catalog.Products
         public string Name { set; get; } = null!;
 
         public int Price { set; get; }
+        public int Quantity { set; get; }
 
         public int OriginalPrice { set; get; }
 
