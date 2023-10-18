@@ -53,5 +53,11 @@ namespace StorageSystem.DataAccess.ProductRepository
             return await _dbContext.Products.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefaultAsync();
         }
 
+        public async Task<int> CreateAndReturnId(Product _object)
+        {
+            _dbContext.Products.Add(_object);
+            await _dbContext.SaveChangesAsync();
+            return _object.Id;
+        }
     }
 }

@@ -30,8 +30,8 @@ namespace StorageSystem.Models.Catalog.Products
 
         public DateTime DateCreated { set; get; }
 
-        public Category Category { get; set; } = null!;
+        public virtual Category Category { get; set; } = null!;
 
-        public List<ProductImage> ProductImages { get; set; } = null!;
+        public virtual List<ProductImage> ProductImages { get; set; }
     }
 }

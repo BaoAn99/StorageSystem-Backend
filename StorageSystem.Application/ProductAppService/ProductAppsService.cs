@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using StorageSystem.Application.ProductAppService.Dtos;
+using StorageSystem.Application.ProductImageAppService;
 using StorageSystem.DataAccess.IRepository;
+using StorageSystem.Models.Catalog.ProductImages;
 using StorageSystem.Models.Catalog.Products;
 using System;
 using System.Collections.Generic;
@@ -14,18 +16,23 @@ namespace StorageSystem.Application.ProductAppService
     {
         private readonly IMapper _mapper;
         private readonly Irepository<Product> _productRepository;
+        private readonly Irepository<ProductImage> _productImageRepository;
 
-        public ProductAppsService(Irepository<Product> productRepository, IMapper mapper)
+        public ProductAppsService(
+            Irepository<Product> productRepository,
+            IMapper mapper,
+            Irepository<ProductImage> productImageRepository)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _productImageRepository = productImageRepository;
         }
 
         public async Task<List<GetProductForView>> GetAll()
         {
             try
             {
-                var listProduct =  await _productRepository!.GetAll();
+                var listProduct = await _productRepository!.GetAll();
                 var query = listProduct.Select(x => new GetProductForView()
                 {
                     Product = _mapper.Map<ProductDto>(x)
@@ -39,23 +46,31 @@ namespace StorageSystem.Application.ProductAppService
             }
         }
 
-        public Task<GetProductForEditOutput> GetDefImportFileForEdit(int id)
+        public async Task<GetProductForEditOutput> GetProductForEdit(int id)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetById(id);
+
+            var productForEdit = new GetProductForEditOutput
+            {
+                Name = product.Name,
+                Description = product.Description,
+            };
+            return productForEdit;
         }
 
-        public async Task CreateProduct(CreateOrUpdateProductDto input) {
+        public async Task CreateProduct(CreateProductDto input)
+        {
             var product = _mapper.Map<Product>(input);
             await _productRepository.Create(product);
         }
 
-        public async Task UpdateProduct(int id, CreateOrUpdateProductDto input)
+        public async Task UpdateProduct(int id, UpdateProductDto input)
         {
             var product = await _productRepository.GetById(id);
             if (product != null)
             {
-                var mapperdProduct = _mapper.Map(input, product);
-                await _productRepository.Update(mapperdProduct);
+                var mapperedProduct = _mapper.Map(input, product);
+                await _productRepository.Update(mapperedProduct);
             }
         }
 

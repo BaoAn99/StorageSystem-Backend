@@ -50,5 +50,7 @@ namespace StorageSystem.EntityFrameworkCore.EntityFrameworkCore
             .Property(f => f.Id)
             .ValueGeneratedOnAdd();
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLazyLoadingProxies();
     }
 }

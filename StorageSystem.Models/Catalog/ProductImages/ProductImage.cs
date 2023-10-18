@@ -1,4 +1,5 @@
-﻿using StorageSystem.Models.Catalog.Products;
+﻿using Castle.Components.DictionaryAdapter;
+using StorageSystem.Models.Catalog.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,6 @@ namespace StorageSystem.Models.Catalog.ProductImages
 
         public DateTime DateCreated { get; set; }
 
-        public Product Product { get; set; } =  null!;
+        public virtual Product Product { get; set; } =  null!;
     }
 }

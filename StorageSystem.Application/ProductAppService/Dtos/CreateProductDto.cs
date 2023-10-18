@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.ProductAppService.Dtos
 {
-    public class GetProductForEditOutput
+    public class CreateProductDto
     {
         public int CategoryId { get; set; }
         public string Name { set; get; }
@@ -16,6 +16,6 @@ namespace StorageSystem.Application.ProductAppService.Dtos
         public int Stock { set; get; }
         public string Description { set; get; }
 
-        public List<GetProducImagetByProductId> ProductImages { get; set;}
+        public List<CreateProductImageDto> ProductImages { set; get; }
     }
 }

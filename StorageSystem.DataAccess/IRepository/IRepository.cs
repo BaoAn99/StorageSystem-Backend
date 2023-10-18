@@ -10,6 +10,8 @@ namespace StorageSystem.DataAccess.IRepository
     {
         public Task Create(T _object);
 
+        public Task<int> CreateAndReturnId(T _object);
+
         public Task Update(T _object);
 
         public Task<IEnumerable<T>> GetAll();
