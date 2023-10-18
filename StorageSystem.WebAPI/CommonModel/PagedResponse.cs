@@ -24,5 +24,12 @@
             Message = message;
             Errors = error ?? null;
         }
+
+        public PagedResponse(T data, string message, List<string> error)
+        {
+            Data = data;
+            Message = message;
+            Errors = error ?? null;
+        }
     }
 }

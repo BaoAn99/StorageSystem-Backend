@@ -53,5 +53,9 @@ namespace StorageSystem.DataAccess.CategoryRepository
             return await _dbContext.Categories.Where(x => x.IsDeleted == false && x.Id == Id).FirstOrDefaultAsync();
         }
 
+        public Task<int> CreateAndReturnId(Category _object)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
