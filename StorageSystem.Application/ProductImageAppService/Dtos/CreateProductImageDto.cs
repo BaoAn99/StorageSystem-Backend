@@ -9,6 +9,6 @@ namespace StorageSystem.Application.ProductImageAppService.Dtos
     public class CreateProductImageDto
     {
         public string ImagePath { get; set; }
-
+        public bool IsImageFeature { get; set; }
     }
 }

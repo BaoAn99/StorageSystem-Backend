@@ -14,6 +14,7 @@
             PageSize = pageSize;
             Data = data;
             TotalRecords = totalRecords;
+            TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
             Message = null;
             Succeeded = true;
             Errors = null;

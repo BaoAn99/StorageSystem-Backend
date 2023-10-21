@@ -24,6 +24,8 @@ namespace StorageSystem.Models.Catalog.ProductImages
 
         public DateTime DateCreated { get; set; }
 
+        public bool IsImageFeature { get; set; }
+
         public virtual Product Product { get; set; } =  null!;
     }
 }

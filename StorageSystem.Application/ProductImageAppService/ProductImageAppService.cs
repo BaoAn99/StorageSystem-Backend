@@ -55,14 +55,15 @@ namespace StorageSystem.Application.ProductImageAppService
             }
         }
 
-        public async Task<List<GetProducImagetByProductId>> GetImageProductByProductId(int productId)
+        public async Task<List<GetProducImagetByProduct>> GetImageProductByProductId(int productId)
         {
             var productImages = await _productImageRepository.GetAll();
             var listProductImage = productImages?.Where(x => x.ProductId == productId);
 
-            var query = listProductImage.Select(x => new GetProducImagetByProductId()
+            var query = listProductImage.Select(x => new GetProducImagetByProduct()
             {
-                ProductImage = _mapper.Map<ProductImageDto>(x)
+                Id = x.ProductId,
+                ImagePath = x.ImagePath
             }).ToList();
 
             return query;

@@ -17,6 +17,6 @@ namespace StorageSystem.Application.ProductAppService.Dtos
         public int Stock { set; get; }
         public string Description { set; get; }
 
-        //public List<UpdateProductImageDto> ProductImages { set; get; }
+        public List<UpdateProductImageDto> ProductImages { set; get; }
     }
 }
