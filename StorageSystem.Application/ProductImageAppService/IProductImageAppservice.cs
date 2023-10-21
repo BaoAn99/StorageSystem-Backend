@@ -13,7 +13,7 @@ namespace StorageSystem.Application.ProductImageAppService
         Task<List<GetProductImageForView>> GetAll();
         //Task<GetProductForEditOutput> GetProductForEdit(int id);
 
-        Task<List<GetProducImagetByProductId>> GetImageProductByProductId(int productId);
+        Task<List<GetProducImagetByProduct>> GetImageProductByProductId(int productId);
         Task CreateProductImage(CreateProductImageDto input);
         Task UpdateProductImage(int id, UpdateProductImageDto input);
         Task Delete(int id);

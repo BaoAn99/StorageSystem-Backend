@@ -10,6 +10,7 @@ namespace StorageSystem.Application.ProductImageAppService.Dtos
     {
         public int ProductId { get; set; }
         public string ImagePath { get; set; }
+        public bool IsImageFeature { get; set; }
 
     }
 }

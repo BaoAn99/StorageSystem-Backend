@@ -60,7 +60,9 @@ namespace StorageSystem.Application.ProductAppService
 
         public async Task CreateProduct(CreateProductDto input)
         {
+            var imageFeature = input.ProductImages.SingleOrDefault(x => x.IsImageFeature == true);
             var product = _mapper.Map<Product>(input);
+            product.ThumbnailImage = imageFeature.ImagePath;
             await _productRepository.Create(product);
         }
 
@@ -69,7 +71,9 @@ namespace StorageSystem.Application.ProductAppService
             var product = await _productRepository.GetById(id);
             if (product != null)
             {
+                var imageFeature = input.ProductImages.SingleOrDefault(x => x.IsImageFeature == true);
                 var mapperedProduct = _mapper.Map(input, product);
+                mapperedProduct.ThumbnailImage = imageFeature.ImagePath;
                 await _productRepository.Update(mapperedProduct);
             }
         }

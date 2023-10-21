@@ -16,6 +16,7 @@ namespace StorageSystem.Models.Catalog.Products
         public string Name { set; get; } = null!;
 
         public int Price { set; get; }
+
         public int Quantity { set; get; }
 
         public int OriginalPrice { set; get; }
@@ -29,6 +30,8 @@ namespace StorageSystem.Models.Catalog.Products
         public bool IsDeleted { get; set; }
 
         public DateTime DateCreated { set; get; }
+
+        public string ThumbnailImage { get; set; }
 
         public virtual Category Category { get; set; } = null!;
 
