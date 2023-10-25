@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StorageSystem.EntityFrameworkCore\StorageSystem.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\StorageSystem.Models\StorageSystem.Models.csproj" />
+    <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
+    <ProjectReference Include="..\StorageSystem.Persistence\StorageSystem.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,35 @@
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using OneOf;
+using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Products.Ins;
+using StorageSystem.Application.Models.Products.Out;
+using StorageSystem.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StorageSystem.Application.Contracts.DataAccess
+{
+    public interface IProductDataAccess : IGenericDataAccess<Product>
+    {
+        Task<Product> FirstOrDefaultAsync(Guid Id, CancellationToken cancellationToken = default);
+
+        Task<Product> FirstAsync(Guid Id);
+
+        Task<EntityEntry<Product>> CreateProduct(Product product);
+
+        Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default);
+
+        Task UpdateProduct(Product product);
+
+        Task DeleteProduct(Guid Id);
+
+        Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default);
+
+        Task<Product> FindProductById(Guid Id);
+    }
+}
