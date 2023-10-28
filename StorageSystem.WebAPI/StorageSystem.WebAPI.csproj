@@ -10,23 +10,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.23">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.24">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.23">
-
-		<PrivateAssets>all</PrivateAssets>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.24">
+      <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.21" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.13" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     <PackageReference Include="OneOf" Version="3.0.263" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -35,6 +33,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
+    <ProjectReference Include="..\StorageSystem.Cache\StorageSystem.Cache.csproj" />
+    <ProjectReference Include="..\StorageSystem.DataAccess\StorageSystem.DataAccess.csproj" />
+    <ProjectReference Include="..\StorageSystem.Persistence\StorageSystem.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

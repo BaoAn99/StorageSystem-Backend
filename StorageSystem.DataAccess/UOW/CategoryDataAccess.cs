@@ -8,12 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.DataAccess.UOW
+namespace StorageSystem.DataAccess.UOW;
+
+public class CategoryDataAccess : GenericDataAccess<Category>, ICategoryDataAccess
 {
-    public class CategoryDataAccess : GenericDataAccess<Category>, ICategoryDataAccess
+    public CategoryDataAccess(IApplicationDbContext context) : base(context)
     {
-        public CategoryDataAccess(IApplicationDbContext context) : base(context)
-        {
-        }
     }
 }

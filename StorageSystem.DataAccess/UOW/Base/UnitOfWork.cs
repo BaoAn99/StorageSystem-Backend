@@ -7,32 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.DataAccess.UOW.Base
+namespace StorageSystem.DataAccess.UOW.Base;
+
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly IApplicationDbContext _context;
+
+    public IProductDataAccess ProductDataAccess { get; }
+
+    public ICategoryDataAccess CategoryDataAccess { get; }
+
+    public UnitOfWork(
+        IApplicationDbContext context,
+        IProductDataAccess productDataAccess,
+        ICategoryDataAccess categoryDataAccess)
     {
-        private readonly IApplicationDbContext _context;
+        _context = context;
+        ProductDataAccess = productDataAccess;
+        CategoryDataAccess = categoryDataAccess;
+    }
 
-        public IProductDataAccess ProductDataAccess { get; }
+    public int SaveChanges()
+    {
+        return _context.SaveChanges();
+    }
 
-        public ICategoryDataAccess CategoryDataAccess { get; }
-
-        public UnitOfWork(
-            IProductDataAccess productDataAccess,
-            ICategoryDataAccess categoryDataAccess) 
-        {
-            ProductDataAccess = productDataAccess;
-            CategoryDataAccess = categoryDataAccess;
-        }
-
-        public int SaveChanges()
-        {
-            return _context.SaveChanges();
-        }
-
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return await _context.SaveChangeAsync(cancellationToken);
-        }
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.SaveChangeAsync(cancellationToken);
     }
 }

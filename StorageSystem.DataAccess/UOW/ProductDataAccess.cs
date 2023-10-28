@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Contracts.DataAccess;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
@@ -11,57 +13,61 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.DataAccess.UOW
+namespace StorageSystem.DataAccess.UOW;
+
+public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
 {
-    public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
+    public ProductDataAccess(IApplicationDbContext context) : base(context)
     {
-        public ProductDataAccess(IApplicationDbContext context) : base(context)
-        {
-        }
+    }
 
-        public Task<EntityEntry<Product>> CreateProduct(Product product)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<EntityEntry<Product>> CreateProduct(Product product)
+    {
+        return await _context.Products.AddAsync(product);
+    }
 
-        public Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default)
+    {
+        await _context.Products.AddRangeAsync(products, cancellationToken);
+    }
 
-        public Task DeleteProduct(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task DeleteProduct(Product product)
+    {
+        _context.Products.Remove(product);
+    }
 
-        public Task<Product> FindProductById(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<Product> FindProductById(Guid Id)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task<Product> FirstAsync(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<Product> FirstAsync(Guid Id)
+    {
+        return await _context.Products.FirstAsync(x => x.Id == Id);
+    }
 
-        public Task<Product> FirstOrDefaultAsync(Guid Id, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<Product> FirstOrDefaultAsync(Guid Id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Products.FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
+    }
 
-        public Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
+    {
+        return await _context.Products.ToListAsync(cancellationToken);
+    }
 
-        public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
+    public async Task<List<Product>> GetAllProducts1(CancellationToken cancellationToken = default)
+    {
+        return await _context.Products.ToListAsync();
+    }
 
-        public Task UpdateProduct(Product product)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task UpdateProduct(Product product)
+    {
+        _context.Products.Update(product);
     }
 }

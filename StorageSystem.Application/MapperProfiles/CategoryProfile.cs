@@ -22,7 +22,7 @@ namespace StorageSystem.Application.MapperProfiles
 
         private void CreateCategoryMapper()
         {
-            //CreateMap<Product, ProductDto>().ReverseMap();
+            
             //CreateMap<CreateProductDto, Product>().ForMember(des => des.ProductImages, act => act.MapFrom(src => src.ProductImages));
             //CreateMap<UpdateProductDto, Product>().ReverseMap();
             //CreateMap<CreateProductImageDto, ProductImage>().ReverseMap();

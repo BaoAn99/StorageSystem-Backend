@@ -1,6 +1,7 @@
 ﻿using OneOf;
 using OneOf.Types;
 using StorageSystem.Application.Models;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Products.Out;
 using StorageSystem.Domain.Entities;
 using System;
@@ -14,12 +15,12 @@ namespace StorageSystem.Application.Constracts.Services.Features
 {
     public interface IProduct
     {
-        Task<OneOf<IEnumerable<ProductOutDto>, LocalizationErrorMessageOutDto, ValidationResult>> GetAll();
+        Task<OneOf<IEnumerable<ProductOutDto>, List<Product>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateProduct(Product product);
         
-        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Product product);
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, Product product);
         
-        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> Delete(Guid id);
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id);
     }
 }

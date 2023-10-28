@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Contracts.DataAccess.Base
+namespace StorageSystem.Application.Contracts.DataAccess.Base;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        IProductDataAccess ProductDataAccess { get; }
+    IProductDataAccess ProductDataAccess { get; }
 
-        ICategoryDataAccess CategoryDataAccess { get; }
+    ICategoryDataAccess CategoryDataAccess { get; }
 
-        int SaveChanges();
+    int SaveChanges();
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-    }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }

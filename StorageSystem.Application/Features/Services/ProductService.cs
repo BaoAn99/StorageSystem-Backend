@@ -2,6 +2,7 @@
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Models;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Products.Ins;
 using StorageSystem.Application.Models.Products.Out;
 using StorageSystem.Domain.Entities;
@@ -27,17 +28,18 @@ namespace StorageSystem.Application.Features.Services
             return true;
         }
 
-        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> Delete(Guid id)
+        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OneOf<IEnumerable<ProductOutDto>, LocalizationErrorMessageOutDto, ValidationResult>> GetAll()
+        public async Task<OneOf<IEnumerable<ProductOutDto>, List<Product>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
         {
-            throw new NotImplementedException();
+            List<Product> a = await _unitOfWork.ProductDataAccess.GetAllProducts1();
+            return a;
         }
 
-        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Product product)
+        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, Product product)
         {
             throw new NotImplementedException();
         }

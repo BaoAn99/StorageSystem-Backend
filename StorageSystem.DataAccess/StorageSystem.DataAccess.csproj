@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
-    <ProjectReference Include="..\StorageSystem.Persistence\StorageSystem.Persistence.csproj" />
+    <Folder Include="Contracts\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
+    <ProjectReference Include="..\StorageSystem.Persistence\StorageSystem.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

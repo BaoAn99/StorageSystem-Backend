@@ -5,14 +5,13 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Contracts.DataAccess.Base
+namespace StorageSystem.Application.Contracts.DataAccess.Base;
+
+public interface IGenericDataAccess<TEntity> where TEntity : class
 {
-    public interface IGenericDataAccess<TEntity> where TEntity : class
-    {
-        Task<List<TEntity>> GetsAsync(Expression<Func<TEntity, bool>>? predicate = null);
+    Task<List<TEntity>> GetsAsync(Expression<Func<TEntity, bool>>? predicate = null);
 
-        int SaveChanges();
+    int SaveChanges();
 
-        Task<int> SaveChangesAsync();
-    }
+    Task<int> SaveChangesAsync();
 }
