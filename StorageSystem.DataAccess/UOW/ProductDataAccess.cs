@@ -21,19 +21,9 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
     }
 
-    public async Task<EntityEntry<Product>> CreateProduct(Product product)
-    {
-        return await _context.Products.AddAsync(product);
-    }
-
     public async Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default)
     {
         await _context.Products.AddRangeAsync(products, cancellationToken);
-    }
-
-    public async Task DeleteProduct(Product product)
-    {
-        _context.Products.Remove(product);
     }
 
     public Task<Product> FindProductById(Guid Id)
@@ -64,10 +54,5 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
-    }
-
-    public async Task UpdateProduct(Product product)
-    {
-        _context.Products.Update(product);
     }
 }

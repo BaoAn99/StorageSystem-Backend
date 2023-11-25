@@ -11,7 +11,9 @@ public interface IGenericDataAccess<TEntity> where TEntity : class
 {
     Task<List<TEntity>> GetsAsync(Expression<Func<TEntity, bool>>? predicate = null);
 
-    int SaveChanges();
+    void Insert(TEntity entity);
 
-    Task<int> SaveChangesAsync();
+    void Update(TEntity entityToUpdate);
+
+    void Delete(object id);
 }

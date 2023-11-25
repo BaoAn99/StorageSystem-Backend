@@ -1,4 +1,5 @@
-﻿using OneOf;
+﻿using NPOI.SS.Formula.Functions;
+using OneOf;
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Models;
@@ -24,13 +25,14 @@ namespace StorageSystem.Application.Features.Services
         }
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateProduct(Product product)
         {
-            await _unitOfWork.ProductDataAccess.CreateProduct(product);
+            _unitOfWork.ProductDataAccess.Insert(product);
             return true;
         }
 
-        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id)
+        public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id)
         {
-            throw new NotImplementedException();
+            _unitOfWork.ProductDataAccess.Delete(id);
+            return true;
         }
 
         public async Task<OneOf<IEnumerable<ProductOutDto>, List<Product>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
@@ -39,9 +41,10 @@ namespace StorageSystem.Application.Features.Services
             return a;
         }
 
-        public Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, Product product)
+        public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, Product product)
         {
-            throw new NotImplementedException();
+            _unitOfWork.ProductDataAccess.Update(product);
+            return true;
         }
     }
 }

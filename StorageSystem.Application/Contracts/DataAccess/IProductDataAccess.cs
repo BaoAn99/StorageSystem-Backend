@@ -18,13 +18,7 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task<Product> FirstAsync(Guid Id);
 
-        Task<EntityEntry<Product>> CreateProduct(Product product);
-
         Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default);
-
-        Task UpdateProduct(Product product);
-
-        Task DeleteProduct(Product product);
 
         Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default);
 
