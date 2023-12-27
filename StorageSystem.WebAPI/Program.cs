@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StorageSystem.Application;
+using StorageSystem.Application.AuthService;
 using StorageSystem.Application.ProductAppService;
 using StorageSystem.Application.ProductImageAppService;
 using StorageSystem.DataAccess.IRepository;
@@ -25,11 +26,10 @@ internal class Program
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
-                              policy =>
-                              {
-                                  policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
-                              });
+            options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
+            });
         });
 
         // Add services to the container.
@@ -39,10 +39,10 @@ internal class Program
         // For Entity Framework
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
+                    builder.Configuration.GetConnectionString("DefaultConnection1")));
 
         //For Identity
-        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
@@ -92,6 +92,7 @@ internal class Program
             options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
 
         });
+        builder.Services.AddTransient<IAuthService, AuthService>();
         builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
         builder.Services.AddTransient<IProductAppService, ProductAppsService>();
         builder.Services.AddTransient<Irepository<ProductImage>, ProductImageRepository>();

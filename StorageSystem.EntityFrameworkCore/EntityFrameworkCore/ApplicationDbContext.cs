@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.EntityFrameworkCore.EntityFrameworkCore
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.ProductAppService;
 using StorageSystem.Application.ProductAppService.Dtos;
 using StorageSystem.Application.ProductImageAppService;
@@ -21,6 +22,7 @@ namespace StorageSystem.WebAPI.Controllers
             _productImageAppservice = productImageAppservice;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
         {
