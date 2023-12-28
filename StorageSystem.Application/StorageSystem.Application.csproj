@@ -31,4 +31,8 @@
     <ProjectReference Include="..\StorageSystem.Domain\StorageSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AuthService\Dtos\" />
+  </ItemGroup>
+
 </Project>

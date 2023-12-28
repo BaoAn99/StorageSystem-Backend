@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Products.Ins;
@@ -20,8 +21,9 @@ namespace StorageSystem.WebAPI.Controllers
             _iProduct = iProduct;
         }
 
-        [HttpPost()]
-        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
         {
             var result = await _iProduct.CreateProduct(product);
             return result.Match<IActionResult>(

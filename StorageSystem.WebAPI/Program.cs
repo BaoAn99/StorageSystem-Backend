@@ -5,6 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StorageSystem.Application;
+using StorageSystem.Application.AuthService;
+using StorageSystem.Application.ProductAppService;
+using StorageSystem.Application.ProductImageAppService;
+using StorageSystem.DataAccess.IRepository;
+using StorageSystem.DataAccess.ProductImageRepository;
+using StorageSystem.DataAccess.ProductRepository;
+using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
+using StorageSystem.Models.Catalog.ProductImages;
+using StorageSystem.Models.Catalog.Products;
 using System.Text;
 //using StorageSystem.Persistence;
 using StorageSystem.DataAccess;
@@ -21,11 +30,10 @@ internal class Program
 
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy(name: MyAllowSpecificOrigins,
-                              policy =>
-                              {
-                                  policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
-                              });
+            options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
+            {
+                policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
+            });
         });
 
         //For Identity
@@ -54,20 +62,15 @@ internal class Program
         //    };
         //});
 
-        //builder.Services.Configure<IdentityOptions>(options =>
-        //{
-        //    //Thiết lập về Password
-        //    options.Password.RequireDigit = false; // Không bắt phải có số
-        //    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-        //    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
-        //    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
-        //    options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
-        //    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+        // For Entity Framework
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection1")));
 
-        //    // Cấu hình Lockout - khóa user
-        //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
-        //    options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lần thì khóa
-        //    options.Lockout.AllowedForNewUsers = true;
+        //For Identity
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
 
         //    // Cấu hình về User.
         //    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
@@ -89,6 +92,12 @@ internal class Program
             .AddDataAccessServiceRegistration()
             .AddApplicationServiceRegistration();
 
+        });
+        builder.Services.AddTransient<IAuthService, AuthService>();
+        builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
+        builder.Services.AddTransient<IProductAppService, ProductAppsService>();
+        builder.Services.AddTransient<Irepository<ProductImage>, ProductImageRepository>();
+        builder.Services.AddTransient<IProductImageAppservice, ProductImageAppService>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
