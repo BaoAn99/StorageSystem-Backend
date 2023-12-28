@@ -15,6 +15,10 @@ using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
 using StorageSystem.Models.Catalog.ProductImages;
 using StorageSystem.Models.Catalog.Products;
 using System.Text;
+//using StorageSystem.Persistence;
+using StorageSystem.DataAccess;
+using StorageSystem.Persistence.Contracts;
+using StorageSystem.Persistence;
 
 internal class Program
 {
@@ -32,9 +36,31 @@ internal class Program
             });
         });
 
-        // Add services to the container.
+        //For Identity
+        //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+        //.AddEntityFrameworkStores<ApplicationDbContext>()
+        //.AddDefaultTokenProviders();
 
-        builder.Services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Program));
+        // Adding Authentication
+        //builder.Services.AddAuthentication(options =>
+        //{
+        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+        //}).AddJwtBearer(options =>
+        //{
+        //    options.SaveToken = true;
+        //    options.RequireHttpsMetadata = false;
+        //    options.TokenValidationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateIssuerSigningKey = true,
+        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey"))),
+        //        ValidateLifetime = true,
+        //        ValidateAudience = false,
+        //        ValidateIssuer = false,
+        //        ClockSkew = TimeSpan.Zero
+        //    };
+        //});
 
         // For Entity Framework
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -46,50 +72,25 @@ internal class Program
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
-        // Adding Authentication
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-        {
-            options.SaveToken = true;
-            options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey"))),
-                ValidateLifetime = true,
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
+        //    // Cấu hình về User.
+        //    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+        //        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        //    options.User.RequireUniqueEmail = true; // Email là duy nhất
 
-        builder.Services.Configure<IdentityOptions>(options =>
-        {
-            //Thiết lập về Password
-            options.Password.RequireDigit = false; // Không bắt phải có số
-            options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
-            options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
-            options.Password.RequireUppercase = false; // Không bắt buộc chữ in
-            options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
-            options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+        //    // Cấu hình đăng nhập.
+        //    //options.SignIn.RequireConfirmedEmail = true; // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+        //    options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
 
-            // Cấu hình Lockout - khóa user
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
-            options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lần thì khóa
-            options.Lockout.AllowedForNewUsers = true;
+        //});
 
-            // Cấu hình về User.
-            options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            options.User.RequireUniqueEmail = true; // Email là duy nhất
+        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        //            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection1")));
+        //builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
-            // Cấu hình đăng nhập.
-            //options.SignIn.RequireConfirmedEmail = true; // Cấu hình xác thực địa chỉ email (email phải tồn tại)
-            options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
+        builder.Services
+            .AddPersistenceServiceRegistration(builder.Configuration)
+            .AddDataAccessServiceRegistration()
+            .AddApplicationServiceRegistration();
 
         });
         builder.Services.AddTransient<IAuthService, AuthService>();

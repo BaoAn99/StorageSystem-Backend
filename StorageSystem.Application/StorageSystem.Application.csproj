@@ -11,12 +11,24 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.23" />
     <PackageReference Include="MimeKit" Version="3.2.0" />
+    <PackageReference Include="NPOI" Version="2.6.2" />
+    <PackageReference Include="OneOf" Version="3.0.263" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StorageSystem.DataAccess\StorageSystem.DataAccess.csproj" />
-    <ProjectReference Include="..\StorageSystem.Models\StorageSystem.Models.csproj" />
+    <Folder Include="Contracts\Apis\" />
+    <Folder Include="Contracts\Features\" />
+    <Folder Include="Contracts\Caches\" />
+    <Folder Include="Contracts\Providers\" />
+    <Folder Include="Contracts\Services\Features\" />
+    <Folder Include="Models\Apis\" />
+    <Folder Include="Models\ProductImage\Base\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StorageSystem.Domain\StorageSystem.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
