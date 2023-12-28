@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.ProductImageAppService.Dtos
+namespace StorageSystem.Application.Models.ProductImage.Ins
 {
-    public class ProductImageDto
+    public class GetProducImagetByProductInsDto
     {
         public int Id { get; set; }
         public string ImagePath { get; set; }

@@ -2,43 +2,22 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StorageSystem.Domain.Entities;
-using StorageSystem.Persistence.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StorageSystem.Persistence;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
     }
 
-    //public DbSet<Category> Categories => Set<Category>();
-    //public DbSet<Product> Products => Set<Product>();
-    //public DbSet<ProductImage> ProductImages => Set<ProductImage>();
-
-    DbSet<Product> IApplicationDbContext.Products { get; set; }
-    DbSet<Category> IApplicationDbContext.Categories { get; set; }
-    DbSet<ProductImage> IApplicationDbContext.ProductImages { get; set; }
-
-    public Task<int> SaveChangeAsync(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    //DbSet<Product> IApplicationDbContext.Products { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    //DbSet<Category> IApplicationDbContext.Categories { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    //DbSet<ProductImage> IApplicationDbContext.ProductImages { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-
         base.OnModelCreating(builder);
         // Bỏ tiền tố AspNet của các bảng: mặc định các bảng trong IdentityDbContext có
         // tên với tiền tố AspNet như: AspNetUserRoles, AspNetUser ...

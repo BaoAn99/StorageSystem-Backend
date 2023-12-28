@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OneOf;
 using StorageSystem.Application.Contracts.DataAccess.Base;
-using StorageSystem.Application.Models.Products.Ins;
-using StorageSystem.Application.Models.Products.Out;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;

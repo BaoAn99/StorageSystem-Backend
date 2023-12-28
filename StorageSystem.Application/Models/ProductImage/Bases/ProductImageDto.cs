@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Models.Categories.Ins
+namespace StorageSystem.Application.Models.ProductImage.Bases
 {
-    public class CategoryInDto
+    public class ProductImageDto
     {
         public int Id { get; set; }
-
-        public string Name { get; set; }
+        public string ImagePath { get; set; }
     }
 }

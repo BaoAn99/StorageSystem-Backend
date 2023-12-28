@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Models.ProductImage.Outs
+namespace StorageSystem.Application.Models.Product.Outs
 {
-    public class ProductImageOutDto
+    public class GetProductForEditOutput
     {
     }
 }

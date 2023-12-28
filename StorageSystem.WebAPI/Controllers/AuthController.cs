@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.IdentityModel.Tokens;
-using StorageSystem.Application.AuthService;
-using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
+using StorageSystem.Application.Contracts.Features.Auths;
+using StorageSystem.Persistence;
 using StorageSystem.WebAPI.ViewModel.AuthViewModel;
-using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace StorageSystem.WebAPI.Controllers
 {
@@ -174,7 +167,7 @@ namespace StorageSystem.WebAPI.Controllers
     public class Credential
     {
         public string UserName { get; set; }
-        public string Password { get; set; }    
+        public string Password { get; set; }
     }
 
     public class Credential1

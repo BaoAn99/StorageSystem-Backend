@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Constracts.Services.Features
 {
-    public interface IProductImage
+    public interface IProductImageService
     {
         //Task<List<GetProductImageForView>> GetAll();
         ////Task<GetProductForEditOutput> GetProductForEdit(int id);

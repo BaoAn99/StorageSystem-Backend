@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.ProductImageAppService.Dtos
+namespace StorageSystem.Application.Models.ProductImage.Ins
 {
-    public class CreateProductImageDto
+    public class UpdateProductImageInsDto
     {
+        public int ProductId { get; set; }
         public string ImagePath { get; set; }
         public bool IsImageFeature { get; set; }
+
     }
 }

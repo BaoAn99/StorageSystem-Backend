@@ -5,20 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StorageSystem.Application;
-using StorageSystem.Application.AuthService;
-using StorageSystem.Application.ProductAppService;
-using StorageSystem.Application.ProductImageAppService;
-using StorageSystem.DataAccess.IRepository;
-using StorageSystem.DataAccess.ProductImageRepository;
-using StorageSystem.DataAccess.ProductRepository;
-using StorageSystem.EntityFrameworkCore.EntityFrameworkCore;
-using StorageSystem.Models.Catalog.ProductImages;
-using StorageSystem.Models.Catalog.Products;
 using System.Text;
 //using StorageSystem.Persistence;
 using StorageSystem.DataAccess;
 using StorageSystem.Persistence.Contracts;
 using StorageSystem.Persistence;
+using StorageSystem.Application.Contracts.Features.Auths;
+using StorageSystem.Application.Features.Auths;
+using StorageSystem.Application.Constracts.Services.Features;
+using StorageSystem.Application.Features.Services;
 
 internal class Program
 {
@@ -36,32 +31,6 @@ internal class Program
             });
         });
 
-        //For Identity
-        //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-        //.AddEntityFrameworkStores<ApplicationDbContext>()
-        //.AddDefaultTokenProviders();
-
-        // Adding Authentication
-        //builder.Services.AddAuthentication(options =>
-        //{
-        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-        //}).AddJwtBearer(options =>
-        //{
-        //    options.SaveToken = true;
-        //    options.RequireHttpsMetadata = false;
-        //    options.TokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateIssuerSigningKey = true,
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey"))),
-        //        ValidateLifetime = true,
-        //        ValidateAudience = false,
-        //        ValidateIssuer = false,
-        //        ClockSkew = TimeSpan.Zero
-        //    };
-        //});
-
         // For Entity Framework
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -72,32 +41,62 @@ internal class Program
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
 
-        //    // Cấu hình về User.
-        //    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
-        //        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-        //    options.User.RequireUniqueEmail = true; // Email là duy nhất
-
-        //    // Cấu hình đăng nhập.
-        //    //options.SignIn.RequireConfirmedEmail = true; // Cấu hình xác thực địa chỉ email (email phải tồn tại)
-        //    options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
-
-        //});
-
-        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        //            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection1")));
-        //builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
-        builder.Services
-            .AddPersistenceServiceRegistration(builder.Configuration)
-            .AddDataAccessServiceRegistration()
-            .AddApplicationServiceRegistration();
-
+        // Adding Authentication
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey"))),
+                ValidateLifetime = true,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ClockSkew = TimeSpan.Zero
+            };
         });
-        builder.Services.AddTransient<IAuthService, AuthService>();
-        builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
-        builder.Services.AddTransient<IProductAppService, ProductAppsService>();
-        builder.Services.AddTransient<Irepository<ProductImage>, ProductImageRepository>();
-        builder.Services.AddTransient<IProductImageAppservice, ProductImageAppService>();
+
+        builder.Services.Configure<IdentityOptions>(options =>
+        {
+            //Thiết lập về Password
+            options.Password.RequireDigit = false; // Không bắt phải có số
+            options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+            options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+            options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+            options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
+            options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+
+            // Cấu hình Lockout - khóa user
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); // Khóa 1 phút
+            options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lần thì khóa
+            options.Lockout.AllowedForNewUsers = true;
+
+            // Cấu hình về User.
+            options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+            options.User.RequireUniqueEmail = true; // Email là duy nhất
+
+            // Cấu hình đăng nhập.
+            //options.SignIn.RequireConfirmedEmail = true; // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+            options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
+        });
+
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        //builder.Services.AddScoped<IProductService, ProductService>();
+        //builder.Services.AddScoped<ICategoryService, CategoryService>();
+        //builder.Services.AddScoped<IProductImageService, ProductImageService>();
+        //builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
+        //builder.Services.AddTransient<IProductAppService, ProductAppsService>();
+        //builder.Services.AddTransient<Irepository<ProductImage>, ProductImageRepository>();
+        //builder.Services.AddTransient<IProductImageAppservice, ProductImageAppService>();
+
+        //builder.Services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Program));
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Features.Services
 {
-    public class CategoryService : ICategory
+    public class CategoryService : ICategoryService
     {
 
     }

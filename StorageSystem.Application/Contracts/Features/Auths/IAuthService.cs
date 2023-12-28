@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.AuthService
+namespace StorageSystem.Application.Contracts.Features.Auths
 {
     public interface IAuthService
     {

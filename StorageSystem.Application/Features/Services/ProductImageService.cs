@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Features.Services
 {
-    public class ProductImageService : IProductImage
+    public class ProductImageService : IProductImageService
     {
         
     }

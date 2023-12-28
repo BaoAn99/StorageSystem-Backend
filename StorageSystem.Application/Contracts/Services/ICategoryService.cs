@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Constracts.Services.Features
 {
-    public interface ICategory
+    public interface ICategoryService
     {
         //Task<OneOf> GetAll();
         //Task<GetCategoryForEditOutput> GetCategoryForEdit(int id);

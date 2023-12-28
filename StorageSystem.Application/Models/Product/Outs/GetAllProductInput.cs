@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Models.ProductImage.Ins
+namespace StorageSystem.Application.Models.Product.Outs
 {
-    public class ProductImageInDto
+    public class GetAllProductInput
     {
+        public string Filter { get; set; }
     }
 }

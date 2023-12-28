@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StorageSystem.Application.ProductImageAppService.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

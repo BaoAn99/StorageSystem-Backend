@@ -14,8 +14,8 @@ namespace StorageSystem.Application
         public static IServiceCollection AddApplicationServiceRegistration(this IServiceCollection services)
         {
             //services.AddAutoMapper(c => c.AddProfile<AutoMapper>(), typeof(Program));
-            services.AddScoped<IProduct, ProductService>()
-                .AddScoped<ICategory, CategoryService>();
+            services.AddScoped<IProductService, ProductService>()
+                .AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }
