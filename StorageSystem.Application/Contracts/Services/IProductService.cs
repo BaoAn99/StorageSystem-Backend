@@ -3,8 +3,8 @@ using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Product.Outs;
 using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 using StorageSystem.Application.Models.Bases;
+using FluentValidation.Results;
 
 namespace StorageSystem.Application.Constracts.Services.Features
 {
@@ -17,5 +17,7 @@ namespace StorageSystem.Application.Constracts.Services.Features
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, UpdateProductInsDto productDto);
         
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id);
+
+        Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> FindProductById(Guid id);
     }
 }

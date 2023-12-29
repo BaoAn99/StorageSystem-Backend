@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MathNet.Numerics.Statistics.Mcmc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Contracts.DataAccess;
@@ -21,9 +22,14 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
     }
 
-    public async Task CreateProductAsync(Product product, CancellationToken cancellationToken = default)
+    public async Task<bool> CreateProductAsync(Product product, CancellationToken cancellationToken = default)
     {
-        await InsertAsync(product);
+        EntityEntry<Product> res = await InsertAsync(product);
+        if(res != null)
+        {
+            return true;
+        }
+        return false;
         //await _context.Products.AddAsync(product, cancellationToken);
     }
 
@@ -32,9 +38,20 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         await _context.Products.AddRangeAsync(products, cancellationToken);
     }
 
-    public Task<Product> FindProductById(Guid Id)
+    public async Task<bool> DeleteProduct(Guid productId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        Product product = await FindProductById(productId);
+        if(product != null)
+        {
+            Delete(product);
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<Product> FindProductById(Guid Id)
+    {
+        return await FirstOrDefaultAsync(Id);
     }
 
     public async Task<Product> FirstAsync(Guid Id)
@@ -50,11 +67,6 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
     {
         return await _context.Products.ToListAsync(cancellationToken);
-    }
-
-    public async Task<List<Product>> GetAllProducts1(CancellationToken cancellationToken = default)
-    {
-        return await _context.Products.ToListAsync();
     }
 
     public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)

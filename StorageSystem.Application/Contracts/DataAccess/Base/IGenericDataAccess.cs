@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,7 +14,7 @@ public interface IGenericDataAccess<TEntity> where TEntity : class
 
     void Insert(TEntity entity);
 
-    Task InsertAsync(TEntity entity, CancellationToken cancellationToken);
+    Task<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken);
 
     void Update(TEntity entityToUpdate);
 

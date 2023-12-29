@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Persistence;
 using StorageSystem.Persistence.Contracts;
@@ -50,9 +51,9 @@ public abstract class GenericDataAccess<TEntity> : IGenericDataAccess<TEntity> w
         dbSet.Add(entity);
     }
 
-    public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await dbSet.AddAsync(entity, cancellationToken);
+        return await dbSet.AddAsync(entity, cancellationToken);
     }
 
     //public int SaveChanges()

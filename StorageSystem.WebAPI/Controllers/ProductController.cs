@@ -28,17 +28,29 @@ namespace StorageSystem.WebAPI.Controllers
             return Ok("ok");
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll([FromQuery] PaginationFilter filter)
-        //{
-        //    var result = await _iProduct.CreateProduct(product);
-        //    return result.Match<IActionResult>(
-        //        _ => NoContent(),
-        //        BadRequest,
-        //        BadRequest
-        //    );
-        //}
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetAll([FromQuery] Paging paging)
+        {
+            var result = await _productService.GetAllProducts(paging);
+            return result.Match<IActionResult>(
+                _ => Ok(result.AsT0),
+                BadRequest,
+                BadRequest
+            );
+        }
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> FindProductById(Guid id)
+        {
+            var result = await _productService.FindProductById(id);
+            return result.Match<IActionResult>(
+                _ => Ok(result.AsT0),
+                BadRequest,
+                res => BadRequest(res)
+            );
+        }
 
         //[HttpPut("{id}")]
         //public async Task<IActionResult> UpdateProduct(Guid productId, [FromBody] Product product)
@@ -51,16 +63,16 @@ namespace StorageSystem.WebAPI.Controllers
         //    );
         //}
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteProduct(Guid productId)
-        //{
-        //    var result = await _iProduct.DeleteProduct(productId);
-        //    return result.Match<IActionResult>(
-        //        _ => NoContent(),
-        //        BadRequest,
-        //        BadRequest
-        //    );
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            var result = await _productService.DeleteProduct(id);
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                r1 => Ok(result.AsT1),
+                r2 => Ok(result.AsT2)
+            );
+        }
 
         //[HttpGet()]
         //public async Task<IActionResult> GetAllProducts([FromQuery] Paging filter)
