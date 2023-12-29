@@ -50,6 +50,11 @@ public abstract class GenericDataAccess<TEntity> : IGenericDataAccess<TEntity> w
         dbSet.Add(entity);
     }
 
+    public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        await dbSet.AddAsync(entity, cancellationToken);
+    }
+
     //public int SaveChanges()
     //{
     //    return _context.SaveChanges();

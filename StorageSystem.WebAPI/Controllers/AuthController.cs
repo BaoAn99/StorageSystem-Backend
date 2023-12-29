@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Features.Auths;
-using StorageSystem.Persistence;
+using StorageSystem.Application.Models.Auth.Ins;
+using StorageSystem.Persistence.Models;
 using StorageSystem.WebAPI.ViewModel.AuthViewModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace StorageSystem.WebAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -28,7 +29,7 @@ namespace StorageSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             if (model is null)
             {
@@ -75,7 +76,7 @@ namespace StorageSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)

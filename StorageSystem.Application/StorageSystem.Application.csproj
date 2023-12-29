@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Auth\Outs\" />
     <Folder Include="Models\Category\Ins\" />
     <Folder Include="Models\Category\Outs\" />
   </ItemGroup>

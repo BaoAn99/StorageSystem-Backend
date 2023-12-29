@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Persistence
+namespace StorageSystem.Persistence.Models
 {
     public class ApplicationUser : IdentityUser
     {

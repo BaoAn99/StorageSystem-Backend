@@ -21,6 +21,12 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
     }
 
+    public async Task CreateProductAsync(Product product, CancellationToken cancellationToken = default)
+    {
+        await InsertAsync(product);
+        //await _context.Products.AddAsync(product, cancellationToken);
+    }
+
     public async Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default)
     {
         await _context.Products.AddRangeAsync(products, cancellationToken);

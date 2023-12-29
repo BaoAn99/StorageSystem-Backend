@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StorageSystem.Application;
 using System.Text;
-//using StorageSystem.Persistence;
 using StorageSystem.DataAccess;
 using StorageSystem.Persistence.Contracts;
 using StorageSystem.Persistence;
@@ -19,10 +18,10 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-
         var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         var builder = WebApplication.CreateBuilder(args);
 
+        // Configuration CORS
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
@@ -31,15 +30,8 @@ internal class Program
             });
         });
 
-        // For Entity Framework
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection1")));
-
-        //For Identity
-        builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        // Registration Entity Framework
+        builder.Services.AddPersistenceServiceRegistration(builder.Configuration);
 
         // Adding Authentication
         builder.Services.AddAuthentication(options =>
@@ -87,16 +79,12 @@ internal class Program
             options.SignIn.RequireConfirmedPhoneNumber = false; // Xác thực số điện thoại
         });
 
-        builder.Services.AddScoped<IAuthService, AuthService>();
-        //builder.Services.AddScoped<IProductService, ProductService>();
-        //builder.Services.AddScoped<ICategoryService, CategoryService>();
-        //builder.Services.AddScoped<IProductImageService, ProductImageService>();
-        //builder.Services.AddTransient<Irepository<Product>, ProductRepository>();
-        //builder.Services.AddTransient<IProductAppService, ProductAppsService>();
-        //builder.Services.AddTransient<Irepository<ProductImage>, ProductImageRepository>();
-        //builder.Services.AddTransient<IProductImageAppservice, ProductImageAppService>();
+        // Registration Services
+        builder.Services.AddApplicationServiceRegistration();
 
-        //builder.Services.AddAutoMapper(c => c.AddProfile<AutoMapping>(), typeof(Program));
+        // Registration DataAccess
+        builder.Services.AddDataAccessServiceRegistration();
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

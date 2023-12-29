@@ -13,6 +13,8 @@ public interface IGenericDataAccess<TEntity> where TEntity : class
 
     void Insert(TEntity entity);
 
+    Task InsertAsync(TEntity entity, CancellationToken cancellationToken);
+
     void Update(TEntity entityToUpdate);
 
     void Delete(object id);

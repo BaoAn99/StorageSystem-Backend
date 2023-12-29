@@ -8,7 +8,7 @@ namespace StorageSystem.Domain.Entities;
 
 public class Product
 {
-    public Guid Id { set; get; }
+    public Guid Id { set; get; } = Guid.NewGuid();
 
     public string Name { set; get; }
 
@@ -24,13 +24,13 @@ public class Product
 
     public Guid CategoryId { set; get; }
 
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; } = false;
 
-    public DateTimeOffset DateCreated { set; get; }
+    public DateTimeOffset DateCreated { set; get; } = DateTimeOffset.Now;
 
-    public string ThumbnailImage { get; set; }
+    public string ThumbnailImage { get; set; } = "image";
 
-    public virtual Category Category { get; set; } = null!;
+    public virtual Category? Category { get; set; } = null!;
 
-    public virtual List<ProductImage> ProductImages { get; set; }
+    public virtual List<ProductImage>? ProductImages { get; set; }
 }

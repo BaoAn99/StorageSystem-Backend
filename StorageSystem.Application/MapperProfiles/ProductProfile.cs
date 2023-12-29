@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using StorageSystem.Application.Models.Product.Ins;
+using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace StorageSystem.Application.MapperProfiles
     {
         public ProductProfile() 
         {
-            //CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<CreateProductInsDto, Product>().ReverseMap();
         }
     }
 }

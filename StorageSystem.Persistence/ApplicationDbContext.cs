@@ -2,19 +2,21 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StorageSystem.Domain.Entities;
+using StorageSystem.Persistence.Contracts;
+using StorageSystem.Persistence.Models;
 
 namespace StorageSystem.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
     }
 
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+    public DbSet<Product> Products { get ; set ; }
+    public DbSet<Category> Categories { get ; set ; }
+    public DbSet<ProductImage> ProductImages { get ; set ; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
