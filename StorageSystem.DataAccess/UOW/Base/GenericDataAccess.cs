@@ -66,8 +66,8 @@ public abstract class GenericDataAccess<TEntity> : IGenericDataAccess<TEntity> w
     //    return _context.SaveChangeAsync();
     //}
 
-    public void Update(TEntity entityToUpdate)
+    public EntityEntry<TEntity> Update(TEntity entityToUpdate)
     {
-        dbSet.Update(entityToUpdate);
+        return dbSet.Update(entityToUpdate);
     }
 }

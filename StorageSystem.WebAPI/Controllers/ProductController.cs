@@ -52,16 +52,16 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateProduct(Guid productId, [FromBody] Product product)
-        //{
-        //    var result = await _iProduct.UpdateProduct(productId, product);
-        //    return result.Match<IActionResult>(
-        //        _ => NoContent(),
-        //        BadRequest,
-        //        BadRequest
-        //    );
-        //}
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductInsDto product)
+        {
+            var result = await _productService.UpdateProduct(id, product);
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                BadRequest,
+                BadRequest
+            );
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)

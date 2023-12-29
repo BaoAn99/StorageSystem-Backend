@@ -53,9 +53,29 @@ namespace StorageSystem.Application.Features.Services
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, UpdateProductInsDto productDto)
         {
-            Product product = new Product();
-            //_unitOfWork.ProductDataAccess.Update(product);
-            return true;
+            Product product = await _unitOfWork.ProductDataAccess.FindProductById(productId);
+            if (product != null)
+            {
+                product.Name = productDto.Name;
+                product.Price = productDto.Price;
+                product.Quantity = productDto.Quantity;
+                product.OriginalPrice = productDto.OriginalPrice;
+                product.Stock = productDto.Stock;
+                product.Description = productDto.Description;
+                product.CategoryId = productDto.CategoryId;
+                product.ThumbnailImage = productDto.ThumbnailImage;
+                product.ProductImages = productDto.ProductImages;
+
+                await _unitOfWork.ProductDataAccess.UpdateProduct(product);
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            return new ValidationResult(
+                       new List<ValidationFailure>
+                       {
+                            new ValidationFailure ("Not exists product !", "400000")
+                       }
+                   );
         }
 
         public async Task<OneOf<IEnumerable<GetProductForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)

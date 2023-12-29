@@ -43,6 +43,8 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         Product product = await FindProductById(productId);
         if(product != null)
         {
+            //product.IsDeleted = true;
+            //EntityEntry<Product> res = Update(product);
             Delete(product);
             return true;
         }
@@ -61,16 +63,26 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
 
     public async Task<Product> FirstOrDefaultAsync(Guid Id, CancellationToken cancellationToken = default)
     {
-        return await _context.Products.FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
+        return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
     }
 
     public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
     {
-        return await _context.Products.ToListAsync(cancellationToken);
+        return await _context.Products.Include(p => p.ProductImages).ToListAsync(cancellationToken);
     }
 
     public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<bool> UpdateProduct(Product product, CancellationToken cancellationToken = default)
+    {
+        EntityEntry<Product> res = Update(product);
+        if (res != null)
+        {
+            return true;
+        }
+        return false;
     }
 }

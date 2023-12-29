@@ -21,6 +21,8 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default);
 
+        Task<bool> UpdateProduct(Product product, CancellationToken cancellationToken = default);
+
         Task<bool> DeleteProduct(Guid productId, CancellationToken cancellationToken = default); 
 
         Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default);

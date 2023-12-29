@@ -16,7 +16,7 @@ public interface IGenericDataAccess<TEntity> where TEntity : class
 
     Task<EntityEntry<TEntity>> InsertAsync(TEntity entity, CancellationToken cancellationToken);
 
-    void Update(TEntity entityToUpdate);
+    EntityEntry<TEntity> Update(TEntity entityToUpdate);
 
     void Delete(object id);
 }
