@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using OneOf;
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.DataAccess.Base;
@@ -14,29 +15,31 @@ namespace StorageSystem.Application.Features.Services
 {
     public class ProductService : IProductService
     {
+        private readonly ILogger<ProductService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IUnitOfWork unitOfWork, IMapper mapper) 
+        public ProductService(ILogger<ProductService> logger, IUnitOfWork unitOfWork, IMapper mapper) 
         {
+            _logger = logger;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateProduct(CreateProductInsDto productDto)
         {
+            _logger.LogInformation($"Start create product");
             Product product = _mapper.Map<Product>(productDto);
-            var result = await _unitOfWork.ProductDataAccess.CreateProductAsync(product);
-            if (result)
+            try
             {
+                await _unitOfWork.ProductDataAccess.CreateProductAsync(product);
                 await _unitOfWork.SaveChangesAsync();
-                return true;
             }
-            return new ValidationResult (
-                       new List<ValidationFailure>
-                       {
-                            new ValidationFailure ("You have wrong at server !", "5000000")
-                       }
-                   );
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error when create product {ex.Message} !");
+                return false;
+            }
+            return true;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id)
@@ -56,6 +59,7 @@ namespace StorageSystem.Application.Features.Services
             Product product = await _unitOfWork.ProductDataAccess.FindProductById(productId);
             if (product != null)
             {
+                _logger.LogInformation($"Start update product");
                 product.Name = productDto.Name;
                 product.Price = productDto.Price;
                 product.Quantity = productDto.Quantity;
@@ -66,8 +70,16 @@ namespace StorageSystem.Application.Features.Services
                 product.ThumbnailImage = productDto.ThumbnailImage;
                 product.ProductImages = productDto.ProductImages;
 
-                await _unitOfWork.ProductDataAccess.UpdateProduct(product);
-                await _unitOfWork.SaveChangesAsync();
+                try
+                {
+                    await _unitOfWork.ProductDataAccess.UpdateProduct(product);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error when update product {ex.Message} !");
+                    return false;
+                }
                 return true;
             }
             return new ValidationResult(

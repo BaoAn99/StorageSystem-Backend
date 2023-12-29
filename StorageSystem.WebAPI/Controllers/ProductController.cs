@@ -21,6 +21,7 @@ namespace StorageSystem.WebAPI.Controllers
             _productService = productService;
         }
 
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> AddProduct(CreateProductInsDto productDto)
         {
@@ -28,7 +29,7 @@ namespace StorageSystem.WebAPI.Controllers
             return Ok("ok");
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] Paging paging)
         {
@@ -40,7 +41,7 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> FindProductById(Guid id)
         {
@@ -52,6 +53,7 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
+        //[Authorize]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductInsDto product)
         {
@@ -63,6 +65,7 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
@@ -73,49 +76,5 @@ namespace StorageSystem.WebAPI.Controllers
                 r2 => Ok(result.AsT2)
             );
         }
-
-        //[HttpGet()]
-        //public async Task<IActionResult> GetAllProducts([FromQuery] Paging filter)
-        //{
-        //    //var validFilter = new Paging(filter.PageNumber, filter.PageSize);
-        //    //var productList = await _productsService.GetAll();
-        //    //var pagedData = productList.Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-        //    //    .Take(validFilter.PageSize)
-        //    //    .ToList();
-
-        //    //var totalRecords = productList.Count();
-
-        //    //return Ok(new PagedResponse<List<GetProductForView>>(pagedData, validFilter.PageNumber, validFilter.PageSize, totalRecords));
-        //    var result = await _iProduct.GetAllProducts(filter);
-        //    return result.Match<IActionResult>(
-        //        _ => Ok(result.AsT0),
-        //        _ => Ok(result.AsT1),
-        //        BadRequest,
-        //        BadRequest
-        //    );
-        //}
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetProductForEdit(int id)
-        //{
-        //    GetProductForEditOutput product = new GetProductForEditOutput();
-        //    List<string> error = new List<string>();
-        //    string message = "Success";
-
-        //    try
-        //    {
-        //        product = await _productsService.GetProductForEdit(id);
-
-        //        var productImages = await _productImageAppservice.GetImageProductByProductId(id);
-
-        //        product.ProductImages = productImages;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        error.Add(ex.Message);
-        //        message = "Fail";
-        //    }
-
-        //    return Ok(new PagedResponse<GetProductForEditOutput>(product, message, error));
     }
 }

@@ -22,14 +22,9 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
     }
 
-    public async Task<bool> CreateProductAsync(Product product, CancellationToken cancellationToken = default)
+    public async Task CreateProductAsync(Product product, CancellationToken cancellationToken = default)
     {
-        EntityEntry<Product> res = await InsertAsync(product);
-        if(res != null)
-        {
-            return true;
-        }
-        return false;
+        await InsertAsync(product);
         //await _context.Products.AddAsync(product, cancellationToken);
     }
 

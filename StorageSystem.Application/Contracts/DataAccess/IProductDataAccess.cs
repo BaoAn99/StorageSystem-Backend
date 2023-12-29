@@ -17,7 +17,7 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task<Product> FirstAsync(Guid Id);
 
-        Task<bool> CreateProductAsync(Product product, CancellationToken cancellationToken = default);
+        Task CreateProductAsync(Product product, CancellationToken cancellationToken = default);
 
         Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default);
 
