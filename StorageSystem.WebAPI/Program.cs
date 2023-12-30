@@ -13,6 +13,7 @@ using StorageSystem.Application.Contracts.Features.Auths;
 using StorageSystem.Application.Features.Auths;
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Features.Services;
+using StorageSystem.Cache;
 
 internal class Program
 {
@@ -29,6 +30,9 @@ internal class Program
                 policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
             });
         });
+
+        // Configuration Redis
+        builder.Services.AddStackExchangeRedisExtension(builder.Configuration);
 
         // Registration Entity Framework
         builder.Services.AddPersistenceServiceRegistration(builder.Configuration);
@@ -99,6 +103,7 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        app.UseRedisInformation();
         app.UseHttpsRedirection();
         app.UseCors(MyAllowSpecificOrigins);
 

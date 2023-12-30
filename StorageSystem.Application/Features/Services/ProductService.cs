@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using OneOf;
 using StorageSystem.Application.Constracts.Services.Features;
+using StorageSystem.Application.Contracts.Caches;
 using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
@@ -18,11 +19,13 @@ namespace StorageSystem.Application.Features.Services
         private readonly ILogger<ProductService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(ILogger<ProductService> logger, IUnitOfWork unitOfWork, IMapper mapper) 
+        private readonly IProductCaching _productCaching;
+        public ProductService(ILogger<ProductService> logger, IUnitOfWork unitOfWork, IMapper mapper, IProductCaching productCaching) 
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _productCaching = productCaching;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateProduct(CreateProductInsDto productDto)
@@ -106,6 +109,8 @@ namespace StorageSystem.Application.Features.Services
 
         public async Task<OneOf<IEnumerable<GetProductForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
         {
+            //await _productCaching.CachingProducts();
+            //var a = _productCaching.GetCachingProducts();
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(true);
             IEnumerable<GetProductForView> data = _mapper.Map<IEnumerable<GetProductForView>>(products);
             return data.ToList();

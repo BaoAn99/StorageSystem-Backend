@@ -8,19 +8,16 @@
 
   <ItemGroup>
     <Compile Remove="Contracts\Apis\**" />
-    <Compile Remove="Contracts\Caches\**" />
     <Compile Remove="Contracts\Providers\**" />
     <Compile Remove="Contracts\Services\Features\**" />
     <Compile Remove="Models\Apis\**" />
     <Compile Remove="Models\ProductImage\Base\**" />
     <EmbeddedResource Remove="Contracts\Apis\**" />
-    <EmbeddedResource Remove="Contracts\Caches\**" />
     <EmbeddedResource Remove="Contracts\Providers\**" />
     <EmbeddedResource Remove="Contracts\Services\Features\**" />
     <EmbeddedResource Remove="Models\Apis\**" />
     <EmbeddedResource Remove="Models\ProductImage\Base\**" />
     <None Remove="Contracts\Apis\**" />
-    <None Remove="Contracts\Caches\**" />
     <None Remove="Contracts\Providers\**" />
     <None Remove="Contracts\Services\Features\**" />
     <None Remove="Models\Apis\**" />
@@ -37,6 +34,10 @@
     <PackageReference Include="MimeKit" Version="3.2.0" />
     <PackageReference Include="NPOI" Version="2.6.2" />
     <PackageReference Include="OneOf" Version="3.0.263" />
+    <PackageReference Include="StackExchange.Redis" Version="2.7.10" />
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="10.0.2" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="10.0.2" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="10.0.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
 

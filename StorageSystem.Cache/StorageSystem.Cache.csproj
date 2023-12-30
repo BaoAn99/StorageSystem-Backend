@@ -7,9 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Features\**" />
-    <EmbeddedResource Remove="Features\**" />
-    <None Remove="Features\**" />
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="10.0.2" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="10.0.2" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Newtonsoft" Version="10.0.2" />
+    <PackageReference Include="StackExchange.Redis.Extensions.System.Text.Json" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ namespace StorageSystem.Persistence
             // For Entity Framework
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(
-                        configuration.GetConnectionString("DefaultConnection1")));
+                        configuration.GetConnectionString("DefaultConnection")));
 
             //For Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
