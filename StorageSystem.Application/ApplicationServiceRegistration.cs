@@ -21,7 +21,7 @@ namespace StorageSystem.Application
             services.AddAutoMapper(typeof(ProductProfile).Assembly);
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProductService, ProductService>();
-            //services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             //services.AddScoped<IProductImageService, ProductImageService>();
             //services.AddTransient<Irepository<Product>, ProductRepository>();
 

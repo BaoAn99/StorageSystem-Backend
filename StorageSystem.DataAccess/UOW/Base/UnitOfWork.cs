@@ -37,4 +37,19 @@ public class UnitOfWork : IUnitOfWork
     {
         return await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public void BeginTransaction()
+    {
+        //_context
+    }
+
+    public void TransactionCommit()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void TransactionRollBack()
+    {
+        throw new NotImplementedException();
+    }
 }

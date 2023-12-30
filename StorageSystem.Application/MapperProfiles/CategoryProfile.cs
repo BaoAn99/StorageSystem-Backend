@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using StorageSystem.Application.Models.Category.Ins;
+using StorageSystem.Application.Models.Category.Outs;
+using StorageSystem.Application.Models.Product.Outs;
+using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +25,9 @@ namespace StorageSystem.Application.MapperProfiles
 
         private void CreateCategoryMapper()
         {
-            
-            //CreateMap<CreateProductDto, Product>().ForMember(des => des.ProductImages, act => act.MapFrom(src => src.ProductImages));
-            //CreateMap<UpdateProductDto, Product>().ReverseMap();
-            //CreateMap<CreateProductImageDto, ProductImage>().ReverseMap();
-            //CreateMap<UpdateProductImageDto, ProductImage>().ReverseMap();
+            CreateMap<CreateCategoryInsDto, Category>();
+            CreateMap<UpdateCategoryInsDto, Category>();
+            CreateMap<Category, GetCategoryForView>().ReverseMap();
         }
     }
 }

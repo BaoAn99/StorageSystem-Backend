@@ -6,26 +6,26 @@ using OneOf;
 using OneOf.Types;
 using StorageSystem.Domain.Entities;
 using NPOI.SS.Formula.Functions;
-using StorageSystem.Application.Models.Product.Ins;
+using StorageSystem.Application.Models.Category.Ins;
 
 namespace StorageSystem.WebAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class CategoryController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public ProductController(IProductService productService)
+        public CategoryController(ICategoryService categoryService)
         {
-            _productService = productService;
+            _categoryService = categoryService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddProduct(CreateProductInsDto productDto)
+        public async Task<IActionResult> AddCategory(CreateCategoryInsDto categoryDto)
         {
-            var result = await _productService.CreateProduct(productDto);
+            var result = await _categoryService.CreateCategory(categoryDto);
             return result.Match<IActionResult>(
                 _ => Ok(result.AsT0),
                 BadRequest,
@@ -33,11 +33,11 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] Paging paging)
         {
-            var result = await _productService.GetAllProducts(paging);
+            var result = await _categoryService.GetAllCategories(paging);
             return result.Match<IActionResult>(
                 _ => Ok(result.AsT0),
                 BadRequest,
@@ -45,11 +45,11 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> FindProductById(Guid id)
+        public async Task<IActionResult> FindCategoryById(Guid id)
         {
-            var result = await _productService.FindProductById(id);
+            var result = await _categoryService.FindCategoryById(id);
             return result.Match<IActionResult>(
                 _ => Ok(result.AsT0),
                 BadRequest,
@@ -57,11 +57,11 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductInsDto product)
+        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryInsDto category)
         {
-            var result = await _productService.UpdateProduct(id, product);
+            var result = await _categoryService.UpdateCategory(id, category);
             return result.Match<IActionResult>(
                 _ => NoContent(),
                 BadRequest,
@@ -71,9 +71,9 @@ namespace StorageSystem.WebAPI.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> DeleteCategory(Guid id)
         {
-            var result = await _productService.DeleteProduct(id);
+            var result = await _categoryService.DeleteCategory(id);
             return result.Match<IActionResult>(
                 _ => NoContent(),
                 r1 => Ok(result.AsT1),

@@ -21,11 +21,17 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task CreateProductRangeAsync(List<Product> products, CancellationToken cancellationToken = default);
 
-        Task<bool> UpdateProduct(Product product, CancellationToken cancellationToken = default);
+        void UpdateProduct(Product product, CancellationToken cancellationToken = default);
 
-        Task<bool> DeleteProduct(Guid productId, CancellationToken cancellationToken = default); 
+        void UpdateProductRange(List<Product> products, CancellationToken cancellationToken = default);
+
+        void DeleteProduct(Product product, CancellationToken cancellationToken = default);
+
+        void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Product>> GetAllProducts(bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default);
 

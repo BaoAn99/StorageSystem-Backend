@@ -15,4 +15,10 @@ public interface IUnitOfWork
     int SaveChanges();
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+    void BeginTransaction();
+
+    void TransactionCommit();
+
+    void TransactionRollBack();
 }

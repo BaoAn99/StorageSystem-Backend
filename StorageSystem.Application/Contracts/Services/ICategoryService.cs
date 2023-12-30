@@ -1,17 +1,27 @@
-﻿using System;
+﻿using OneOf;
+using StorageSystem.Application.Models.Bases;
+using StorageSystem.Application.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation.Results;
+using StorageSystem.Application.Models.Category.Ins;
+using StorageSystem.Application.Models.Category.Outs;
 
 namespace StorageSystem.Application.Constracts.Services.Features
 {
     public interface ICategoryService
     {
-        //Task<OneOf> GetAll();
-        //Task<GetCategoryForEditOutput> GetCategoryForEdit(int id);
-        //Task CreateCategory(CreateOrEditCategoryDto input);
-        //Task EditCategory(int id, CreateOrEditCategoryDto input);
-        //Task DeleteCategory(int id);
+        Task<OneOf<IEnumerable<GetCategoryForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCategories(Paging filter);
+
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateCategory(CreateCategoryInsDto categoryDto);
+
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateCategory(Guid categoryId, UpdateCategoryInsDto categoryDto);
+
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteCategory(Guid id);
+
+        Task<OneOf<GetCategoryForView, LocalizationErrorMessageOutDto, ValidationResult>> FindCategoryById(Guid id);
     }
 }

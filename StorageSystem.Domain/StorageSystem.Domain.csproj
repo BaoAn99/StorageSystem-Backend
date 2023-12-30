@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Commons\**" />
     <Compile Remove="Exceptions\**" />
     <Compile Remove="Models\**" />
-    <EmbeddedResource Remove="Commons\**" />
     <EmbeddedResource Remove="Exceptions\**" />
     <EmbeddedResource Remove="Models\**" />
-    <None Remove="Commons\**" />
     <None Remove="Exceptions\**" />
     <None Remove="Models\**" />
   </ItemGroup>

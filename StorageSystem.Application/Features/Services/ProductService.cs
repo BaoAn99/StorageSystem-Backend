@@ -44,14 +44,28 @@ namespace StorageSystem.Application.Features.Services
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id)
         {
-            var result = await FindProductById(id);
-            if(result.IsT0)
+            var product = await _unitOfWork.ProductDataAccess.FindProductById(id);
+            if (product != null)
             {
-                await _unitOfWork.ProductDataAccess.DeleteProduct(id);
-                await _unitOfWork.SaveChangesAsync();
+                try
+                {
+                    _logger.LogInformation($"Start delete product");
+                    _unitOfWork.ProductDataAccess.DeleteProduct(product);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error when delete product {ex.Message} !");
+                    return false;
+                }
                 return true;
             }
-            return result.AsT2;
+            return new ValidationResult(
+                       new List<ValidationFailure>
+                       {
+                            new ValidationFailure ("Not exists product !", "400000")
+                       }
+                   );
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateProduct(Guid productId, UpdateProductInsDto productDto)
@@ -72,7 +86,7 @@ namespace StorageSystem.Application.Features.Services
 
                 try
                 {
-                    await _unitOfWork.ProductDataAccess.UpdateProduct(product);
+                    _unitOfWork.ProductDataAccess.UpdateProduct(product);
                     await _unitOfWork.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -92,7 +106,7 @@ namespace StorageSystem.Application.Features.Services
 
         public async Task<OneOf<IEnumerable<GetProductForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
         {
-            IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts();
+            IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(true);
             IEnumerable<GetProductForView> data = _mapper.Map<IEnumerable<GetProductForView>>(products);
             return data.ToList();
         }

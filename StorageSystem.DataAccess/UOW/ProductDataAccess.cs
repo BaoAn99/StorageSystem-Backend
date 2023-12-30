@@ -33,19 +33,6 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         await _context.Products.AddRangeAsync(products, cancellationToken);
     }
 
-    public async Task<bool> DeleteProduct(Guid productId, CancellationToken cancellationToken = default)
-    {
-        Product product = await FindProductById(productId);
-        if(product != null)
-        {
-            //product.IsDeleted = true;
-            //EntityEntry<Product> res = Update(product);
-            Delete(product);
-            return true;
-        }
-        return false;
-    }
-
     public async Task<Product> FindProductById(Guid Id)
     {
         return await FirstOrDefaultAsync(Id);
@@ -63,21 +50,36 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
 
     public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
     {
-        return await _context.Products.Include(p => p.ProductImages).ToListAsync(cancellationToken);
+        return await _context.Products.ToListAsync(cancellationToken);
     }
 
-    public Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(bool trackingReference, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Category).ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> UpdateProduct(Product product, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
     {
-        EntityEntry<Product> res = Update(product);
-        if (res != null)
-        {
-            return true;
-        }
-        return false;
+        return await _context.Products.Include(p => p.ProductImages).Where(p => p.CategoryId == CategoryId).ToListAsync(cancellationToken);
+    }
+
+    public async void UpdateProduct(Product product, CancellationToken cancellationToken = default)
+    {
+        Update(product);
+    }
+
+    public void UpdateProductRange(List<Product> products, CancellationToken cancellationToken = default)
+    {
+        _context.Products.UpdateRange(products);
+    }
+
+    public async void DeleteProduct(Product product, CancellationToken cancellationToken = default)
+    {
+        Delete(product);
+    }
+
+    public void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default)
+    {
+        _context.Products.RemoveRange(products);
     }
 }
