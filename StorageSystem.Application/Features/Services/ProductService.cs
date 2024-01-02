@@ -111,6 +111,7 @@ namespace StorageSystem.Application.Features.Services
         {
             //await _productCaching.CachingProducts();
             //var a = _productCaching.GetCachingProducts();
+            _logger.LogInformation("Start get all products !");
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(true);
             IEnumerable<GetProductForView> data = _mapper.Map<IEnumerable<GetProductForView>>(products);
             return data.ToList();

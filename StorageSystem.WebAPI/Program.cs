@@ -14,15 +14,26 @@ using StorageSystem.Application.Features.Auths;
 using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Features.Services;
 using StorageSystem.Cache;
+using Nest;
+using StorageSystem.WebAPI;
+using Serilog;
+using Serilog.Exceptions;
+using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
+using StorageSystem.WebAPI.Extensions;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         var builder = WebApplication.CreateBuilder(args);
 
+        // Configuration Serilog
+        builder.Host.UseSerilog(LoggingExtension.ConfigureLogging);
+        Log.Information("Starting project ...");
+
         // Configuration CORS
+        var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         builder.Services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins, policy =>
@@ -30,6 +41,24 @@ internal class Program
                 policy.AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(origin => true).AllowCredentials();
             });
         });
+
+        // Connect to ES
+        var url = builder.Configuration["ElasticConfiguration:url"];
+        var defaultIndex = builder.Configuration["ElasticConfiguration:index"];
+        var settings = new ConnectionSettings(new Uri(url)).BasicAuthentication("", "")
+                .PrettyJson()
+                .DefaultIndex(defaultIndex)
+                .DefaultMappingFor<ProductTest>(m => m
+                    .Ignore(p => p.Quantity)
+                );
+
+        var client = new ElasticClient(settings);
+
+        builder.Services.AddSingleton<IElasticClient>(client);
+
+        var createIndexResponse = client.Indices.Create(defaultIndex,
+                index => index.Map<ProductTest>(x => x.AutoMap())
+            );
 
         // Configuration Redis
         builder.Services.AddStackExchangeRedisExtension(builder.Configuration);
