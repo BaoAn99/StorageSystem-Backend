@@ -42,23 +42,18 @@ internal class Program
             });
         });
 
-        // Connect to ES
+        // Elasticsearch configuration
+        Log.Information("Connection to Elasticsearch");
         var url = builder.Configuration["ElasticConfiguration:url"];
         var defaultIndex = builder.Configuration["ElasticConfiguration:index"];
         var settings = new ConnectionSettings(new Uri(url)).BasicAuthentication("", "")
                 .PrettyJson()
-                .DefaultIndex(defaultIndex)
-                .DefaultMappingFor<ProductTest>(m => m
-                    .Ignore(p => p.Quantity)
-                );
+                .DisableDirectStreaming()
+                .DefaultIndex(defaultIndex);
 
         var client = new ElasticClient(settings);
 
         builder.Services.AddSingleton<IElasticClient>(client);
-
-        var createIndexResponse = client.Indices.Create(defaultIndex,
-                index => index.Map<ProductTest>(x => x.AutoMap())
-            );
 
         // Configuration Redis
         builder.Services.AddStackExchangeRedisExtension(builder.Configuration);
