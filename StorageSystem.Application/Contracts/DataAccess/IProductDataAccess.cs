@@ -29,12 +29,14 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.Paging filter, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Product>> GetAllProducts(bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.Paging filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default);
 
         Task<Product> FindProductById(Guid Id);
+
+        int GetTotalProducts(string keywork = null);
     }
 }

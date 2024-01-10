@@ -11,6 +11,8 @@ namespace StorageSystem.Application.Models.Bases
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
+
+        public string? Keywork { get; set; }
         
         public Paging()
         {

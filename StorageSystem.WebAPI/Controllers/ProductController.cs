@@ -39,7 +39,10 @@ namespace StorageSystem.WebAPI.Controllers
         {
             var result = await _productService.GetAllProducts(paging);
             return result.Match<IActionResult>(
-                _ => Ok(result.AsT0),
+                res => Ok(new
+                {
+                    res.ProductLists, res.Total
+                }),
                 BadRequest,
                 BadRequest
             );
