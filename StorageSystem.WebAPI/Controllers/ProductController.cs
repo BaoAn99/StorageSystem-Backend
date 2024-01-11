@@ -83,5 +83,16 @@ namespace StorageSystem.WebAPI.Controllers
                 r2 => Ok(result.AsT2)
             );
         }
+
+        [HttpPost("delete-range")]
+        public async Task<IActionResult> DeleteRangeProduct([FromBody] List<Guid> ids)
+        {
+            var result = await _productService.DeleteRangeProduct(ids);
+            return result.Match<IActionResult>(
+                _ => NoContent(),
+                r1 => Ok(result.AsT1),
+                r2 => Ok(result.AsT2)
+            );
+        }
     }
 }

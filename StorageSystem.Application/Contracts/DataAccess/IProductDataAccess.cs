@@ -38,5 +38,7 @@ namespace StorageSystem.Application.Contracts.DataAccess
         Task<Product> FindProductById(Guid Id);
 
         int GetTotalProducts(string keywork = null);
+
+        Task<IEnumerable<Product>> GetAllProductsFromIds(List<Guid> ids);
     }
 }

@@ -18,6 +18,8 @@ namespace StorageSystem.Application.Constracts.Services.Features
         
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteProduct(Guid id);
 
+        Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteRangeProduct(List<Guid> ids);
+
         Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> FindProductById(Guid id);
     }
 }

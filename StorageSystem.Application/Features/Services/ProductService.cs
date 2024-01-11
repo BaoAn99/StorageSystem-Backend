@@ -39,7 +39,7 @@ namespace StorageSystem.Application.Features.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error when create product {ex.Message} !");
+                _logger.LogError($"Error when create product {ex.Message}!");
                 return false;
             }
             return true;
@@ -58,7 +58,7 @@ namespace StorageSystem.Application.Features.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error when delete product {ex.Message} !");
+                    _logger.LogError($"Error when delete product {ex.Message}!");
                     return false;
                 }
                 return true;
@@ -66,7 +66,7 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists product !", "400000")
+                            new ValidationFailure ("Not exists product!", "400000")
                        }
                    );
         }
@@ -94,7 +94,7 @@ namespace StorageSystem.Application.Features.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error when update product {ex.Message} !");
+                    _logger.LogError($"Error when update product {ex.Message}!");
                     return false;
                 }
                 return true;
@@ -102,7 +102,7 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists product !", "400000")
+                            new ValidationFailure ("Not exists product!", "400000")
                        }
                    );
         }
@@ -111,7 +111,7 @@ namespace StorageSystem.Application.Features.Services
         {
             //await _productCaching.CachingProducts();
             //var a = _productCaching.GetCachingProducts();
-            _logger.LogInformation("Start get all products !");
+            _logger.LogInformation("Start get all products!");
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(filter,true);
             GetProductForView data = new GetProductForView();
             data.ProductLists = _mapper.Map<List<ProductList>>(products);
@@ -129,7 +129,41 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists product !", "400000")
+                            new ValidationFailure ("Not exists product!", "400000")
+                       }
+                   );
+        }
+
+        public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> DeleteRangeProduct(List<Guid> ids)
+        {
+            var res = _unitOfWork.ProductDataAccess.GetAllProductsFromIds(ids);
+            if(res.Result.Any())
+            {
+                if(ids.Count == res.Result.Count())
+                {
+                    try
+                    {
+                        _unitOfWork.ProductDataAccess.DeleteProductRange(res.Result.ToList());
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Error when delete product {ex.Message}!");
+                        return false;
+                    }
+                    return true;
+                }
+                return new ValidationResult(
+                           new List<ValidationFailure>
+                           {
+                                new ValidationFailure ("Have wrong when delete range product!", "400000")
+                           }
+                       );
+            }
+            return new ValidationResult(
+                       new List<ValidationFailure>
+                       {
+                            new ValidationFailure ("Not product delete!", "400000")
                        }
                    );
         }
