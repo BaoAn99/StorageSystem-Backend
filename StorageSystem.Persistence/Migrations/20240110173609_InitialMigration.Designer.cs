@@ -12,8 +12,8 @@ using StorageSystem.Persistence;
 namespace StorageSystem.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240102085532_Init")]
-    partial class Init
+    [Migration("20240110173609_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

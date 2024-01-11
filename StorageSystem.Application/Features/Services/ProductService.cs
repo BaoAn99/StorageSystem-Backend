@@ -107,14 +107,16 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<IEnumerable<GetProductForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
+        public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
         {
             //await _productCaching.CachingProducts();
             //var a = _productCaching.GetCachingProducts();
             _logger.LogInformation("Start get all products !");
-            IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(true);
-            IEnumerable<GetProductForView> data = _mapper.Map<IEnumerable<GetProductForView>>(products);
-            return data.ToList();
+            IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(filter,true);
+            GetProductForView data = new GetProductForView();
+            data.ProductLists = _mapper.Map<List<ProductList>>(products);
+            data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keywork);
+            return data;
         }
 
         public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> FindProductById(Guid id)

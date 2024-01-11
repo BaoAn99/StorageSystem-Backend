@@ -29,7 +29,9 @@ public class CategoryDataAccess : GenericDataAccess<Category>, ICategoryDataAcce
 
     public void DeleteCategory(Category category)
     {
-        _context.Categories.Remove(category);
+        //_context.Categories.Remove(category);
+        category.IsDeleted = true;
+        _context.Categories.Update(category);
     }
 
     public void DeleteCategoryRange(List<Category> categories)

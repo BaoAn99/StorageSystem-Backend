@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Contracts.DataAccess;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence;
@@ -48,14 +49,22 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, CancellationToken cancellationToken = default)
     {
-        return await _context.Products.ToListAsync(cancellationToken);
+        return await _context.Products
+            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Category).ToListAsync(cancellationToken);
+        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Category)
+            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
@@ -75,11 +84,20 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
 
     public async void DeleteProduct(Product product, CancellationToken cancellationToken = default)
     {
-        Delete(product);
+        //Delete(product);
+        product.IsDeleted = true;
+        Update(product);
     }
 
     public void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default)
     {
         _context.Products.RemoveRange(products);
+    }
+
+    public int GetTotalProducts(string keywork = null)
+    {
+        return _context.Products
+            .Where(p => string.IsNullOrEmpty(keywork) || p.Name.ToLower().Contains(keywork.ToLower()))
+            .Count();
     }
 }

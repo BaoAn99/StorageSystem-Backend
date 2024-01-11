@@ -18,7 +18,7 @@ namespace StorageSystem.Application.MapperProfiles
             CreateMap<UpdateProductInsDto, Product>().ReverseMap();
             CreateMap<Product, GetProductForView>().ReverseMap();
             CreateMap<ProductImage, ProductImageDto>().ReverseMap();
-            CreateMap<Product, GetProductForView>().ForMember(dest => dest.ProductImages, opt => opt.MapFrom(src => src.ProductImages));
+            CreateMap<Product, ProductList>().ForMember(dest => dest.ProductImages, opt => opt.MapFrom(src => src.ProductImages));
         }
     }
 }
