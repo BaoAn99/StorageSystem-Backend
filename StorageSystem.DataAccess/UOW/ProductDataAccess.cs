@@ -91,13 +91,23 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
 
     public void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default)
     {
-        _context.Products.RemoveRange(products);
+        foreach (var product in products)
+        {
+            product.IsDeleted = true;
+        }
+        UpdateProductRange(products);
+        //_context.Products.RemoveRange(products);
     }
 
     public int GetTotalProducts(string keywork = null)
     {
         return _context.Products
-            .Where(p => string.IsNullOrEmpty(keywork) || p.Name.ToLower().Contains(keywork.ToLower()))
+            .Where(p => string.IsNullOrEmpty(keywork) || p.Name.ToLower().Contains(keywork.ToLower())) 
             .Count();
+    }
+
+    public async Task<IEnumerable<Product>> GetAllProductsFromIds(List<Guid> ids)
+    {
+        return await _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
     }
 }
