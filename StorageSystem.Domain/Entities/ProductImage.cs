@@ -11,7 +11,7 @@ namespace StorageSystem.Domain.Entities
     public class ProductImage
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required, MaxLength(255)]
 

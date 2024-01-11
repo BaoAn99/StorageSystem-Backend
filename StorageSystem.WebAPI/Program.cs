@@ -120,6 +120,14 @@ internal class Program
 
         var app = builder.Build();
 
+        app.MigrateDatabase();
+
+        //using (var scope = app.Services.CreateScope())
+        //{
+        //    var datacontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        //    datacontext.Database.Migrate();
+        //}
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
