@@ -19,8 +19,6 @@ public class Product
     [Column(TypeName = "decimal(18,4)")]
     public decimal Price { set; get; }
 
-    public int Quantity { set; get; }
-
     [Column(TypeName = "decimal(18,4)")]
     public decimal OriginalPrice { set; get; }
 
@@ -32,6 +30,10 @@ public class Product
     public Guid CategoryId { set; get; }
     public virtual Category? Category { get; set; }
 
+    [ForeignKey("UnitId")]
+    public Guid UnitId { set; get; }
+    public virtual Unit? Unit { get; set; }
+
     public bool IsDeleted { get; set; } = false;
 
     public DateTimeOffset DateCreated { set; get; } = DateTimeOffset.Now;
@@ -39,4 +41,6 @@ public class Product
     public string ThumbnailImage { get; set; }
 
     public virtual List<ProductImage> ProductImages { get; set; }
+
+    public virtual ProductSupplier? ProductSupplier { get; set; }
 }

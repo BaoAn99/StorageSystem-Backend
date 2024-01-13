@@ -13,8 +13,6 @@ namespace StorageSystem.Application.Models.Product.Ins
 
         public decimal Price { set; get; }
 
-        public int Quantity { set; get; }
-
         public decimal OriginalPrice { set; get; }
 
         public int Stock { set; get; }
