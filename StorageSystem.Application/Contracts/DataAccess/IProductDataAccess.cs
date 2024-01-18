@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OneOf;
 using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Bill.Ins;
+using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -40,5 +42,7 @@ namespace StorageSystem.Application.Contracts.DataAccess
         int GetTotalProducts(string keywork = null);
 
         Task<IEnumerable<Product>> GetAllProductsFromIds(List<Guid> ids);
+
+        //Task<bool> UpdateQuantityProductsFromIds(List<UpdateQuantityProductDto> orders);
     }
 }

@@ -23,9 +23,5 @@ namespace StorageSystem.Domain.Entities
 
         [Column(TypeName = "decimal(18,4)")]
         public decimal Price { set; get; }
-
-        public virtual List<Product>? Products { get; set;}
-
-        public virtual List<Supplier>? Suppliers { get; set; }
     }
 }

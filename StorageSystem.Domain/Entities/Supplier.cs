@@ -27,6 +27,6 @@ namespace StorageSystem.Domain.Entities
 
         public bool IsDeleted { get; set; } = false;
 
-        public virtual ProductSupplier? ProductSupplier { get; set; }
+        public List<ProductSupplier>? ProductSuppliers { get; set; }
     }
 }

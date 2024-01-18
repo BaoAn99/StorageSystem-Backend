@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Contracts.DataAccess;
 using StorageSystem.Application.Models.Bases;
+using StorageSystem.Application.Models.Bill.Ins;
+using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence;
@@ -110,4 +112,43 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
         return await _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
     }
+
+    //public async Task<bool> UpdateQuantityProductsFromIds(List<UpdateQuantityProductDto> orders)
+    //{
+    //    try
+    //    {
+    //        //var updatedItemsDictionary = orders.ToDictionary(item => item.Id);
+    //        //var p = _context.Products.Join(updatedItemsDictionary,
+    //        //      item => item.Id,
+    //        //      order => order.Key,
+    //        //      (item, order) => new
+    //        //      {
+    //        //          test = item.Id,
+    //        //          //Stock = orders.Value.Quantity
+    //        //      })
+    //        //.ToList();
+    //        List<Product> products = await _context.Products
+    //            .Where(p => orders.Select(o => o.ProductId).Contains(p.Id))
+    //            .ToListAsync();
+
+    //        //foreach (var product in products)
+    //        //{
+    //        //    foreach (var item in orders)
+    //        //    {
+    //        //        if (item.Id == product.Id)
+    //        //        {
+    //        //            product.Stock = product.Stock - item.Quantity;
+    //        //            if (product.Stock < 0) return false;
+    //        //        }
+    //        //    }
+    //        //}
+
+    //        UpdateProductRange(products);
+    //    }
+    //    catch(Exception ex)
+    //    {
+    //        return false;
+    //    }
+    //    return true;
+    //}
 }

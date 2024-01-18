@@ -18,6 +18,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get ; set ; }
     public DbSet<ProductImage> ProductImages { get ; set ; }
+    public DbSet<Bill> Bills { get ; set ; }
+    public DbSet<BillDetail> BillDetails { get ; set ; }
+    public DbSet<Coupon> Coupons { get ; set ; }
+    public DbSet<CouponDetail> CouponDetails { get ; set ; }
+    public DbSet<Customer> Customers { get ; set ; }
+    public DbSet<Supplier> Suppliers { get ; set ; }
+    public DbSet<ProductSupplier> ProductSuppliers { get ; set ; }
+    public DbSet<Unit> Units { get ; set ; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<ProductUnit> ProductUnits { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -55,6 +65,36 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
          }
         );
 
+        builder.Entity<Unit>().HasData(
+         new Unit
+         {
+             Id = new Guid("4b703409-a32a-49cf-9943-d5a68dbedd6f"),
+             Name = "Thùng",
+             DateCreated = DateTime.Now,
+             IsDeleted = false
+         }
+        );
+
+        builder.Entity<Unit>().HasData(
+         new Unit
+         {
+             Id = new Guid("bb7b0969-4383-446f-8ab9-6d766df08359"),
+             Name = "Kg",
+             DateCreated = DateTime.Now,
+             IsDeleted = false
+         }
+        );
+
+        builder.Entity<Unit>().HasData(
+         new Unit
+         {
+             Id = new Guid("54cb56aa-a710-47e0-a386-4cc493d46747"),
+             Name = "Hộp",
+             DateCreated = DateTime.Now,
+             IsDeleted = false
+         }
+        );
+
         builder.Entity<Product>().HasData(
             new Product
             {
@@ -62,7 +102,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Tony Reichert",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/80",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -76,7 +115,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Zoey Lang",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/81",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -89,7 +127,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Jane Fisher",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/82",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -102,7 +139,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "William Howard",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/83",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -115,7 +151,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Kristen Copper",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/84",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -128,7 +163,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Brian Kim",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/85",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -141,7 +175,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Michael Hunt",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/86",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -154,7 +187,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Samantha Brooks",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/87",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -167,7 +199,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Frank Harrison",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/88",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -180,7 +211,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Emma Adams",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/89",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -193,7 +223,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Brandon Stevens",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/90",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -206,7 +235,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Megan Richards",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/91",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -219,7 +247,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Oliver Scott",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/92",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -232,7 +259,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Grace Allen",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/93",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -245,7 +271,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Noah Carter",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/94",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -258,7 +283,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 Name = "Ava Perez",
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
-                Stock = 100,
                 Description = "Description",
                 ThumbnailImage = "https://placewaifu.com/image/95",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
@@ -732,6 +756,34 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                         Caption = "Caption"
                     }
             );
+
+             //Id = new Guid("4b703409-a32a-49cf-9943-d5a68dbedd6f"),
+             //Name = "Thùng",
+             //Id = new Guid("bb7b0969-4383-446f-8ab9-6d766df08359"),
+             //Name = "Kg",
+             //Id = new Guid("54cb56aa-a710-47e0-a386-4cc493d46747"),
+             //Name = "Hộp",
+           
+        builder.Entity<ProductUnit>().HasData(
+         new ProductUnit
+         {
+             ProductId = new Guid("5d01611b-e2ad-4abd-b40e-0450f50d2ec9"),
+             UnitId = new Guid("4b703409-a32a-49cf-9943-d5a68dbedd6f"),
+             Quantity = 100
+         },
+         new ProductUnit
+         {
+             ProductId = new Guid("5d01611b-e2ad-4abd-b40e-0450f50d2ec9"),
+             UnitId = new Guid("54cb56aa-a710-47e0-a386-4cc493d46747"),
+             Quantity = 100
+         },
+         new ProductUnit
+         {
+             ProductId = new Guid("c861791b-bce9-47a9-84c7-1abdb578d88b"),
+             UnitId = new Guid("bb7b0969-4383-446f-8ab9-6d766df08359"),
+             Quantity = 100
+         }
+        );
     }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLazyLoadingProxies();

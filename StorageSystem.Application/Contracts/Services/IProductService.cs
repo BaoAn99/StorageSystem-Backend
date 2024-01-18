@@ -6,7 +6,7 @@ using StorageSystem.Domain.Entities;
 using StorageSystem.Application.Models.Bases;
 using FluentValidation.Results;
 
-namespace StorageSystem.Application.Constracts.Services.Features
+namespace StorageSystem.Application.Contracts.Services
 {
     public interface IProductService
     {

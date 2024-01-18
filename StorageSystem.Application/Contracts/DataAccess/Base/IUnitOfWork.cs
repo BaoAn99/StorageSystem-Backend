@@ -12,6 +12,18 @@ public interface IUnitOfWork
 
     ICategoryDataAccess CategoryDataAccess { get; }
 
+    IBillDataAccess BillDataAccess { get; }
+
+    ICustomerDataAccess CustomerDataAccess { get; }
+
+    IOrderDataAccess OrderDataAccess { get; }
+
+    IUnitDataAccess UnitDataAccess { get; }
+
+    ISupplierDataAccess SupplierDataAccess { get; }
+
+    IProductUnitDataAccess ProductUnitDataAccess { get; }
+
     int SaveChanges();
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));

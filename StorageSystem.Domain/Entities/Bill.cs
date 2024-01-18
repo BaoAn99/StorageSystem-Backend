@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StorageSystem.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +12,7 @@ namespace StorageSystem.Domain.Entities
     public class Bill
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
 
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
 
@@ -21,10 +22,12 @@ namespace StorageSystem.Domain.Entities
         public decimal Total { get; set; }
 
         [ForeignKey("CustomerId")]
-        public Guid CustomerId { set; get; }
+        public Guid? CustomerId { set; get; }
         public virtual Customer? Customer { get; set; }
 
         public Guid OwnerId { set; get; }
+
+        public decimal? Deposit { get; set; }
 
         public virtual List<BillDetail>? BillDetails { get; set; }
     }

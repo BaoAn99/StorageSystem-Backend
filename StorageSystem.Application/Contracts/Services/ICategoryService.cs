@@ -10,7 +10,7 @@ using FluentValidation.Results;
 using StorageSystem.Application.Models.Category.Ins;
 using StorageSystem.Application.Models.Category.Outs;
 
-namespace StorageSystem.Application.Constracts.Services.Features
+namespace StorageSystem.Application.Contracts.Services
 {
     public interface ICategoryService
     {
