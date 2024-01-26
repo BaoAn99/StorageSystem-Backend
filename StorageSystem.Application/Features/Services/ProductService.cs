@@ -104,7 +104,7 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
+        public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(FilterProduct filter)
         {
             //await _productCaching.CachingProducts();
             //var a = _productCaching.GetCachingProducts();
@@ -112,7 +112,7 @@ namespace StorageSystem.Application.Features.Services
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(filter,true);
             GetProductForView data = new GetProductForView();
             data.ProductLists = _mapper.Map<List<ProductList>>(products);
-            data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keywork);
+            data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keyword, filter.CategoryId);
             return data;
         }
 

@@ -35,9 +35,9 @@ namespace StorageSystem.WebAPI.Controllers
 
         //[Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllProducts([FromQuery] FilterProduct filter)
         {
-            var result = await _productService.GetAllProducts(paging);
+            var result = await _productService.GetAllProducts(filter);
             return result.Match<IActionResult>(
                 res => Ok(new
                 {

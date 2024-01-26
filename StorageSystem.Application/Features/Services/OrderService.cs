@@ -225,14 +225,19 @@ namespace StorageSystem.Application.Features.Services
                 try
                 {
                     _logger.LogInformation($"Start update order");
-                    _unitOfWork.OrderDataAccess.UpdateOrderRange(orders);
 
                     var dic1 = orderDto.Orders.ToDictionary(orders => (orders.ProductId, orders.UnitId));
                     var dic2 = orders.ToDictionary(orders => (orders.ProductId, orders.UnitId));
+                    //Toàn bộ danh sách cần
                     var a = dic1.Keys.ToList().Union(dic2.Keys.ToList()).ToList();
+                    //Danh sách chung giữa list cũ và mới
                     var b = dic1.Keys.ToList().Intersect(dic2.Keys.ToList());
+                    //Danh sách cũ và mới không giống nhau
                     var c = a.ToList().Except(b.ToList());
-                    
+                    var d = c.ToList().Intersect(dic1.Keys);
+                    var e = c.ToList().Intersect(dic2.Keys);
+                    //var d = orderDto.Orders.Select(o => b.Contains(o.ProductId, o.UnitId));
+
                     List<UpdateQuantityProductDto> listItems = new List<UpdateQuantityProductDto>();
                     foreach (var obj in a)
                     {
@@ -243,15 +248,6 @@ namespace StorageSystem.Application.Features.Services
                         listItems.Add(updateQuantityProductDto);
                     }
 
-                    //foreach (var obj in orderDto.Orders)
-                    //{
-                    //    UpdateQuantityProductDto updateQuantityProductDto = new UpdateQuantityProductDto();
-                    //    updateQuantityProductDto.ProductId = obj.ProductId;
-                    //    updateQuantityProductDto.Quantity = obj.Quantity;
-                    //    updateQuantityProductDto.UnitId = obj.UnitId;
-                    //    listItems.Add(updateQuantityProductDto);
-                    //}
-                    //listItems = listItems.Distinct().ToList();
                     List<ProductUnit> list = (List<ProductUnit>)await _unitOfWork.ProductUnitDataAccess.GetProductsByProductIdsAndUnitIds(listItems);
 
                     if (list.Any() && list.Count() != listItems.Count())
@@ -259,33 +255,68 @@ namespace StorageSystem.Application.Features.Services
                         return false;
                     }
 
-                    //product need update
+                    //new list
+                    var f = orderDto.Orders.Where(o => d.Select(d1 => d1.ProductId).Contains(o.ProductId)).ToList();
+                    var f1 = f.Where(o => d.Select(d1 => d1.UnitId).Contains(o.UnitId)).ToList();
+                    //old list
+                    var g = orders.Where(o => e.Select(d1 => d1.ProductId).Contains(o.ProductId)).ToList();
+                    var g1 = g.Where(o => e.Select(d1 => d1.UnitId).Contains(o.UnitId)).ToList();
+
+                    var h = list.Where(o => b.Select(d1 => d1.ProductId).Contains(o.ProductId)).ToList();
+                    var h1 = h.Where(o => b.Select(d1 => d1.UnitId).Contains(o.UnitId)).ToList();
                     foreach (var i in list)
                     {
-                        //old list
-                        foreach (var j in listItems)
+                        foreach(var j in f1)
                         {
-                            //new list
-                            foreach (var k in orderDto.Orders)
+                            if(i.ProductId == j.ProductId && i.UnitId == j.UnitId)
                             {
-                                if (j.ProductId == k.ProductId && j.UnitId == k.UnitId)
-                                {
-                                    if(j.Quantity > k.Quantity)
-                                    {
-                                        i.Quantity = i.Quantity + (j.Quantity - k.Quantity);
-                                    }else if (j.Quantity < k.Quantity)
-                                    {
-                                        i.Quantity = i.Quantity - (k.Quantity - j.Quantity);
-                                    }
-                                }else if((j.ProductId != k.ProductId && j.UnitId == k.UnitId) || (j.ProductId == k.ProductId && j.UnitId != k.UnitId) || (j.ProductId != k.ProductId && j.UnitId != k.UnitId))
-                                {
-
-                                }
-                                //Nếu list mới không còn mua sp như list cũ ... hoặc list mới mua sp mới khác list cũ
+                                i.Quantity -= j.Quantity;
                             }
                         }
                     }
+
+                    foreach (var i in list)
+                    {
+                        foreach (var j in g1)
+                        {
+                            if (i.ProductId == j.ProductId && i.UnitId == j.UnitId)
+                            {
+                                i.Quantity += j.Quantity;
+                            }
+                        }
+                    }
+
+                    foreach (var i in list)
+                    {
+                        foreach (var j in orders)
+                        {
+                            foreach( var k in orderDto.Orders)
+                            {
+                                if(i.ProductId == j.ProductId && j.ProductId == k.ProductId
+                                    && i.UnitId == j.UnitId && j.UnitId == k.UnitId)
+                                {
+                                    if(j.Quantity > k.Quantity)
+                                    {
+                                        i.Quantity += (j.Quantity - k.Quantity);
+                                    }
+                                    else if (j.Quantity < k.Quantity)
+                                    {
+                                        i.Quantity -= (k.Quantity - j.Quantity);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     _unitOfWork.ProductUnitDataAccess.UpdateProductOfUnitRange(list);
+                    orderDto.Orders.Select(o =>
+                    {
+                        o.CustomerId = orders[0].CustomerId;
+                        o.StatusOrder = orders[0].StatusOrder;
+                        return o;
+                    }).ToList();
+                    //orders = _mapper.Map<List<Order>>(orderDto.Orders);
+                    _unitOfWork.OrderDataAccess.UpdateOrderRange(orders);
                     await _unitOfWork.SaveChangesAsync();
                 }
                 catch (Exception ex)

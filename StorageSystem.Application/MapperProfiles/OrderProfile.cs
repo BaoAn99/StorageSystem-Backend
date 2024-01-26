@@ -15,6 +15,8 @@ namespace StorageSystem.Application.MapperProfiles
         {
             CreateMap<CreateOrderInsDto, Order>();
             CreateMap<CreateOrderItemInsDto, Order>();
+            CreateMap<UpdateOrderInsDto, Order>();
+            CreateMap<UpdateOrderItemInsDto, Order>();
         }
     }
 }

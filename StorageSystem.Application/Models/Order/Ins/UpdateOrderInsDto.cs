@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Models.Order.Base;
+using StorageSystem.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,9 @@ namespace StorageSystem.Application.Models.Order.Ins
         public decimal? DiscountAmount { get; set; }
 
         public Guid OwnerId { get; set; }
+
+        public StatusOrder? StatusOrder { get; set; }
+
+        public Guid? CustomerId { get; set; }
     }
 }

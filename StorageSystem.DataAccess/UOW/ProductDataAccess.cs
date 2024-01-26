@@ -51,22 +51,29 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(FilterProduct filter, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
+            .Where(p => string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
             .Skip((filter.PageNumber - 1) * filter.PageSize)
             .Take(filter.PageSize)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(FilterProduct filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Category)
-            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
-            .Skip((filter.PageNumber - 1) * filter.PageSize)
-            .Take(filter.PageSize)
+        var list = await _context.Products.Include(p => p.ProductImages).Include(p => p.Category)
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
+                        && (filter.CategoryId == null || p.CategoryId == filter.CategoryId)
+                        )
+            .OrderBy(p => p.Price)
             .ToListAsync(cancellationToken);
+        if (filter.IsSortDecrease)
+        {
+            list = list.OrderByDescending(p => p.Price).ToList();
+        }
+        return list.Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize).ToList();
     }
 
     public async Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
@@ -101,10 +108,11 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         //_context.Products.RemoveRange(products);
     }
 
-    public int GetTotalProducts(string keywork = null)
+    public int GetTotalProducts(string keyword = null, Guid? categoryId = null)
     {
         return _context.Products
-            .Where(p => string.IsNullOrEmpty(keywork) || p.Name.ToLower().Contains(keywork.ToLower())) 
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower()))
+                        && (categoryId == null || p.CategoryId == categoryId)) 
             .Count();
     }
 

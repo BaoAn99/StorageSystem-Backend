@@ -10,7 +10,7 @@ namespace StorageSystem.Application.Contracts.Services
 {
     public interface IProductService
     {
-        Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter);
+        Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(FilterProduct filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateProduct(CreateProductInsDto productDto);
         
