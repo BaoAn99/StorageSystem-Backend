@@ -27,5 +27,7 @@ namespace StorageSystem.Domain.Entities
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
 
         public bool IsDeleted { get; set;} = false;
+
+        public Guid? OrderId { get; set; }
     }
 }

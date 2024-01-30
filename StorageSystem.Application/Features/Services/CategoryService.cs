@@ -3,8 +3,8 @@ using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using NPOI.SS.Formula.Functions;
 using OneOf;
-using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Category.Ins;
@@ -43,7 +43,7 @@ namespace StorageSystem.Application.Features.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error when create category {ex.Message} !");
+                _logger.LogError($"Error when create category {ex.Message}, {ex.InnerException}!");
                 return false;
             }
             return true;
@@ -62,7 +62,7 @@ namespace StorageSystem.Application.Features.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error when delete category {ex.Message} !");
+                    _logger.LogError($"Error when delete category {ex.Message}, {ex.InnerException}!");
                     return false;
                 }
                 return true;
@@ -70,7 +70,7 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists category !", "400000")
+                            new ValidationFailure ("Not exists category!", "400000")
                        }
                    );
         }
@@ -85,7 +85,7 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists category !", "400000")
+                            new ValidationFailure ("Not exists category!", "400000")
                        }
                    );
         }
@@ -112,7 +112,7 @@ namespace StorageSystem.Application.Features.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error when update category {ex.Message} !");
+                    _logger.LogError($"Error when update category {ex.Message}, {ex.InnerException}!");
                     return false;
                 }
                 return true;
@@ -120,7 +120,7 @@ namespace StorageSystem.Application.Features.Services
             return new ValidationResult(
                        new List<ValidationFailure>
                        {
-                            new ValidationFailure ("Not exists category !", "400000")
+                            new ValidationFailure ("Not exists category!", "400000")
                        }
                    );
         }

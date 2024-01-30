@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using StorageSystem.Application.Constracts.Services.Features;
+using StorageSystem.Application.Contracts.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StorageSystem.Application.Constracts.Services.Features
+namespace StorageSystem.Application.Contracts.Services
 {
     public interface IProductImageService
     {

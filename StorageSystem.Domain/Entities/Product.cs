@@ -22,17 +22,13 @@ public class Product
     [Column(TypeName = "decimal(18,4)")]
     public decimal OriginalPrice { set; get; }
 
-    public int Stock { set; get; }
-
     public string? Description { set; get; }
+
+    //Thiếu field nhập số lượng cho phép thông báo khi sắp hết hàng
 
     [ForeignKey("CategoryId")]
     public Guid CategoryId { set; get; }
     public virtual Category? Category { get; set; }
-
-    [ForeignKey("UnitId")]
-    public Guid UnitId { set; get; }
-    public virtual Unit? Unit { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 
@@ -42,5 +38,7 @@ public class Product
 
     public virtual List<ProductImage> ProductImages { get; set; }
 
-    public virtual ProductSupplier? ProductSupplier { get; set; }
+    public List<ProductSupplier>? ProductSuppliers { get; set; }
+
+    public List<ProductUnit>? ProductUnits { get; set; }
 }

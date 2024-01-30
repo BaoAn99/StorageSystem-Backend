@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Models.Bases;
 using OneOf;
 using OneOf.Types;
 using StorageSystem.Domain.Entities;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Models.Category.Ins;
+using StorageSystem.Application.Contracts.Services;
 
 namespace StorageSystem.WebAPI.Controllers
 {
@@ -21,9 +21,8 @@ namespace StorageSystem.WebAPI.Controllers
             _categoryService = categoryService;
         }
 
-        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddCategory(CreateCategoryInsDto categoryDto)
+        public async Task<IActionResult> AddCategory([FromBody] CreateCategoryInsDto categoryDto)
         {
             var result = await _categoryService.CreateCategory(categoryDto);
             return result.Match<IActionResult>(
@@ -33,9 +32,8 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllCategories([FromQuery] Paging paging)
         {
             var result = await _categoryService.GetAllCategories(paging);
             return result.Match<IActionResult>(
@@ -45,7 +43,6 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> FindCategoryById(Guid id)
         {
@@ -57,7 +54,6 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        [Authorize]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryInsDto category)
         {
@@ -69,7 +65,6 @@ namespace StorageSystem.WebAPI.Controllers
             );
         }
 
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {

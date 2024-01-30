@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OneOf;
 using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Bill.Ins;
+using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -29,16 +31,18 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         void DeleteProductRange(List<Product> products, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.Paging filter, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.FilterProduct filter, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.Paging filter, bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Product>> GetAllProducts(Models.Bases.FilterProduct filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default);
 
         Task<Product> FindProductById(Guid Id);
 
-        int GetTotalProducts(string keywork = null);
+        int GetTotalProducts(string keyword = null, Guid? categoryId = null);
 
         Task<IEnumerable<Product>> GetAllProductsFromIds(List<Guid> ids);
+
+        //Task<bool> UpdateQuantityProductsFromIds(List<UpdateQuantityProductDto> orders);
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Models.Bases;
 using OneOf;
 using OneOf.Types;
 using StorageSystem.Domain.Entities;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Models.Product.Ins;
+using StorageSystem.Application.Contracts.Services;
 
 namespace StorageSystem.WebAPI.Controllers
 {
@@ -35,9 +35,9 @@ namespace StorageSystem.WebAPI.Controllers
 
         //[Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllProducts([FromQuery] FilterProduct filter)
         {
-            var result = await _productService.GetAllProducts(paging);
+            var result = await _productService.GetAllProducts(filter);
             return result.Match<IActionResult>(
                 res => Ok(new
                 {

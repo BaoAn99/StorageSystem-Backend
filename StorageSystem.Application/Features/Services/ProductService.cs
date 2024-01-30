@@ -3,9 +3,9 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using OneOf;
-using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.Caches;
 using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Product.Ins;
@@ -79,8 +79,6 @@ namespace StorageSystem.Application.Features.Services
                 _logger.LogInformation($"Start update product");
                 product.Name = productDto.Name;
                 product.Price = productDto.Price;
-                product.OriginalPrice = productDto.OriginalPrice;
-                product.Stock = productDto.Stock;
                 product.Description = productDto.Description;
                 product.CategoryId = productDto.CategoryId;
                 product.ThumbnailImage = productDto.ThumbnailImage;
@@ -106,7 +104,7 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(Paging filter)
+        public async Task<OneOf<GetProductForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllProducts(FilterProduct filter)
         {
             //await _productCaching.CachingProducts();
             //var a = _productCaching.GetCachingProducts();
@@ -114,7 +112,7 @@ namespace StorageSystem.Application.Features.Services
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(filter,true);
             GetProductForView data = new GetProductForView();
             data.ProductLists = _mapper.Map<List<ProductList>>(products);
-            data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keywork);
+            data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keyword, filter.CategoryId);
             return data;
         }
 
@@ -165,6 +163,6 @@ namespace StorageSystem.Application.Features.Services
                             new ValidationFailure ("Not product delete!", "400000")
                        }
                    );
-        }
+        } 
     }
 }

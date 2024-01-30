@@ -18,14 +18,38 @@ public class UnitOfWork : IUnitOfWork
 
     public ICategoryDataAccess CategoryDataAccess { get; }
 
+    public IBillDataAccess BillDataAccess { get; }
+
+    public ICustomerDataAccess CustomerDataAccess { get; }
+
+    public IOrderDataAccess OrderDataAccess { get; }
+
+    public IUnitDataAccess UnitDataAccess {get;}
+
+    public ISupplierDataAccess SupplierDataAccess {get;}
+
+    public IProductUnitDataAccess ProductUnitDataAccess {get; }
+
     public UnitOfWork(
         IApplicationDbContext context,
         IProductDataAccess productDataAccess,
-        ICategoryDataAccess categoryDataAccess)
+        ICategoryDataAccess categoryDataAccess,
+        IBillDataAccess billDataAccess,
+        ICustomerDataAccess customerDataAccess,
+        IOrderDataAccess orderDataAccess,
+        IUnitDataAccess unitDataAccess,
+        ISupplierDataAccess supplierDataAccess,
+        IProductUnitDataAccess productUnitDataAccess)
     {
         _context = context;
         ProductDataAccess = productDataAccess;
         CategoryDataAccess = categoryDataAccess;
+        BillDataAccess = billDataAccess;
+        CustomerDataAccess = customerDataAccess;
+        OrderDataAccess = orderDataAccess;
+        UnitDataAccess = unitDataAccess;
+        SupplierDataAccess = supplierDataAccess;
+        ProductUnitDataAccess = productUnitDataAccess;
     }
 
     public int SaveChanges()

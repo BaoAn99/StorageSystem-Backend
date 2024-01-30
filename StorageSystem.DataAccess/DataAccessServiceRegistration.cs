@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StorageSystem.Application.Constracts.Services.Features;
 using StorageSystem.Application.Contracts.DataAccess;
 using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Features.Services;
@@ -19,6 +18,12 @@ public static class DataAccessServiceRegistration
     {
         return services.AddScoped<IUnitOfWork, UnitOfWork>()
             .AddScoped<IProductDataAccess, ProductDataAccess>()
-            .AddScoped<ICategoryDataAccess, CategoryDataAccess>();
+            .AddScoped<ICategoryDataAccess, CategoryDataAccess>()
+            .AddScoped<IBillDataAccess, BillDataAccess>()
+            .AddScoped<IOrderDataAccess, OrderDataAccess>()
+            .AddScoped<ISupplierDataAccess, SupplierDataAccess>()
+            .AddScoped<IUnitDataAccess, UnitDataAccess>()
+            .AddScoped<IProductUnitDataAccess, ProductUnitDataAccess>()
+            .AddScoped<ICustomerDataAccess, CustomerDataAccess>();
     }
 }

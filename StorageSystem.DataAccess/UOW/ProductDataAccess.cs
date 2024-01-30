@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using NPOI.SS.Formula.Functions;
 using StorageSystem.Application.Contracts.DataAccess;
 using StorageSystem.Application.Models.Bases;
+using StorageSystem.Application.Models.Bill.Ins;
+using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence;
@@ -49,22 +51,29 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         return await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == Id, cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(FilterProduct filter, CancellationToken cancellationToken = default)
     {
         return await _context.Products
-            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
+            .Where(p => string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
             .Skip((filter.PageNumber - 1) * filter.PageSize)
             .Take(filter.PageSize)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(Paging filter, bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Product>> GetAllProducts(FilterProduct filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Products.Include(p => p.ProductImages).Include(p => p.Category)
-            .Where(p => string.IsNullOrEmpty(filter.Keywork) || p.Name.ToLower().Contains(filter.Keywork.ToLower()))
-            .Skip((filter.PageNumber - 1) * filter.PageSize)
-            .Take(filter.PageSize)
+        var list = await _context.Products.Include(p => p.ProductImages).Include(p => p.Category)
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
+                        && (filter.CategoryId == null || p.CategoryId == filter.CategoryId)
+                        )
+            .OrderBy(p => p.Price)
             .ToListAsync(cancellationToken);
+        if (filter.IsSortDecrease)
+        {
+            list = list.OrderByDescending(p => p.Price).ToList();
+        }
+        return list.Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize).ToList();
     }
 
     public async Task<IEnumerable<Product>> GetProductsByCategoryId(Guid CategoryId, CancellationToken cancellationToken = default)
@@ -99,10 +108,11 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
         //_context.Products.RemoveRange(products);
     }
 
-    public int GetTotalProducts(string keywork = null)
+    public int GetTotalProducts(string keyword = null, Guid? categoryId = null)
     {
         return _context.Products
-            .Where(p => string.IsNullOrEmpty(keywork) || p.Name.ToLower().Contains(keywork.ToLower())) 
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower()))
+                        && (categoryId == null || p.CategoryId == categoryId)) 
             .Count();
     }
 
@@ -110,4 +120,43 @@ public class ProductDataAccess : GenericDataAccess<Product>, IProductDataAccess
     {
         return await _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
     }
+
+    //public async Task<bool> UpdateQuantityProductsFromIds(List<UpdateQuantityProductDto> orders)
+    //{
+    //    try
+    //    {
+    //        //var updatedItemsDictionary = orders.ToDictionary(item => item.Id);
+    //        //var p = _context.Products.Join(updatedItemsDictionary,
+    //        //      item => item.Id,
+    //        //      order => order.Key,
+    //        //      (item, order) => new
+    //        //      {
+    //        //          test = item.Id,
+    //        //          //Stock = orders.Value.Quantity
+    //        //      })
+    //        //.ToList();
+    //        List<Product> products = await _context.Products
+    //            .Where(p => orders.Select(o => o.ProductId).Contains(p.Id))
+    //            .ToListAsync();
+
+    //        //foreach (var product in products)
+    //        //{
+    //        //    foreach (var item in orders)
+    //        //    {
+    //        //        if (item.Id == product.Id)
+    //        //        {
+    //        //            product.Stock = product.Stock - item.Quantity;
+    //        //            if (product.Stock < 0) return false;
+    //        //        }
+    //        //    }
+    //        //}
+
+    //        UpdateProductRange(products);
+    //    }
+    //    catch(Exception ex)
+    //    {
+    //        return false;
+    //    }
+    //    return true;
+    //}
 }
