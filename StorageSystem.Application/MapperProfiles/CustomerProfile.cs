@@ -17,6 +17,7 @@ namespace StorageSystem.Application.MapperProfiles
             CreateMap<CreateCustomerInsDto, Customer>();
             CreateMap<UpdateCustomerInsDto, Customer>().ReverseMap();
             CreateMap<Customer, GetCustomerForView>().ReverseMap();
+            CreateMap<Customer, CustomerList>().ReverseMap();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace StorageSystem.Application.Contracts.Services
 {
     public interface ICustomerService
     {
-        Task<OneOf<IEnumerable<GetCustomerForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(Paging filter);
+        Task<OneOf<GetCustomerForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(FilterCustomer filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateCustomer(CreateCustomerInsDto customerDto);
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StorageSystem.Application.Contracts.DataAccess;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence.Contracts;
@@ -48,14 +49,31 @@ public class CustomerDataAccess : GenericDataAccess<Customer>, ICustomerDataAcce
         return await _context.Customers.FirstOrDefaultAsync(c => c.Phone == phone);
     }
 
-    public async Task<IEnumerable<Customer>> GetAllCustomers(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, CancellationToken cancellationToken = default)
     {
-        return await _context.Customers.Where(c => c.IsDeleted == false).ToListAsync(cancellationToken);
+        return await _context.Customers
+            .Where(p => string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()) 
+            || p.Phone.ToLower().Contains(filter.Keyword.ToLower()))
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Customer>> GetAllCustomers(bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Customers.Where(c => c.IsDeleted == false).ToListAsync(cancellationToken);
+        var list = await _context.Customers
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()) || p.Phone.ToLower().Contains(filter.Keyword.ToLower())))
+            .ToListAsync(cancellationToken);
+        
+        return list.Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize).ToList();
+    }
+
+    public int GetTotalCustomers(string keyword = null)
+    {
+        return _context.Customers
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower()) || p.Phone.ToLower().Contains(keyword.ToLower())))
+            .Count();
     }
 
     public void UpdateCustomer(Customer customer)

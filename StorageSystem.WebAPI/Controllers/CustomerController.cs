@@ -29,11 +29,15 @@ namespace StorageSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllCustomer([FromQuery] FilterCustomer filter)
         {
-            var result = await _customerService.GetAllCustomers(paging);
+            var result = await _customerService.GetAllCustomers(filter);
             return result.Match<IActionResult>(
-                _ => Ok(result.AsT0),
+                res => Ok(new
+                {
+                    res.Customers,
+                    res.Total
+                }),
                 BadRequest,
                 BadRequest
             );

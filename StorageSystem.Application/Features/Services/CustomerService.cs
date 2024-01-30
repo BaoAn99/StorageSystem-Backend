@@ -90,11 +90,14 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<IEnumerable<GetCustomerForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(Paging filter)
+        public async Task<OneOf<GetCustomerForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(FilterCustomer filter)
         {
-            IEnumerable<Customer> categories = await _unitOfWork.CustomerDataAccess.GetAllCustomers(true);
-            IEnumerable<GetCustomerForView> data = _mapper.Map<IEnumerable<GetCustomerForView>>(categories);
-            return data.ToList();
+            _logger.LogInformation("Start get all customers!");
+            IEnumerable<Customer> customers = await _unitOfWork.CustomerDataAccess.GetAllCustomers(filter, true);
+            GetCustomerForView data = new GetCustomerForView();
+            data.Customers = _mapper.Map<List<CustomerList>>(customers);
+            data.Total = _unitOfWork.CustomerDataAccess.GetTotalCustomers(filter.Keyword);
+            return data;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateCustomer(Guid customerId, UpdateCustomerInsDto customerDto)
