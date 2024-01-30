@@ -79,7 +79,6 @@ namespace StorageSystem.Application.Features.Services
                 _logger.LogInformation($"Start update product");
                 product.Name = productDto.Name;
                 product.Price = productDto.Price;
-                product.Quantity = productDto.Quantity;
                 product.OriginalPrice = productDto.OriginalPrice;
                 product.Stock = productDto.Stock;
                 product.Description = productDto.Description;

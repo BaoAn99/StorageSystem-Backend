@@ -67,8 +67,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/80",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110,
+                Price = 405000
                 
             },
             new Product
@@ -82,8 +81,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/81",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -96,8 +94,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/82",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -110,8 +107,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/83",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -124,8 +120,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/84",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -138,8 +133,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/85",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -152,8 +146,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/86",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -166,8 +159,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/87",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110 
+                Price = 405000 
             },
             new Product
             {
@@ -180,8 +172,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/88",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -194,8 +185,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/89",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -208,8 +198,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/90",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -222,8 +211,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/91",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -236,8 +224,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/92",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -250,8 +237,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/93",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -264,8 +250,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/94",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             },
             new Product
             {
@@ -278,8 +263,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
                 ThumbnailImage = "https://placewaifu.com/image/95",
                 CategoryId = new Guid("9be53c65-521f-417a-b7de-13af7b0bdfc4"),
                 OriginalPrice = 110000,
-                Price = 405000,
-                Quantity = 110
+                Price = 405000
             }
             );
 
