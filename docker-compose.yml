@@ -20,18 +20,20 @@ services:
       ConnectionStrings__DefaultConnection: "Server=sqlserverdb;Database=StorageSystem;User=sa;Password=r00t.R00T"
 
   sqlserverdb:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: sqlserverdb
+    cap_add: [ 'SYS_PTRACE' ]
     environment:
-      SA_PASSWORD: "r00t.R00T"
-      ACCEPT_EULA: Y
+      - "ACCEPT_EULA=1"
+      - "MSSQL_USER=sa"
+      - "MSSQL_SA_PASSWORD=r00t.R00T"
     ports:
       - "1435:1433"
     networks:
       - application-network
     restart: always
     volumes:
-      - sqlserver-data:/var/lib/sqlserver/data
+      - "mssql-azuresql-edge-data:/var/opt/mssql"
 
   elasticsearch:
     container_name: elasticsearch
@@ -66,5 +68,5 @@ networks:
     
 volumes:
   webapi-data:
-  sqlserver-data:
+  mssql-azuresql-edge-data:
   es-data:
