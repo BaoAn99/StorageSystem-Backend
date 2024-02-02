@@ -119,7 +119,7 @@ internal class Program
 
         var app = builder.Build();
 
-        app.MigrateDatabase();
+        //app.MigrateDatabase();
 
         //using (var scope = app.Services.CreateScope())
         //{

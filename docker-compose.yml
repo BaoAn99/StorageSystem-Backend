@@ -10,28 +10,41 @@ services:
     ports:
       - "44348:80"
     depends_on:
-      - sqlserverdb
+      - mssql
     networks:
       - application-network
     volumes:
       - webapi-data:/app/data
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=sqlserverdb;Database=StorageSystem;User=sa;Password=r00t.R00T"
+      - "FLASK_APP=app.py"
+      - "FLASK_ENV=development"
+      - "SCHEMA_PATH=/app/schemas"
+      - "SQL_CLIENT_HOST=mssql"
+      - "SQL_CLIENT_PORT=1435"
+      - "SQL_CLIENT_USER=sa"
+      - "SQL_CLIENT_PASS=r00t.R00T"
+      - "SQL_CLIENT_CMD=/opt/mssql-tools/bin/sqlcmd"
+      - "RANDOM_SEED=0"
+      # ASPNETCORE_ENVIRONMENT: Development
+      # ConnectionStrings__DefaultConnection: "Server=mssql;Database=StorageSystem;User=sa;Password=r00t.R00T"
+    links:
+      - mssql
 
-  sqlserverdb:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserverdb
+  mssql:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: mssql
+    cap_add: [ 'SYS_PTRACE' ]
     environment:
-      SA_PASSWORD: "r00t.R00T"
-      ACCEPT_EULA: Y
+      - "ACCEPT_EULA=1"
+      - "MSSQL_USER=sa"
+      - "MSSQL_SA_PASSWORD=r00t.R00T"
     ports:
       - "1435:1433"
     networks:
       - application-network
     restart: always
     volumes:
-      - sqlserver-data:/var/lib/sqlserver/data
+      - "mssql-azuresql-edge-data:/var/opt/mssql"
 
   elasticsearch:
     container_name: elasticsearch
@@ -66,5 +79,5 @@ networks:
     
 volumes:
   webapi-data:
-  sqlserver-data:
+  mssql-azuresql-edge-data:
   es-data:
