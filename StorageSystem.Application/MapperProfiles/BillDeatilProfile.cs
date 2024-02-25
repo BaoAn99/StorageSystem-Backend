@@ -13,8 +13,8 @@ namespace StorageSystem.Application.MapperProfiles
     {
         public BillDetailProfile() 
         {
-            CreateMap<CreateBillInsItemDto, BillDetail>();
-            CreateMap<UpdateBillInsItemDto, BillDetail>();
+            //CreateMap<CreateBillInsItemDto, BillDetail>();
+            //CreateMap<UpdateBillInsItemDto, BillDetail>();
             //.ForPath(dest => dest.BillId, opt => opt.MapFrom(src => src.Id))
             //.ForPath(dest => dest, opt => opt.MapFrom(src => src.Orders));
 

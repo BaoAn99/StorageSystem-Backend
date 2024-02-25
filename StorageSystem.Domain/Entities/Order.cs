@@ -28,8 +28,8 @@ namespace StorageSystem.Domain.Entities
         public virtual Product? Product { get; set; }
 
         [ForeignKey("UnitId")]
-        public Guid UnitId { set; get; }
-        public virtual Unit? Unit { get; set; }
+        public Guid? UnitId { set; get; }
+        public virtual Unit Unit { get; set; }
 
         [ForeignKey("CustomerId")]
         public Guid CustomerId { set; get; }

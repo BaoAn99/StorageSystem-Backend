@@ -12,7 +12,7 @@ namespace StorageSystem.Application.Models.Product.Outs
 {
     public class GetProductForView
     {
-        public List<ProductList> ProductLists = new List<ProductList>();
+        public List<ProductList> Products = new List<ProductList>();
 
         public int Total { get; set; }
     }
@@ -25,7 +25,7 @@ namespace StorageSystem.Application.Models.Product.Outs
 
         public decimal Price { set; get; }
 
-        public int Quantity { set; get; }
+        public int StockStatus { set; get; }
 
         public decimal OriginalPrice { set; get; }
 
@@ -38,6 +38,8 @@ namespace StorageSystem.Application.Models.Product.Outs
         public string ThumbnailImage { get; set; }
 
         public Guid CategoryId { set; get; }
+
+        public Guid UnitId { set; get; }
 
         public virtual List<ProductImageDto> ProductImages { get; set; }
         //public List<string> Categories { get; set; }

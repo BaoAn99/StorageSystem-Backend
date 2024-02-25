@@ -26,8 +26,9 @@ namespace StorageSystem.Application.MapperProfiles
         private void CreateCategoryMapper()
         {
             CreateMap<CreateCategoryInsDto, Category>();
-            CreateMap<UpdateCategoryInsDto, Category>();
+            CreateMap<UpdateCategoryInsDto, Category>().ReverseMap();
             CreateMap<Category, GetCategoryForView>().ReverseMap();
+            CreateMap<Category, CategoryList>().ReverseMap();
         }
     }
 }

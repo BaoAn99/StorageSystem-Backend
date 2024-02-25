@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StorageSystem.Application.Contracts.DataAccess;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence.Contracts;
@@ -48,9 +49,26 @@ public class SupplierDataAccess : GenericDataAccess<Supplier>, ISupplierDataAcce
         return await _context.Suppliers.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Supplier>> GetAllSuppliers(bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Supplier>> GetAllSuppliers(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Suppliers.ToListAsync(cancellationToken);
+        var data = await _context.Suppliers
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
+            && p.IsDeleted == false
+            )
+            .OrderBy(p => p.Name)
+            //.GroupBy(p => p.Name)
+            //.Select(grp => grp.ToList())
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
+        return (IEnumerable<Supplier>)data;
+    }
+
+    public int GetTotalSuppliers(string keyword = null)
+    {
+        return _context.Suppliers
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower())) && p.IsDeleted == false)
+            .Count();
     }
 
     public void UpdateSupplier(Supplier supplier)

@@ -9,6 +9,13 @@ namespace StorageSystem.Application.Models.Category.Outs
 {
     public class GetCategoryForView
     {
+        public List<CategoryList> Categories = new List<CategoryList>();
+
+        public int Total { get; set; }
+    }
+
+    public class CategoryList
+    {
         public Guid Id { get; set; }
 
         public string Name { get; set; }

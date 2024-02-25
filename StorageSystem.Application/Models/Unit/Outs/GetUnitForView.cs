@@ -8,6 +8,13 @@ namespace StorageSystem.Application.Models.Unit.Outs
 {
     public class GetUnitForView
     {
+        public List<UnitList> Units = new List<UnitList>();
+
+        public int Total { get; set; }
+    }
+
+    public class UnitList
+    {
         public Guid Id { get; set; }
 
         public string Name { get; set; }

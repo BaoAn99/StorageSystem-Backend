@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Models.Bases
 {
-    public class FilterCustomer : Paging
+    public class FilterBase : Paging
     {
         public string? Keyword { get; set; }
     }

@@ -28,6 +28,6 @@ namespace StorageSystem.Domain.Entities
 
         public decimal AmountPaid { get; set; }
 
-        public virtual List<CouponDetail>? CouponDetails { get; set; }
+        public virtual ICollection<Product> Products { get; set;}
     }
 }

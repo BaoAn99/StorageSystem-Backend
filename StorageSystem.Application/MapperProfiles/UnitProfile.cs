@@ -25,8 +25,9 @@ namespace StorageSystem.Application.MapperProfiles
         private void CreateUnitMapper()
         {
             CreateMap<CreateUnitInsDto, Unit>();
-            CreateMap<UpdateUnitInsDto, Unit>();
+            CreateMap<UpdateUnitInsDto, Unit>().ReverseMap();
             CreateMap<Unit, GetUnitForView>().ReverseMap();
+            CreateMap<Unit, UnitList>().ReverseMap();
         }
     }
 }

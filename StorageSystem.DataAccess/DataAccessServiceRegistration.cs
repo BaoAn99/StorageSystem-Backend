@@ -23,7 +23,6 @@ public static class DataAccessServiceRegistration
             .AddScoped<IOrderDataAccess, OrderDataAccess>()
             .AddScoped<ISupplierDataAccess, SupplierDataAccess>()
             .AddScoped<IUnitDataAccess, UnitDataAccess>()
-            .AddScoped<IProductUnitDataAccess, ProductUnitDataAccess>()
             .AddScoped<ICustomerDataAccess, CustomerDataAccess>();
     }
 }

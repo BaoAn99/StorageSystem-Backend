@@ -14,7 +14,7 @@ namespace StorageSystem.Application.Contracts.Services
 {
     public interface ISupplierService
     {
-        Task<OneOf<IEnumerable<GetSupplierForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllSuppliers(Paging filter);
+        Task<OneOf<GetSupplierForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllSuppliers(FilterBase filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateSupplier(CreateSupplierInsDto supplierDto);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,21 @@ namespace StorageSystem.Domain.Entities
 
         public bool IsDeleted { get; set; } = false;
 
-        public List<ProductSupplier>? ProductSuppliers { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Price { set; get; }
+
+        public Guid SuplierId { get; set; } = Guid.NewGuid();
+
+        public Guid ProductId { get; set; }
+
+        //public ICollection<Guid> ProductIds { get; } = new List<Guid>(); 
+
+        //public virtual ICollection<Product>? Products { get; set; }
+
+        //[ForeignKey("ProductId")]
+        //public Guid ProductId { set; get; }
+        //public virtual Product Product { get; set; }
+
+        
     }
 }

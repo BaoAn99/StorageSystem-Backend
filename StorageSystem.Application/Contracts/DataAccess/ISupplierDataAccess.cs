@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,10 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task<IEnumerable<Supplier>> GetAllSuppliers(CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Supplier>> GetAllSuppliers(bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Supplier>> GetAllSuppliers(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<Supplier> FindSupplierById(Guid Id);
+
+        int GetTotalSuppliers(string keyword = null);
     }
 }

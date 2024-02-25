@@ -12,7 +12,7 @@ namespace StorageSystem.Domain.Entities
     public class Bill
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
 
@@ -29,6 +29,18 @@ namespace StorageSystem.Domain.Entities
 
         public decimal? Deposit { get; set; }
 
-        public virtual List<BillDetail>? BillDetails { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal Price { get; set; }
+
+        public int Quantity { get; set; }
+
+        public decimal? DiscountAmount { get; set; }
+
+        //[ForeignKey("ProductId")]
+        public Guid BillId { set; get; }
+        public Guid ProductId { set; get; }
+        //public virtual Product? Product { get; set; }
+
+        public virtual ICollection<Product> Products { get; set;}
     }
 }

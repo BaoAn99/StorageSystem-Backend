@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,10 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task<IEnumerable<Unit>> GetAllUnits(CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Unit>> GetAllUnits(bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Unit>> GetAllUnits(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<Unit> FindUnitById(Guid Id);
+
+        int GetTotalUnits(string keyword = null);
     }
 }

@@ -6,6 +6,7 @@ using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
+using StorageSystem.Application.Models.Category.Outs;
 using StorageSystem.Application.Models.Supplier.Ins;
 using StorageSystem.Application.Models.Supplier.Outs;
 using StorageSystem.Domain.Entities;
@@ -31,10 +32,10 @@ namespace StorageSystem.Application.Features.Services
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateSupplier(CreateSupplierInsDto supplierDto)
         {
             _logger.LogInformation($"Start create supplier");
-            Supplier supplier = _mapper.Map<Supplier>(supplierDto);
+            List<Supplier> suppliers = _mapper.Map<IEnumerable<Supplier>>(supplierDto).ToList();
             try
             {
-                await _unitOfWork.SupplierDataAccess.CreateSupplierAsync(supplier);
+                await _unitOfWork.SupplierDataAccess.CreateSupplierRangeAsync(suppliers);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -86,11 +87,14 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<IEnumerable<GetSupplierForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllSuppliers(Paging filter)
+        public async Task<OneOf<GetSupplierForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllSuppliers(FilterBase filter)
         {
-            IEnumerable<Supplier> suppliers = await _unitOfWork.SupplierDataAccess.GetAllSuppliers(true);
-            IEnumerable<GetSupplierForView> data = _mapper.Map<IEnumerable<GetSupplierForView>>(suppliers);
-            return data.ToList();
+            _logger.LogInformation("Start get all suppliers!");
+            IEnumerable<Supplier> suppliers = await _unitOfWork.SupplierDataAccess.GetAllSuppliers(filter, true);
+            GetSupplierForView data = new GetSupplierForView();
+            data.Suppliers = _mapper.Map<List<SupplierList>>(suppliers);
+            data.Total = _unitOfWork.SupplierDataAccess.GetTotalSuppliers(filter.Keyword);
+            return data;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateSupplier(Guid supplierId, UpdateSupplierInsDto supplierDto)

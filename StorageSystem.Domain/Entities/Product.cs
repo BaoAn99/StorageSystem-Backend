@@ -24,11 +24,17 @@ public class Product
 
     public string? Description { set; get; }
 
-    //Thiếu field nhập số lượng cho phép thông báo khi sắp hết hàng
+    public int StockStatus { set; get; }
+
+    //miss field stock
 
     [ForeignKey("CategoryId")]
     public Guid CategoryId { set; get; }
     public virtual Category? Category { get; set; }
+
+    [ForeignKey("UnitId")]
+    public Guid UnitId { set; get; }
+    public virtual Unit? Unit { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 
@@ -36,9 +42,13 @@ public class Product
 
     public string ThumbnailImage { get; set; }
 
-    public virtual List<ProductImage> ProductImages { get; set; }
+    public virtual ICollection<Bill>? Bills { get; set; }
 
-    public List<ProductSupplier>? ProductSuppliers { get; set; }
+    public virtual ICollection<Coupon>? Coupons  { get; set; }
 
-    public List<ProductUnit>? ProductUnits { get; set; }
+    public virtual ICollection<Order>? Orders { get; set; }
+
+    public virtual ICollection<ProductImage>? ProductImages { get; set; }
+
+    public virtual ICollection<Supplier>? Suppliers { get; set; }
 }

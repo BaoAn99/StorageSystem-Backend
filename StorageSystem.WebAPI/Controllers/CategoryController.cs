@@ -33,11 +33,15 @@ namespace StorageSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllCategories([FromQuery] FilterBase filter)
         {
-            var result = await _categoryService.GetAllCategories(paging);
+            var result = await _categoryService.GetAllCategories(filter);
             return result.Match<IActionResult>(
-                _ => Ok(result.AsT0),
+                res => Ok(new
+                {
+                    res.Categories,
+                    res.Total
+                }),
                 BadRequest,
                 BadRequest
             );

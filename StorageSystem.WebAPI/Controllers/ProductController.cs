@@ -41,7 +41,7 @@ namespace StorageSystem.WebAPI.Controllers
             return result.Match<IActionResult>(
                 res => Ok(new
                 {
-                    res.ProductLists, res.Total
+                    res.Products, res.Total
                 }),
                 BadRequest,
                 BadRequest
