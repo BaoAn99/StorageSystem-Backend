@@ -51,4 +51,6 @@ public class Product
     public virtual ICollection<ProductImage>? ProductImages { get; set; }
 
     public virtual ICollection<Supplier>? Suppliers { get; set; }
+
+    public SupplierProduct SupplierProduct { get; set; }
 }

@@ -32,10 +32,10 @@ namespace StorageSystem.Application.Features.Services
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateSupplier(CreateSupplierInsDto supplierDto)
         {
             _logger.LogInformation($"Start create supplier");
-            List<Supplier> suppliers = _mapper.Map<IEnumerable<Supplier>>(supplierDto).ToList();
+            Supplier supplier = _mapper.Map<Supplier>(supplierDto);
             try
             {
-                await _unitOfWork.SupplierDataAccess.CreateSupplierRangeAsync(suppliers);
+                await _unitOfWork.SupplierDataAccess.CreateSupplierAsync(supplier);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)

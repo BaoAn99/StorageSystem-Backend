@@ -22,7 +22,7 @@ namespace StorageSystem.Application.Models.Supplier.Ins
 
         public string Email { get; set; }
 
-        public List<ProductListItemInsDto> Products { get; set; }
+        //public List<ProductListItemInsDto> Products { get; set; }
     }
 
     public class ProductListItemInsDto
@@ -31,16 +31,16 @@ namespace StorageSystem.Application.Models.Supplier.Ins
         public decimal Price { set; get; }
     }
 
-    public class SupplierDtoToSupplierListConverter : ITypeConverter<CreateSupplierInsDto, IEnumerable<Domain.Entities.Supplier>>
-    {
-        public IEnumerable<Domain.Entities.Supplier> Convert(CreateSupplierInsDto source, IEnumerable<Domain.Entities.Supplier> destination, ResolutionContext context)
-        {
-            foreach (var model in source.Products.Select
-                (e => context.Mapper.Map<Domain.Entities.Supplier>(e)))
-            {
-                context.Mapper.Map(source, model);
-                yield return model;
-            }
-        }
-    }
+    //public class SupplierDtoToSupplierListConverter : ITypeConverter<CreateSupplierInsDto, IEnumerable<Domain.Entities.Supplier>>
+    //{
+    //    public IEnumerable<Domain.Entities.Supplier> Convert(CreateSupplierInsDto source, IEnumerable<Domain.Entities.Supplier> destination, ResolutionContext context)
+    //    {
+    //        foreach (var model in source.Products.Select
+    //            (e => context.Mapper.Map<Domain.Entities.Supplier>(e)))
+    //        {
+    //            context.Mapper.Map(source, model);
+    //            yield return model;
+    //        }
+    //    }
+    //}
 }

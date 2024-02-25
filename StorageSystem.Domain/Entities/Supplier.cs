@@ -28,12 +28,14 @@ namespace StorageSystem.Domain.Entities
 
         public bool IsDeleted { get; set; } = false;
 
-        [Column(TypeName = "decimal(18,4)")]
-        public decimal Price { set; get; }
+        public SupplierProduct SupplierProduct { get; set; }
 
-        public Guid SuplierId { get; set; } = Guid.NewGuid();
+        //[Column(TypeName = "decimal(18,4)")]
+        //public decimal Price { set; get; }
 
-        public Guid ProductId { get; set; }
+        //public Guid SuplierId { get; set; } = Guid.NewGuid();
+
+        //public Guid ProductId { get; set; }
 
         //public ICollection<Guid> ProductIds { get; } = new List<Guid>(); 
 
@@ -43,6 +45,6 @@ namespace StorageSystem.Domain.Entities
         //public Guid ProductId { set; get; }
         //public virtual Product Product { get; set; }
 
-        
+
     }
 }
