@@ -60,12 +60,12 @@ namespace StorageSystem.Application.Features.Services
                 Guid billId = Guid.NewGuid();
                 bill.Id = billId;
                 bill.Total = total;
-                bill.BillDetails = _mapper.Map<List<BillDetail>>(billDto.Orders);
-                bill.BillDetails.Select(item =>
-                {
-                    item.BillId = billId;
-                    return item;
-                }).ToList();
+                //bill.BillDetails = _mapper.Map<List<BillDetail>>(billDto.Orders);
+                //bill.BillDetails.Select(item =>
+                //{
+                //    item.BillId = billId;
+                //    return item;
+                //}).ToList();
 
                 await _unitOfWork.BillDataAccess.CreateBillAsync(bill);
                 //update quantity product from ids
@@ -162,50 +162,50 @@ namespace StorageSystem.Application.Features.Services
             {
                 _logger.LogInformation($"Start update quantity for product");
                 //Loop bill ban đầu
-                foreach(var item in bill.BillDetails)
-                {
-                    //Loop bill hiện tại
-                    foreach(var item1 in billDto.Items)
-                    {
-                        //Nếu sản phẩm cũ:
-                        //+ Số lượng ít hơn lúc đầu -> số lượng product + (số lượng lúc đầu - số lượng hiện tại)
-                        //+ Số lượng nhiều hơn lúc đầu -> số lượng product - (số lượng hiện tại - số lượng lúc đầu)
-                        if(item.ProductId == item1.ProductId)
-                        {
-                            if(item.Quantity > item1.Quantity)
-                            {
+                //foreach(var item in bill.BillDetails)
+                //{
+                //    //Loop bill hiện tại
+                //    foreach(var item1 in billDto.Items)
+                //    {
+                //        //Nếu sản phẩm cũ:
+                //        //+ Số lượng ít hơn lúc đầu -> số lượng product + (số lượng lúc đầu - số lượng hiện tại)
+                //        //+ Số lượng nhiều hơn lúc đầu -> số lượng product - (số lượng hiện tại - số lượng lúc đầu)
+                //        if(item.ProductId == item1.ProductId)
+                //        {
+                //            if(item.Quantity > item1.Quantity)
+                //            {
 
-                            }else if(item.Quantity < item1.Quantity)
-                            {
+                //            }else if(item.Quantity < item1.Quantity)
+                //            {
 
-                            }
-                        }
-                        //Nếu sản phẩm mới -> trừ số lượng
-                        else
-                        {
+                //            }
+                //        }
+                //        //Nếu sản phẩm mới -> trừ số lượng
+                //        else
+                //        {
 
-                        }
-                    }
-                }
-                _logger.LogInformation($"Start update bill");
-                bill.BillDetails = _mapper.Map<List<BillDetail>>(billDto.Items);
-                bill.BillDetails.Select(item =>
-                {
-                    item.BillId = billId;
-                    return item;
-                }).ToList();
+                //        }
+                //    }
+                //}
+                //_logger.LogInformation($"Start update bill");
+                //bill.BillDetails = _mapper.Map<List<BillDetail>>(billDto.Items);
+                //bill.BillDetails.Select(item =>
+                //{
+                //    item.BillId = billId;
+                //    return item;
+                //}).ToList();
 
-                try
-                {
-                    _unitOfWork.BillDataAccess.UpdateBill(bill);
-                    //update quantity product from ids
-                    await _unitOfWork.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"Error when update bill: {ex.Message}, {ex.InnerException}!");
-                    return false;
-                }
+                //try
+                //{
+                //    _unitOfWork.BillDataAccess.UpdateBill(bill);
+                //    //update quantity product from ids
+                //    await _unitOfWork.SaveChangesAsync();
+                //}
+                //catch (Exception ex)
+                //{
+                //    _logger.LogError($"Error when update bill: {ex.Message}, {ex.InnerException}!");
+                //    return false;
+                //}
                 return true;
             }
             return new ValidationResult(

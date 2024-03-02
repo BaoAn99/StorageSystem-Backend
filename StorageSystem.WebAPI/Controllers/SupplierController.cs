@@ -30,11 +30,15 @@ namespace StorageSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllSuppliers([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllSuppliers([FromQuery] FilterBase filter)
         {
-            var result = await _supplierService.GetAllSuppliers(paging);
+            var result = await _supplierService.GetAllSuppliers(filter);
             return result.Match<IActionResult>(
-                _ => Ok(result.AsT0),
+                res => Ok(new
+                {
+                    res.Suppliers,
+                    res.Total
+                }),
                 BadRequest,
                 BadRequest
             );

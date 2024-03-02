@@ -6,6 +6,7 @@ using StorageSystem.Application.Contracts.DataAccess.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
+using StorageSystem.Application.Models.Category.Outs;
 using StorageSystem.Application.Models.Unit.Ins;
 using StorageSystem.Application.Models.Unit.Outs;
 using StorageSystem.Domain.Entities;
@@ -86,11 +87,14 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<IEnumerable<GetUnitForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllUnits(Paging filter)
+        public async Task<OneOf<GetUnitForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllUnits(FilterBase filter)
         {
-            IEnumerable<Unit> units = await _unitOfWork.UnitDataAccess.GetAllUnits(true);
-            IEnumerable<GetUnitForView> data = _mapper.Map<IEnumerable<GetUnitForView>>(units);
-            return data.ToList();
+            _logger.LogInformation("Start get all units!");
+            IEnumerable<Unit> units = await _unitOfWork.UnitDataAccess.GetAllUnits(filter, true);
+            GetUnitForView data = new GetUnitForView();
+            data.Units = _mapper.Map<List<UnitList>>(units);
+            data.Total = _unitOfWork.UnitDataAccess.GetTotalUnits(filter.Keyword);
+            return data;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateUnit(Guid unitId, UpdateUnitInsDto unitDto)
@@ -99,7 +103,7 @@ namespace StorageSystem.Application.Features.Services
             if (unit != null)
             {
                 _logger.LogInformation($"Start update unit");
-                //unit.Name = unitDto.Name;
+                unit.Name = unitDto.Name;
 
                 try
                 {

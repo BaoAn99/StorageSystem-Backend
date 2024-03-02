@@ -22,8 +22,6 @@ public interface IUnitOfWork
 
     ISupplierDataAccess SupplierDataAccess { get; }
 
-    IProductUnitDataAccess ProductUnitDataAccess { get; }
-
     int SaveChanges();
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));

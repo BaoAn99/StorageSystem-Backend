@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Application.Models.Bases
 {
-    public class FilterProduct : Paging
+    public class FilterProduct : FilterBase
     {
-        public string? Keyword { get; set; }
-
         public Guid? CategoryId { get; set; }
 
         public bool IsSortDecrease { get; set; } = false;

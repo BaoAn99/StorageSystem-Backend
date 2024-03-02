@@ -9,6 +9,7 @@ using StorageSystem.Application.Models;
 using StorageSystem.Application.Models.Bases;
 using StorageSystem.Application.Models.Category.Ins;
 using StorageSystem.Application.Models.Category.Outs;
+using StorageSystem.Application.Models.Customer.Outs;
 using StorageSystem.Application.Models.Product.Base;
 using StorageSystem.Application.Models.Product.Ins;
 using StorageSystem.Application.Models.Product.Outs;
@@ -90,11 +91,14 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<IEnumerable<GetCategoryForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCategories(Paging filter)
+        public async Task<OneOf<GetCategoryForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCategories(FilterBase filter)
         {
-            IEnumerable<Category> categories = await _unitOfWork.CategoryDataAccess.GetAllCategories(true);
-            IEnumerable<GetCategoryForView> data = _mapper.Map<IEnumerable<GetCategoryForView>>(categories);
-            return data.ToList();
+            _logger.LogInformation("Start get all categories!");
+            IEnumerable<Category> categories = await _unitOfWork.CategoryDataAccess.GetAllCategories(filter, true);
+            GetCategoryForView data = new GetCategoryForView();
+            data.Categories = _mapper.Map<List<CategoryList>>(categories);
+            data.Total = _unitOfWork.CategoryDataAccess.GetTotalCategories(filter.Keyword);
+            return data;
         }
 
         public async Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> UpdateCategory(Guid categoryId, UpdateCategoryInsDto categoryDto)
@@ -103,7 +107,7 @@ namespace StorageSystem.Application.Features.Services
             if (category != null)
             {
                 _logger.LogInformation($"Start update category");
-                //category.Name = categoryDto.Name;
+                category.Name = categoryDto.Name;
 
                 try
                 {

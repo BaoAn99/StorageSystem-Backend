@@ -28,8 +28,6 @@ public class UnitOfWork : IUnitOfWork
 
     public ISupplierDataAccess SupplierDataAccess {get;}
 
-    public IProductUnitDataAccess ProductUnitDataAccess {get; }
-
     public UnitOfWork(
         IApplicationDbContext context,
         IProductDataAccess productDataAccess,
@@ -38,8 +36,7 @@ public class UnitOfWork : IUnitOfWork
         ICustomerDataAccess customerDataAccess,
         IOrderDataAccess orderDataAccess,
         IUnitDataAccess unitDataAccess,
-        ISupplierDataAccess supplierDataAccess,
-        IProductUnitDataAccess productUnitDataAccess)
+        ISupplierDataAccess supplierDataAccess)
     {
         _context = context;
         ProductDataAccess = productDataAccess;
@@ -49,7 +46,6 @@ public class UnitOfWork : IUnitOfWork
         OrderDataAccess = orderDataAccess;
         UnitDataAccess = unitDataAccess;
         SupplierDataAccess = supplierDataAccess;
-        ProductUnitDataAccess = productUnitDataAccess;
     }
 
     public int SaveChanges()

@@ -45,7 +45,7 @@ public class BillDataAccess : GenericDataAccess<Bill>, IBillDataAccess
 
     public async Task<Bill> FindBillById(Guid Id, bool trackingReference)
     {
-        return await _context.Bills.Include(b => b.BillDetails).FirstOrDefaultAsync(c => c.Id == Id);
+        return await _context.Bills.FirstOrDefaultAsync(c => c.Id == Id);
     }
 
     public async Task<IEnumerable<Bill>> GetAllBills(CancellationToken cancellationToken = default)

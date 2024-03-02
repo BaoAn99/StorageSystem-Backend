@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Contracts.DataAccess.Base;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,10 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         Task<IEnumerable<Category>> GetAllCategories(CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Category>> GetAllCategories(bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Category>> GetAllCategories(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<Category> FindCategoryById(Guid Id);
+
+        int GetTotalCategories(string keyword = null);
     }
 }

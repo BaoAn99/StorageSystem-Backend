@@ -90,7 +90,7 @@ namespace StorageSystem.Application.Features.Services
                    );
         }
 
-        public async Task<OneOf<GetCustomerForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(FilterCustomer filter)
+        public async Task<OneOf<GetCustomerForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCustomers(FilterBase filter)
         {
             _logger.LogInformation("Start get all customers!");
             IEnumerable<Customer> customers = await _unitOfWork.CustomerDataAccess.GetAllCustomers(filter, true);

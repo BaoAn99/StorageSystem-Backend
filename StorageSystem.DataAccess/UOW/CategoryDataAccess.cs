@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StorageSystem.Application.Contracts.DataAccess;
+using StorageSystem.Application.Models.Bases;
 using StorageSystem.DataAccess.UOW.Base;
 using StorageSystem.Domain.Entities;
 using StorageSystem.Persistence.Contracts;
@@ -49,9 +50,23 @@ public class CategoryDataAccess : GenericDataAccess<Category>, ICategoryDataAcce
         return await _context.Categories.ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Category>> GetAllCategories(bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Category>> GetAllCategories(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
-        return await _context.Categories.ToListAsync(cancellationToken);
+        return await _context.Categories
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()))
+            && p.IsDeleted == false
+            )
+            .OrderBy(p => p.Name)
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellationToken);
+    }
+
+    public int GetTotalCategories(string keyword = null)
+    {
+        return _context.Categories
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower())) && p.IsDeleted == false)
+            .Count();
     }
 
     public void UpdateCategory(Category category)

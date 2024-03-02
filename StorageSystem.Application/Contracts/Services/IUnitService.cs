@@ -14,7 +14,7 @@ namespace StorageSystem.Application.Contracts.Services
 {
     public interface IUnitService
     {
-        Task<OneOf<IEnumerable<GetUnitForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllUnits(Paging filter);
+        Task<OneOf<GetUnitForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllUnits(FilterBase filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateUnit(CreateUnitInsDto unitDto);
 

@@ -78,9 +78,11 @@ namespace StorageSystem.Application.Features.Services
             {
                 _logger.LogInformation($"Start update product");
                 product.Name = productDto.Name;
-                product.Price = productDto.Price;
+                //product.Price = productDto.Price;
+                product.StockStatus = productDto.StockStatus;
                 product.Description = productDto.Description;
                 product.CategoryId = productDto.CategoryId;
+                product.UnitId = productDto.UnitId;
                 product.ThumbnailImage = productDto.ThumbnailImage;
                 product.ProductImages = productDto.ProductImages;
 
@@ -111,7 +113,7 @@ namespace StorageSystem.Application.Features.Services
             _logger.LogInformation("Start get all products!");
             IEnumerable<Product> products = await _unitOfWork.ProductDataAccess.GetAllProducts(filter,true);
             GetProductForView data = new GetProductForView();
-            data.ProductLists = _mapper.Map<List<ProductList>>(products);
+            data.Products = _mapper.Map<List<ProductList>>(products);
             data.Total = _unitOfWork.ProductDataAccess.GetTotalProducts(filter.Keyword, filter.CategoryId);
             return data;
         }

@@ -30,14 +30,18 @@ namespace StorageSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUnits([FromQuery] Paging paging)
+        public async Task<IActionResult> GetAllUnits([FromQuery] FilterBase filter)
         {
-            var result = await _unitService.GetAllUnits(paging);
+            var result = await _unitService.GetAllUnits(filter);
             return result.Match<IActionResult>(
-                _ => Ok(result.AsT0),
+                res => Ok(new
+                {
+                    res.Units,
+                    res.Total
+                }),
                 BadRequest,
                 BadRequest
-            );
+                );
         }
 
         [HttpGet("{id}")]

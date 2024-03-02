@@ -19,7 +19,6 @@ namespace StorageSystem.Domain.Entities
 
         public DateTimeOffset DateCreated { set; get; } = DateTimeOffset.Now;
 
-        public virtual List<Product>? Products { get; set; }
-
+        public virtual ICollection<Product>? Products { get; set; }
     }
 }

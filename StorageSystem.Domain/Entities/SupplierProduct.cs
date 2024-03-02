@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace StorageSystem.Domain.Entities
 {
-    public class ProductSupplier
+    public class SupplierProduct
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set;}
 
         [ForeignKey("SupplierId")]
-        public Guid SupplierId { set; get; }
-        public virtual Supplier? Supplier { get; set; }
+        public Guid SupplierId { get; set;}
+        public Supplier Supplier { get; set;}
 
         [ForeignKey("ProductId")]
-        public Guid ProductId { set; get; }
-        public virtual Product? Product { get; set; }
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
 
         [Column(TypeName = "decimal(18,4)")]
         public decimal Price { set; get; }

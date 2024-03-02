@@ -14,7 +14,7 @@ namespace StorageSystem.Application.Contracts.Services
 {
     public interface ICategoryService
     {
-        Task<OneOf<IEnumerable<GetCategoryForView>, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCategories(Paging filter);
+        Task<OneOf<GetCategoryForView, LocalizationErrorMessageOutDto, ValidationResult>> GetAllCategories(FilterBase filter);
 
         Task<OneOf<bool, LocalizationErrorMessageOutDto, ValidationResult>> CreateCategory(CreateCategoryInsDto categoryDto);
 

@@ -10,12 +10,18 @@ namespace StorageSystem.Application.Models.Product.Ins
     public class UpdateProductInsDto : CreateOrUpdateProductDto
     {
         public string Name { set; get; }
+        
+        public decimal? Price { set; get; }
 
-        public decimal Price { set; get; }
+        public decimal? OriginalPrice { set; get; }
 
-        public string Description { set; get; }
+        public int StockStatus { set; get; }
+
+        public string? Description { set; get; }
 
         public Guid CategoryId { get; set; }
+
+        public Guid UnitId { get; set; }
 
         public string ThumbnailImage { get; set; }
 

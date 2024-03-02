@@ -49,20 +49,20 @@ public class CustomerDataAccess : GenericDataAccess<Customer>, ICustomerDataAcce
         return await _context.Customers.FirstOrDefaultAsync(c => c.Phone == phone);
     }
 
-    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterBase filter, CancellationToken cancellationToken = default)
     {
         return await _context.Customers
             .Where(p => string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()) 
-            || p.Phone.ToLower().Contains(filter.Keyword.ToLower()))
+            || p.Phone.ToLower().Contains(filter.Keyword.ToLower()) && p.IsDeleted == false)
             .Skip((filter.PageNumber - 1) * filter.PageSize)
             .Take(filter.PageSize)
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, bool trackingReference, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Customer>> GetAllCustomers(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default)
     {
         var list = await _context.Customers
-            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()) || p.Phone.ToLower().Contains(filter.Keyword.ToLower())))
+            .Where(p => (string.IsNullOrEmpty(filter.Keyword) || p.Name.ToLower().Contains(filter.Keyword.ToLower()) || p.Phone.ToLower().Contains(filter.Keyword.ToLower())) && p.IsDeleted == false)
             .ToListAsync(cancellationToken);
         
         return list.Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -72,7 +72,7 @@ public class CustomerDataAccess : GenericDataAccess<Customer>, ICustomerDataAcce
     public int GetTotalCustomers(string keyword = null)
     {
         return _context.Customers
-            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower()) || p.Phone.ToLower().Contains(keyword.ToLower())))
+            .Where(p => (string.IsNullOrEmpty(keyword) || p.Name.ToLower().Contains(keyword.ToLower()) || p.Phone.ToLower().Contains(keyword.ToLower())) && p.IsDeleted == false)
             .Count();
     }
 

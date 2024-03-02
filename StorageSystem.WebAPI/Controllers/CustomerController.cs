@@ -29,7 +29,7 @@ namespace StorageSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCustomer([FromQuery] FilterCustomer filter)
+        public async Task<IActionResult> GetAllCustomer([FromQuery] FilterBase filter)
         {
             var result = await _customerService.GetAllCustomers(filter);
             return result.Match<IActionResult>(

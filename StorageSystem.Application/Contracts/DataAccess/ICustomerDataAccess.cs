@@ -23,9 +23,9 @@ namespace StorageSystem.Application.Contracts.DataAccess
 
         void DeleteCustomerRange(List<Customer> customers);
 
-        Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Customer>> GetAllCustomers(FilterBase filter, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<Customer>> GetAllCustomers(FilterCustomer filter, bool trackingReference, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Customer>> GetAllCustomers(FilterBase filter, bool trackingReference, CancellationToken cancellationToken = default);
 
         Task<Customer> FindCustomerById(Guid Id);
 
