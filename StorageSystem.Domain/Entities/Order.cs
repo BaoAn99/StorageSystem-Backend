@@ -19,7 +19,9 @@ namespace StorageSystem.Domain.Entities
 
         public int Quantity { get; set; }
 
-        public decimal? DiscountAmount { get; set; }
+        public decimal DiscountTotal { get; set; }
+
+        public decimal DiscountItem { get; set; }
 
         public Guid OwnerId { get; set; }
 
@@ -27,13 +29,17 @@ namespace StorageSystem.Domain.Entities
         public Guid ProductId { set; get; }
         public virtual Product? Product { get; set; }
 
-        [ForeignKey("UnitId")]
-        public Guid? UnitId { set; get; }
-        public virtual Unit Unit { get; set; }
+        //[ForeignKey("UnitId")]
+        //public Guid? UnitId { set; get; }
+        //public virtual Unit Unit { get; set; }
 
         [ForeignKey("CustomerId")]
         public Guid CustomerId { set; get; }
         public virtual Customer? Customer { get; set; }
+
+        public decimal Deposit { get; set; }
+
+        public decimal Total { get; set; }
 
         public StatusOrder StatusOrder { get; set; }
 

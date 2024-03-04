@@ -16,6 +16,10 @@ namespace StorageSystem.Application.Models.Order.Ins
 
         public string? Address { get; set; }
 
+        public Guid OwnerId { get; set; }
+
+        public decimal? DiscountTotal { get; set; }
+
         public List<CreateOrderItemInsDto> Orders { get; set; }
     }
 
@@ -23,15 +27,11 @@ namespace StorageSystem.Application.Models.Order.Ins
     {
         public Guid ProductId { get; set; }
 
-        public Guid UnitId { get; set; }
-
         public decimal Price { get; set; }
 
         public int Quantity { get; set; }
 
-        public decimal? DiscountAmount { get; set; }
-
-        public Guid OwnerId { get; set; }
+        public decimal? DiscountItem { get; set; }
 
         //public StatusOrder StatusOrder { get; set; }
     }

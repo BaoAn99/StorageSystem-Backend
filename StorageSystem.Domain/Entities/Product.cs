@@ -24,9 +24,11 @@ public class Product
 
     public string? Description { set; get; }
 
-    public int StockStatus { set; get; }
+    //notifi for admin when product almous out of stock
+    public int StockStatus { set; get; } = 10;
 
-    //miss field stock
+    public int Stock { set; get; }
+
 
     [ForeignKey("CategoryId")]
     public Guid CategoryId { set; get; }

@@ -199,7 +199,7 @@ namespace StorageSystem.Application.Features.Services
                     UpdateQuantityProductDto updateQuantityProductDto = new UpdateQuantityProductDto();
                     updateQuantityProductDto.ProductId = obj.ProductId;
                     updateQuantityProductDto.Quantity = obj.Quantity;
-                    updateQuantityProductDto.UnitId = obj.UnitId;
+                    //updateQuantityProductDto.UnitId = obj.UnitId;
                     listItems.Add(updateQuantityProductDto);
                 }
                 //var res = await _unitOfWork.ProductUnitDataAccess.UpdateProductQuantity(listItems);
@@ -227,7 +227,7 @@ namespace StorageSystem.Application.Features.Services
                     _logger.LogInformation($"Start update order");
 
                     var dic1 = orderDto.Orders.ToDictionary(orders => (orders.ProductId, orders.UnitId));
-                    var dic2 = orders.ToDictionary(orders => (orders.ProductId, orders.UnitId));
+                    //var dic2 = orders.ToDictionary(orders => (orders.ProductId, orders.UnitId));
                     //Toàn bộ danh sách cần
                     //var a = dic1.Keys.ToList().Union(dic2.Keys.ToList()).ToList();
                     ////Danh sách chung giữa list cũ và mới
