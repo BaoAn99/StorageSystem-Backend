@@ -1,0 +1,45 @@
+﻿<#@ template language="C#" hostspecific="true" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Reflection" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="StorageSystem.Application.Models" #>
+
+<#
+    // Class mà bạn muốn generate code cho
+    string className = "User";
+#>
+
+using FluentValidation;
+
+namespace StorageSystem.Application.Models
+{
+    public class <#= className #>Validator : AbstractValidator<<#= className #>>
+    {
+        public <#= className #>Validator()
+        {
+<#
+    // Sử dụng reflection để lấy thông tin các thuộc tính của class
+    var type = typeof(User);
+    var properties = type.GetProperties();
+    foreach (var prop in properties)
+    { 
+        if (prop.PropertyType == typeof(string))
+        {
+#>
+            RuleFor(x => x.<#= prop.Name #>).NotEmpty().WithMessage("<#= prop.Name #> không được để trống.");
+<#
+        }
+        else if (prop.PropertyType.IsValueType)
+        {
+#>
+            RuleFor(x => x.<#= prop.Name #>).NotNull();
+<#
+        }
+    }
+#>
+        }
+    }
+}
