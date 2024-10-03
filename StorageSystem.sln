@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{43065F6D-5BD9-45F5-89F1-BC6628264F4D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		migration.txt = migration.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AE9D1FC1-81EF-4897-9E95-45598DBACA39}"
@@ -20,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageSystem.Api", "src\St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageSystem.Infrastructure", "src\StorageSystem.Infrastructure\StorageSystem.Infrastructure.csproj", "{1CFCB579-FFDB-49BA-AF0F-0E1DC1E24244}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "tests\TestProject1\TestProject1.csproj", "{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "tests\TestProject1\TestProject1.csproj", "{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

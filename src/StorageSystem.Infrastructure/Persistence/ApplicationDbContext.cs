@@ -17,12 +17,6 @@ namespace StorageSystem.Infrastructure.Persistence
             modelBuilder.InjectEntities<IEntity>(typeof(Invoice).Assembly);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.AddDefaultEntitySetting();
-        }
-
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLazyLoadingProxies();
     }
 }

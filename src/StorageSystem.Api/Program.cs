@@ -1,16 +1,25 @@
-using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Features.Services;
-using StorageSystem.Domain.Entities.Products;
+using StorageSystem.Application;
+using StorageSystem.Infrastructure;
+using StorageSystem.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<IProductService, ProductService>();
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+var services = builder.Services;
 
-builder.Services.AddControllers();
+services.AddSqlDbContext<ApplicationDbContext>(connection)
+    .AddDbContextFactory<ApplicationDbContext>();
+
+// Add service application
+services.AddApplicationServiceRegistration();
+// Add service infrastructure
+services.AddRepositoryServiceRegistration();
+
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var app = builder.Build();
 

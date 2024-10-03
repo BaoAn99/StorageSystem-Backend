@@ -18,7 +18,7 @@ namespace StorageSystem.Api.Controllers
         [HttpPost]
         public ActionResult Create([FromBody] ProductCreateDto model)
         {
-            var productId = _productService.Create(model);
+            var productId = _productService.CreateProductAsync(model);
 
             return Ok(productId);
         }
@@ -26,7 +26,7 @@ namespace StorageSystem.Api.Controllers
         [HttpPut("{id}")]
         public ActionResult Update([FromBody] ProductUpdateDto model)
         {
-            var productId = _productService.Update(model);
+            var productId = _productService.UpdateProductAsync(model);
 
             return Ok(productId);
         }
@@ -34,7 +34,7 @@ namespace StorageSystem.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
-            var isDeleted = _productService.Delete(id);
+            var isDeleted = _productService.DeleteProductAsync(id);
 
             return Ok(isDeleted);
         }
@@ -42,17 +42,17 @@ namespace StorageSystem.Api.Controllers
         [HttpGet("{id}")]
         public ActionResult GetById(Guid id)
         {
-            var product = _productService.GetById(id);
+            var product = _productService.GetProductByIdAsync(id);
 
             return Ok(product);
         }
 
-        [HttpPost]
-        public ActionResult GetAll()
-        {
-            var products = _productService.GetAll();
+        //[HttpPost]
+        //public ActionResult GetAll()
+        //{
+        //    var products = _productService.GetAllProductsAsync();
 
-            return Ok(products);
-        }
+        //    return Ok(products);
+        //}
     }
 }
