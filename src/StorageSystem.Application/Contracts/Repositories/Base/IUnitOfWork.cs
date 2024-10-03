@@ -2,10 +2,19 @@
 {
     public interface IUnitOfWork
     {
-        void BeginTransaction();
+        Task BeginTransactionAsync();
+        Task EndTransactionAsync();
+        int Commit();
+        Task<int> CommitAsync();
+        Task RollBackTransactionAsync();
+    }
 
-        void Commit();
-
-        void RollBack();
+    public interface IUnitOfWork<TDbContext>
+    {
+        Task BeginTransactionAsync();
+        Task EndTransactionAsync();
+        int Commit();
+        Task<int> CommitAsync();
+        Task RollBackTransactionAsync();
     }
 }

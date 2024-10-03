@@ -5,27 +5,27 @@ namespace StorageSystem.Application.Features.Services
 {
     public class ProductService : IProductService
     {
-        public Guid Create(ProductCreateDto model)
+        public Task<Guid> CreateProductAsync(ProductCreateDto model)
         {
             throw new NotImplementedException();
         }
 
-        public bool Delete(Guid id)
+        public bool DeleteProductAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public List<ProductForView> GetAll()
+        public IQueryable<ProductForView> GetAllProducts()
         {
             throw new NotImplementedException();
         }
 
-        public ProductForView GetById(Guid id)
+        public Task<ProductForView> GetProductByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Guid Update(ProductUpdateDto model)
+        public Task<Guid> UpdateProductAsync(ProductUpdateDto model)
         {
             throw new NotImplementedException();
         }
