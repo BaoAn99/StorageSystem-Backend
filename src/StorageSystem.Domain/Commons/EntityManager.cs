@@ -16,6 +16,8 @@ namespace StorageSystem.Domain.Commons
             entity.CreatedAt = DateTimeOffset.Now;
             entity.CreatedByUserId = _sessionStore.GetUserId();
             entity.CreatedByName = _sessionStore.GetUserName();
+            entity.IsDeleted = false;
+            entity.IsPublished = true;
         }
 
         public void SetUpdating(TEntity entity)

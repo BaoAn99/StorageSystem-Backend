@@ -6,8 +6,9 @@ namespace StorageSystem.Application.Contracts.Services
     {
         Task<Guid> CreateProductAsync(ProductCreateDto model);
         Task<Guid> UpdateProductAsync(ProductUpdateDto model);
-        bool DeleteProductAsync(Guid id);
+        Task<bool> DeleteProductAsync(Guid id);
+        Task<bool> SoftDeleteProductAsync(Guid id);
         Task<ProductForView> GetProductByIdAsync(Guid id);
-        IQueryable<ProductForView> GetAllProducts();
+        IEnumerable<ProductForView> GetAllProducts();
     }
 }

@@ -6,12 +6,12 @@ namespace StorageSystem.Domain.Commons
     {
         public string GetUserId()
         {
-            return "khuongpham";
+            return "KhuongPham";
         }
 
         public string GetUserName()
         {
-            return "khuongpham";
+            return "Pham Duy Khuong";
         }
     }
 }

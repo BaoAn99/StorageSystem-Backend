@@ -106,6 +106,11 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     CreatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -118,6 +123,34 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Warehouse", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WarehouseInboundLine",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UnitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UnitName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<double>(type: "float", nullable: false),
+                    DiscountAmount = table.Column<double>(type: "float", nullable: true),
+                    DiscountPercent = table.Column<double>(type: "float", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UpdatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsPublished = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarehouseInboundLine", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -180,6 +213,42 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                         name: "FK_Product_ProductType_TypeId",
                         column: x => x.TypeId,
                         principalTable: "ProductType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Inventory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Batch = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PeriodDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UnitId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UnitName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    MaxStock = table.Column<int>(type: "int", nullable: true),
+                    MinStock = table.Column<int>(type: "int", nullable: false),
+                    WarehouseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WarehouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UpdatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsPublished = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Inventory_Warehouse_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouse",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -359,6 +428,36 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WarehouseInbound",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Batch = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiscountAmount = table.Column<double>(type: "float", nullable: true),
+                    DiscountPercent = table.Column<double>(type: "float", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    StorekeeperId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UpdatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsPublished = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarehouseInbound", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WarehouseInbound_Storekeeper_StorekeeperId",
+                        column: x => x.StorekeeperId,
+                        principalTable: "Storekeeper",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InvoiceLine",
                 columns: table => new
                 {
@@ -508,6 +607,46 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 name: "IX_EmployeeType_UpdatedByUserId",
                 table: "EmployeeType",
                 column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_CreatedAt",
+                table: "Inventory",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_CreatedByUserId",
+                table: "Inventory",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_IsDeleted",
+                table: "Inventory",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_IsPublished",
+                table: "Inventory",
+                column: "IsPublished");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_ProductId",
+                table: "Inventory",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_UnitId",
+                table: "Inventory",
+                column: "UnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_UpdatedByUserId",
+                table: "Inventory",
+                column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inventory_WarehouseId",
+                table: "Inventory",
+                column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoice_CashierId",
@@ -778,11 +917,79 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 name: "IX_Warehouse_UpdatedByUserId",
                 table: "Warehouse",
                 column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_CreatedAt",
+                table: "WarehouseInbound",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_CreatedByUserId",
+                table: "WarehouseInbound",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_IsDeleted",
+                table: "WarehouseInbound",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_IsPublished",
+                table: "WarehouseInbound",
+                column: "IsPublished");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_StorekeeperId",
+                table: "WarehouseInbound",
+                column: "StorekeeperId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInbound_UpdatedByUserId",
+                table: "WarehouseInbound",
+                column: "UpdatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_CreatedAt",
+                table: "WarehouseInboundLine",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_CreatedByUserId",
+                table: "WarehouseInboundLine",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_IsDeleted",
+                table: "WarehouseInboundLine",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_IsPublished",
+                table: "WarehouseInboundLine",
+                column: "IsPublished");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_ProductId",
+                table: "WarehouseInboundLine",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_UnitId",
+                table: "WarehouseInboundLine",
+                column: "UnitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseInboundLine_UpdatedByUserId",
+                table: "WarehouseInboundLine",
+                column: "UpdatedByUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Inventory");
+
             migrationBuilder.DropTable(
                 name: "InvoiceLine");
 
@@ -793,7 +1000,10 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                 name: "ProductSupplier");
 
             migrationBuilder.DropTable(
-                name: "Storekeeper");
+                name: "WarehouseInbound");
+
+            migrationBuilder.DropTable(
+                name: "WarehouseInboundLine");
 
             migrationBuilder.DropTable(
                 name: "Warehouse");
@@ -806,6 +1016,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Supplier");
+
+            migrationBuilder.DropTable(
+                name: "Storekeeper");
 
             migrationBuilder.DropTable(
                 name: "Cashier");

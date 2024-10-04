@@ -17,14 +17,14 @@ namespace StorageSystem.Infrastructure.Repositories
             return await CreateAsync(entity);
         }
 
-        public Task DeleteSupplierAsync(TEntity entity)
+        public async Task DeleteSupplierAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            await DeleteAsync(entity);
         }
 
-        public Task<TEntity?> FindSupplierByIdAsync(TKey id)
+        public async Task<TEntity?> FindSupplierByIdAsync(TKey id)
         {
-            throw new NotImplementedException();
+            return await GetByIdAsync(id);
         }
 
         public IQueryable<TEntity> GetAllSuppliers()
@@ -32,9 +32,9 @@ namespace StorageSystem.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<TKey> UpdateSupplierAsync(TEntity entity)
+        public async Task<TKey> UpdateSupplierAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            return await UpdateAsync(entity);
         }
     }
 }

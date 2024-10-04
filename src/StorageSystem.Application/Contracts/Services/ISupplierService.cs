@@ -6,8 +6,9 @@ namespace StorageSystem.Application.Contracts.Services
     {
         Task<Guid> CreateSupplierAsync(SupplierCreateDto model);
         Task<Guid> UpdateSupplierAsync(SupplierUpdateDto model);
-        bool DeleteSupplierAsync(Guid id);
+        Task<bool> DeleteSupplierAsync(Guid id);
+        Task<bool> SoftDeleteSupplierAsync(Guid id);
         Task<SupplierForView> GetSupplierByIdAsync(Guid id);
-        IQueryable<SupplierForView> GetAllSuppliers();
+        IEnumerable<SupplierForView> GetAllSuppliers();
     }
 }

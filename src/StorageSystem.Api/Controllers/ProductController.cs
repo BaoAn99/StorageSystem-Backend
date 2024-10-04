@@ -15,44 +15,46 @@ namespace StorageSystem.Api.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        public ActionResult Create([FromBody] ProductCreateDto model)
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] ProductCreateDto model)
         {
-            var productId = _productService.CreateProductAsync(model);
-
+            var productId = await _productService.CreateProductAsync(model);
             return Ok(productId);
         }
 
-        [HttpPut("{id}")]
-        public ActionResult Update([FromBody] ProductUpdateDto model)
+        [HttpPut("Update/{id}")]
+        public async Task<IActionResult> Update([FromBody] ProductUpdateDto model)
         {
-            var productId = _productService.UpdateProductAsync(model);
-
+            var productId = await _productService.UpdateProductAsync(model);
             return Ok(productId);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult Delete(Guid id)
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var isDeleted = _productService.DeleteProductAsync(id);
-
+            var isDeleted = await _productService.DeleteProductAsync(id);
             return Ok(isDeleted);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult GetById(Guid id)
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDelete(Guid id)
         {
-            var product = _productService.GetProductByIdAsync(id);
+            var isDeleted = await _productService.SoftDeleteProductAsync(id);
+            return Ok(isDeleted);
+        }
 
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
             return Ok(product);
         }
 
-        //[HttpPost]
-        //public ActionResult GetAll()
-        //{
-        //    var products = _productService.GetAllProductsAsync();
-
-        //    return Ok(products);
-        //}
+        [HttpPost("GetAll")]
+        public ActionResult GetAll()
+        {
+            var products = _productService.GetAllProducts();
+            return Ok(products);
+        }
     }
 }
