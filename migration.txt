@@ -1,2 +1,6 @@
+----- Migration ------
 dotnet ef migrations add Intitial_App_v1_0_1 --context ApplicationDbContext --project StorageSystem.Infrastructure --startup-project StorageSystem.Api --output-dir Persistence/Migrations
 dotnet ef database update --context ApplicationDbContext --project StorageSystem.Infrastructure --startup-project StorageSystem.Api
+
+----- Revert Migration History ------
+dotnet ef database update 20241003220408_Intitial_App_v1_0_1 --context ApplicationDbContext --project StorageSystem.Infrastructure --startup-project StorageSystem.Api

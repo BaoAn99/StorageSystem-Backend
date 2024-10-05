@@ -15,6 +15,10 @@ namespace StorageSystem.Application
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IProductTypeService, ProductTypeService>();
+            services.AddScoped<IProductUnitService, ProductUnitService>();
+            services.AddScoped<IConversionSpecProductService, ConversionSpecProductService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
 
             return services;
         }

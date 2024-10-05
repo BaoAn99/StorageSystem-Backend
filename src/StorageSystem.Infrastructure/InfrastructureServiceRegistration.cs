@@ -12,8 +12,12 @@ namespace StorageSystem.Infrastructure
         {
             services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IProductRepository<,>), typeof(ProductRepository<,>));
             services.AddScoped(typeof(ISupplierRepository<,>), typeof(SupplierRepository<,>));
-            services.AddScoped(typeof(ISupplierRepository<,>), typeof(SupplierRepository<,>));
+            services.AddScoped(typeof(IProductTypeRepository<,>), typeof(ProductTypeRepository<,>));
+            services.AddScoped(typeof(IConversionSpecProductRepository<,>), typeof(ConversionSpecProductRepository<,>));
+            services.AddScoped(typeof(IProductUnitRepository<,>), typeof(ProductUnitRepository<,>));
+            services.AddScoped(typeof(IInvoiceRepository<,>), typeof(InvoiceRepository<,>));
 
             return services;
         }

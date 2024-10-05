@@ -16,18 +16,23 @@ namespace StorageSystem.Domain.Entities.Products
         #region Relationship
         public Guid TypeId { set; get; }
         public virtual ProductType Type { get; set; }
+        public Guid SmallestUnitId { set; get; }
+        public virtual ProductUnit SmallestUnit { get; set; }
+        public virtual ICollection<ProductImage> Images { get; set; }
         #endregion
     }
 
     public class ProductType : EntityAuditBase
     {
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 
-    //public class ProductUnit : EntityAuditBase
-    //{
-    //    public string Name { get; set; }
-    //}
+    public class ProductUnit : EntityAuditBase
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
 
     public class ProductImage : EntityAuditBase
     {
