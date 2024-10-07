@@ -32,7 +32,7 @@ namespace StorageSystem.Api.Controllers
         [HttpPost("Print")]
         public async Task<IActionResult> Print()
         {
-            //var invoiceId = await _invoiceService.CreateInvoiceAsync(model);
+            await _invoiceService.PrintInvoiceAsync();
             return Ok("");
         }
     }

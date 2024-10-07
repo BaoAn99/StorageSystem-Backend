@@ -10,6 +10,11 @@ namespace StorageSystem.Application.Features.Services
             throw new NotImplementedException();
         }
 
+        public Task PrintInvoiceAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Guid> UpdateInvoiceAsync(InvoiceUpdateDto model)
         {
             throw new NotImplementedException();
