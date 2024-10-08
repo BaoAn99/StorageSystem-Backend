@@ -1,4 +1,4 @@
-﻿using StorageSystem.Application.Models.ConversionSpec;
+﻿using StorageSystem.Application.Models.ConversionSpecs;
 
 namespace StorageSystem.Application.Contracts.Services
 {

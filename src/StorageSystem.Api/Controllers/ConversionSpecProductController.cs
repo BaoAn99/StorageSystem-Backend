@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.ConversionSpec;
+using StorageSystem.Application.Models.ConversionSpecs;
 
 namespace StorageSystem.Api.Controllers
 {

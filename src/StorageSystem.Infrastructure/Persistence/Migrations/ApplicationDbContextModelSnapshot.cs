@@ -1146,6 +1146,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
                     b.Property<string>("Batch")
                         .HasColumnType("nvarchar(max)");
 
@@ -1171,6 +1174,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
+                    b.Property<double>("NetAmount")
+                        .HasColumnType("float");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -1187,6 +1193,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
@@ -1201,6 +1210,8 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedByUserId");
 
+                    b.HasIndex("WarehouseId");
+
                     b.ToTable("WarehouseInbound");
                 });
 
@@ -1209,6 +1220,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ConvertQuantity")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -1219,6 +1233,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedByUserId")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("DiscountAmount")
                         .HasColumnType("float");
@@ -1232,6 +1249,12 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
+                    b.Property<double>("NetPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1240,6 +1263,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("SmallestUnitName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -1263,6 +1289,9 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("WarehouseInboundId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
@@ -1278,6 +1307,8 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                     b.HasIndex("UnitId");
 
                     b.HasIndex("UpdatedByUserId");
+
+                    b.HasIndex("WarehouseInboundId");
 
                     b.ToTable("WarehouseInboundLine");
                 });
@@ -1430,12 +1461,36 @@ namespace StorageSystem.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("StorageSystem.Domain.Entities.Warehouses.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Storekeeper");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("StorageSystem.Domain.Entities.Warehouses.WarehouseInboundLine", b =>
+                {
+                    b.HasOne("StorageSystem.Domain.Entities.Warehouses.WarehouseInbound", "WarehouseInbound")
+                        .WithMany("Lines")
+                        .HasForeignKey("WarehouseInboundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WarehouseInbound");
                 });
 
             modelBuilder.Entity("StorageSystem.Domain.Entities.Products.Product", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("StorageSystem.Domain.Entities.Warehouses.WarehouseInbound", b =>
+                {
+                    b.Navigation("Lines");
                 });
 #pragma warning restore 612, 618
         }

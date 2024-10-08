@@ -33,13 +33,13 @@ namespace StorageSystem.Application.Contracts.Repositories.Base
 
         Task DeleteListAsync(IEnumerable<TEntity> entities);
 
-        Task<int> SaveChangesAsync();
+        //Task<int> SaveChangesAsync();
 
         //Task<IDbContextTransaction> BeginTransactionAsync();
 
-        Task EndTransactionAsync();
+        //Task EndTransactionAsync();
 
-        Task RollbackTransactionAsync();
+        //Task RollbackTransactionAsync();
     }
 
     public interface IRepositoryQueryBase<TEntity, TKey> where TEntity : IEntity<TKey>
@@ -72,13 +72,13 @@ namespace StorageSystem.Application.Contracts.Repositories.Base
 
         Task DeleteListAsync(IEnumerable<TEntity> entities);
 
-        Task<int> SaveChangesAsync();
+        //Task<int> SaveChangesAsync();
 
         //Task<IDbContextTransaction> BeginTransactionAsync();
 
-        Task EndTransactionAsync();
+        //Task EndTransactionAsync();
 
-        Task RollbackTransactionAsync();
+        //Task RollbackTransactionAsync();
     }
     //public interface IRepositoryBase<T, K, TContext> : IRepositoryQueryBase<T, K, TContext>
     //    where T : EntityBase<K>

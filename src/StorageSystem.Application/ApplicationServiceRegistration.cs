@@ -10,6 +10,8 @@ namespace StorageSystem.Application
     {
         public static IServiceCollection AddApplicationServiceRegistration(this IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<ISessionStore, SessionStore>();
             services.AddScoped(typeof(IEntityManager<>), typeof(EntityManager<>));
 
@@ -19,6 +21,8 @@ namespace StorageSystem.Application
             services.AddScoped<IProductUnitService, ProductUnitService>();
             services.AddScoped<IConversionSpecProductService, ConversionSpecProductService>();
             services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IWarehouseService, WarehouseService>();
+            services.AddScoped<IWarehouseInboundService, WarehouseInboundService>();
 
             return services;
         }

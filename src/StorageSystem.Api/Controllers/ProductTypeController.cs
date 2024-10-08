@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.ProductType;
+using StorageSystem.Application.Models.ProductTypes;
 
 namespace StorageSystem.Api.Controllers
 {
@@ -53,7 +53,7 @@ namespace StorageSystem.Api.Controllers
         [HttpPost("GetAll")]
         public ActionResult GetAll()
         {
-            var productTypes = _productTypeService.AllProductTypes;
+            var productTypes = _productTypeService.GetAllProductTypes();
             return Ok(productTypes);
         }
     }

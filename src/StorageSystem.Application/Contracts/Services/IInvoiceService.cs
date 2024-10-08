@@ -1,4 +1,4 @@
-﻿using StorageSystem.Application.Models.Invoice;
+﻿using StorageSystem.Application.Models.Invoices;
 
 namespace StorageSystem.Application.Contracts.Services
 {

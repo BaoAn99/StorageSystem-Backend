@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.Supplier;
+using StorageSystem.Application.Models.Suppliers;
 
 namespace StorageSystem.Api.Controllers
 {
