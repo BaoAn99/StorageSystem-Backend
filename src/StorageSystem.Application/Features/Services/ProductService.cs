@@ -1,7 +1,8 @@
-﻿using StorageSystem.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.Product;
+using StorageSystem.Application.Models.Products;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -13,44 +14,24 @@ namespace StorageSystem.Application.Features.Services
         private readonly IEntityManager<ProductImage> _productImageManager;
         private readonly IProductRepository<Product, Guid> _productRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository)
+        private readonly IMapper _mapper;
+        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper)
         {
             _productManager = productManager;
             _productImageManager = productImageManager;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
         public async Task<Guid> CreateProductAsync(ProductCreateDto model)
         {
             try
             {
-                var images = new List<ProductImage>();
-                foreach(var image in model.Images)
-                {
-                    var productImage = new ProductImage
-                    {
-                        ImagePath = image.ImagePath,
-                        Caption = image.Caption,
-                        IsImageFeature = image.IsImageFeature,
-                        Description = image.Description,
-                    };
-                    _productImageManager.SetCreating(productImage);
-                    images.Add(productImage);
-                }
-
-                var product = new Product
-                {
-                    Name = model.Name,
-                    Price = model.Price,
-                    Description = model.Description,
-                    ThumbnailImage = model.ThumbnailImage,
-                    TypeId = model.TypeId,
-                    SmallestUnitId = model.SmallestUnitId,
-                    Images = images
-                };
+                var product = _mapper.Map<Product>(model);
                 _productManager.SetCreating(product);
-                await _productRepository.CreateProductAsync(product);
+                //_productImageManager.SetCreating(product.Images);
+                await _productRepository.CreateAsync(product);
 
                 await _unitOfWork.CommitAsync();
                 return product.Id;
@@ -66,10 +47,10 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
-                var product = await _productRepository.FindProductByIdAsync(id);
+                var product = await _productRepository.GetByIdAsync(id);
                 if (product != null)
                 {
-                    await _productRepository.DeleteProductAsync(product);
+                    await _productRepository.DeleteAsync(product);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }
@@ -83,7 +64,7 @@ namespace StorageSystem.Application.Features.Services
 
         public IEnumerable<ProductForView> GetAllProducts()
         {
-            var product = _productRepository.GetAllProducts();
+            var product = _productRepository.GetAll();
             IEnumerable<ProductForView> productForView = new List<ProductForView>();
 
             return productForView;
@@ -108,7 +89,7 @@ namespace StorageSystem.Application.Features.Services
                         image.IsDeleted = true;
                         image.IsPublished = false;
                     }
-                    await _productRepository.UpdateProductAsync(product);
+                    await _productRepository.UpdateAsync(product);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }

@@ -1,7 +1,8 @@
-﻿using StorageSystem.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.ProductType;
+using StorageSystem.Application.Models.ProductTypes;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -12,23 +13,21 @@ namespace StorageSystem.Application.Features.Services
         private readonly IProductTypeRepository<ProductType, Guid> _productTypeRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityManager<ProductType> _entityManager;
+        private readonly IMapper _mapper;
 
-        public ProductTypeService(IProductTypeRepository<ProductType, Guid> productTypeRepository, IEntityManager<ProductType> entityManager, IUnitOfWork unitOfWork)
+        public ProductTypeService(IProductTypeRepository<ProductType, Guid> productTypeRepository, IEntityManager<ProductType> entityManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _productTypeRepository = productTypeRepository;
             _entityManager = entityManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<Guid> CreateProductTypeAsync(ProductTypeCreateDto model)
         {
             try
             {
-                var productType = new ProductType()
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                };
+                var productType = _mapper.Map<ProductType>(model);
                 _entityManager.SetCreating(productType);
                 await _productTypeRepository.CreateAsync(productType);
 
@@ -46,10 +45,10 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
-                var productType = await _productTypeRepository.FindProductTypeByIdAsync(id);
+                var productType = await _productTypeRepository.GetByIdAsync(id);
                 if (productType != null)
                 {
-                    await _productTypeRepository.DeleteProductTypeAsync(productType);
+                    await _productTypeRepository.DeleteAsync(productType);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }
@@ -61,7 +60,7 @@ namespace StorageSystem.Application.Features.Services
             return false;
         }
 
-        public IEnumerable<ProductTypeForView> AllProductTypes => throw new NotImplementedException();
+        public IEnumerable<ProductTypeForView> GetAllProductTypes() => throw new NotImplementedException();
 
         public Task<ProductTypeForView> GetProductTypeByIdAsync(Guid id)
         {
@@ -77,12 +76,12 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
-                var productType = await _productTypeRepository.FindProductTypeByIdAsync(id);
+                var productType = await _productTypeRepository.GetByIdAsync(id);
                 if (productType != null)
                 {
                     productType.IsDeleted = true;
                     productType.IsPublished = false;
-                    await _productTypeRepository.UpdateProductTypeAsync(productType);
+                    await _productTypeRepository.UpdateAsync(productType);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }

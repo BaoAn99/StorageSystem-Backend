@@ -1,4 +1,4 @@
-﻿using StorageSystem.Application.Models.ProductType;
+﻿using StorageSystem.Application.Models.ProductTypes;
 
 namespace StorageSystem.Application.Contracts.Services
 {
@@ -9,6 +9,6 @@ namespace StorageSystem.Application.Contracts.Services
         Task<bool> DeleteProductTypeAsync(Guid id);
         Task<bool> SoftDeleteProductTypeAsync(Guid id);
         Task<ProductTypeForView> GetProductTypeByIdAsync(Guid id);
-        IEnumerable<ProductTypeForView> AllProductTypes { get; }
+        IEnumerable<ProductTypeForView> GetAllProductTypes();
     }
 }

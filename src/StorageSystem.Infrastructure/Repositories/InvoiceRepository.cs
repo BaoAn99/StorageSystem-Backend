@@ -8,7 +8,7 @@ namespace StorageSystem.Infrastructure.Repositories
 {
     public class InvoiceRepository<TEntity, TKey> : RepositoryBaseAsync<TEntity, TKey>, IInvoiceRepository<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
-        public InvoiceRepository(IDbContextFactory dbContextFactory, IUnitOfWork unitOfWork) : base(dbContextFactory, unitOfWork)
+        public InvoiceRepository(IDbContextFactory dbContextFactory) : base(dbContextFactory)
         {
         }
 

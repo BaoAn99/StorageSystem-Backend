@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.ProductUnit;
+using StorageSystem.Application.Models.ProductUnits;
 
 namespace StorageSystem.Api.Controllers
 {

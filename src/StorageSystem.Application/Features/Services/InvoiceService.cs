@@ -1,5 +1,5 @@
 ﻿using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.Invoice;
+using StorageSystem.Application.Models.Invoices;
 
 namespace StorageSystem.Application.Features.Services
 {

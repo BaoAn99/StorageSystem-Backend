@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
@@ -10,12 +9,12 @@ namespace StorageSystem.Infrastructure.Repositories.Base
     public abstract class RepositoryBaseAsync<TEntity, TKey, TContext> : IRepositoryBaseAsync<TEntity, TKey, TContext> where TEntity : class, IEntity<TKey> where TContext : DbContext
     {
         private readonly TContext _dbContext;
-        private readonly IUnitOfWork<TContext> _unitOfWork;
+        //private readonly IUnitOfWork<TContext> _unitOfWork;
 
-        public RepositoryBaseAsync(TContext dbContext, IUnitOfWork<TContext> unitOfWork)
+        public RepositoryBaseAsync(TContext dbContext)
         {
             _dbContext = _dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            //_unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         public IQueryable<TEntity> GetAll(bool trackChanges = false) =>
@@ -83,27 +82,25 @@ namespace StorageSystem.Infrastructure.Repositories.Base
             return Task.CompletedTask;
         }
 
-        public int SaveChanges() => _unitOfWork.Commit();
-        public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
+        //public int SaveChanges() => _unitOfWork.Commit();
+        //public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync() => await _dbContext.Database.BeginTransactionAsync();
+        //public async Task<IDbContextTransaction> BeginTransactionAsync() => await _dbContext.Database.BeginTransactionAsync();
 
-        public async Task EndTransactionAsync() => await _unitOfWork.EndTransactionAsync();
+        //public async Task EndTransactionAsync() => await _unitOfWork.EndTransactionAsync();
 
-        public async Task RollbackTransactionAsync() => await _unitOfWork.RollBackTransactionAsync();
+        //public async Task RollbackTransactionAsync() => await _unitOfWork.RollBackTransactionAsync();
     }
 
-    public abstract class RepositoryBaseAsync<TEntity, TKey> : IRepositoryBaseAsync<TEntity, TKey> where TEntity : class, IEntity<TKey>
+    public class RepositoryBaseAsync<TEntity, TKey> : IRepositoryBaseAsync<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         private readonly IDbContextFactory _dbContextFactory;
         private readonly DbContext _dbContext;
-        private readonly IUnitOfWork _unitOfWork;
 
-        protected RepositoryBaseAsync(IDbContextFactory dbContextFactory, IUnitOfWork unitOfWork)
+        public RepositoryBaseAsync(IDbContextFactory dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
             _dbContext = _dbContextFactory.Create();
-            _unitOfWork = unitOfWork;
         }
 
         public IQueryable<TEntity> GetAll(bool trackChanges = false) =>
@@ -171,13 +168,20 @@ namespace StorageSystem.Infrastructure.Repositories.Base
             return Task.CompletedTask;
         }
 
-        public int SaveChanges() => _unitOfWork.Commit();
-        public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
+        //public object GetAllLookup(QueryParams queryParams)
+        //{
+        //    IQueryable<TEntity> query = 
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync() => await _dbContext.Database.BeginTransactionAsync();
+        //    return query;
+        //}
 
-        public async Task EndTransactionAsync() => await _unitOfWork.EndTransactionAsync();
+        //public int SaveChanges() => _unitOfWork.Commit();
+        //public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
 
-        public async Task RollbackTransactionAsync() => await _unitOfWork.RollBackTransactionAsync();
+        //public async Task<IDbContextTransaction> BeginTransactionAsync() => await _dbContext.Database.BeginTransactionAsync();
+
+        //public async Task EndTransactionAsync() => await _unitOfWork.EndTransactionAsync();
+
+        //public async Task RollbackTransactionAsync() => await _unitOfWork.RollBackTransactionAsync();
     }
 }

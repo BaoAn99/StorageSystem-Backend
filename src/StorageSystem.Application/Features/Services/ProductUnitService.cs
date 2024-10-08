@@ -1,7 +1,8 @@
-﻿using StorageSystem.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
-using StorageSystem.Application.Models.ProductUnit;
+using StorageSystem.Application.Models.ProductUnits;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -12,22 +13,19 @@ namespace StorageSystem.Application.Features.Services
         private readonly IProductUnitRepository<ProductUnit, Guid> _productUnitRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEntityManager<ProductUnit> _entityManager;
-        public ProductUnitService(IProductUnitRepository<ProductUnit, Guid> productUnitRepository, IUnitOfWork unitOfWork, IEntityManager<ProductUnit> entityManager)
+        private readonly IMapper _mapper;
+        public ProductUnitService(IProductUnitRepository<ProductUnit, Guid> productUnitRepository, IUnitOfWork unitOfWork, IEntityManager<ProductUnit> entityManager, IMapper mapper)
         {
             _productUnitRepository = productUnitRepository;
             _unitOfWork = unitOfWork;
             _entityManager = entityManager;
+            _mapper = mapper;
         }
         public async Task<Guid> CreateProductUnitAsync(ProductUnitCreateDto model)
         {
             try
             {
-                var productUnit = new ProductUnit()
-                {
-                    Name = model.Name,
-                    Description = model.Description,
-                    
-                };
+                var productUnit = _mapper.Map<ProductUnit>(model);
                 _entityManager.SetCreating(productUnit);
                 await _productUnitRepository.CreateAsync(productUnit);
 
@@ -45,10 +43,10 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
-                var productUnit = await _productUnitRepository.FindProductUnitByIdAsync(id);
+                var productUnit = await _productUnitRepository.GetByIdAsync(id);
                 if (productUnit != null)
                 {
-                    await _productUnitRepository.DeleteProductUnitAsync(productUnit);
+                    await _productUnitRepository.DeleteAsync(productUnit);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }
@@ -74,12 +72,12 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
-                var productUnit = await _productUnitRepository.FindProductUnitByIdAsync(id);
+                var productUnit = await _productUnitRepository.GetByIdAsync(id);
                 if (productUnit != null)
                 {
                     productUnit.IsDeleted = true;
                     productUnit.IsPublished = false;
-                    await _productUnitRepository.UpdateProductUnitAsync(productUnit);
+                    await _productUnitRepository.UpdateAsync(productUnit);
                     await _unitOfWork.CommitAsync();
                     return true;
                 }

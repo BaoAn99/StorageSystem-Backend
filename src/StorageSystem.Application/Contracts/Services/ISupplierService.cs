@@ -1,4 +1,4 @@
-﻿using StorageSystem.Application.Models.Supplier;
+﻿using StorageSystem.Application.Models.Suppliers;
 
 namespace StorageSystem.Application.Contracts.Services
 {

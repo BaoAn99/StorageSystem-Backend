@@ -1,4 +1,4 @@
-﻿using StorageSystem.Application.Models.ProductUnit;
+﻿using StorageSystem.Application.Models.ProductUnits;
 
 namespace StorageSystem.Application.Contracts.Services
 {
