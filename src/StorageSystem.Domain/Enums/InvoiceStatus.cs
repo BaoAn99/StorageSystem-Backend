@@ -4,13 +4,17 @@
     {
         Paid,
         Unpaid,
-        Cancelled
+        Cancelled,
+        Debited,
+        Refunded
     }
 
     public enum InvoiceLineStatus
     {
         Paid,
         Unpaid,
-        Cancelled
+        Cancelled,
+        Debited,
+        Refunded
     }
 }
