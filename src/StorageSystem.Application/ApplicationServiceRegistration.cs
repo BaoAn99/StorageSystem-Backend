@@ -23,6 +23,7 @@ namespace StorageSystem.Application
             services.AddScoped<IInvoiceService, InvoiceService>();
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IWarehouseInboundService, WarehouseInboundService>();
+            services.AddScoped<ICustomerService, CustomerService>();            
 
             return services;
         }
