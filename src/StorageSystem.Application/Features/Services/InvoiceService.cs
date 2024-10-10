@@ -135,7 +135,6 @@ namespace StorageSystem.Application.Features.Services
                 throw;
             }
         }
-
         public Task<InvoiceForView> PrintInvoiceAsync(Guid id)
         {
             var invoice = _invoiceRepository.FindByCondition(i => i.Id.Equals(id), false, i => i.Lines).FirstOrDefault();
