@@ -1,4 +1,4 @@
-﻿    using AutoMapper;
+﻿using AutoMapper;
 using StorageSystem.Application.Models.Invoices;
 using StorageSystem.Domain.Entities.Invoices;
 
@@ -20,6 +20,8 @@ namespace StorageSystem.Application.MappingProfiles.Invoices
                     dest => dest.Items,
                     opt => opt.MapFrom(src => src.Lines));
             CreateMap<InvoiceLine, InvoiceLineForView>();
+            //CreateMap<Invoice, InvoiceForView>();
+            
         }
     }
 }

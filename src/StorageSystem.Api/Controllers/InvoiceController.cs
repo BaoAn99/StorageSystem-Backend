@@ -23,17 +23,52 @@ namespace StorageSystem.Api.Controllers
         }
 
         [HttpPost("Update")]
-        public async Task<IActionResult> Update([FromBody] InvoiceUpdateDto model)
+        public async Task<IActionResult> Update([FromBody] InvoiceUpdateDto model, Guid id)
         {
-            var invoiceId = await _invoiceService.UpdateInvoiceAsync(model);
+            var invoiceId = await _invoiceService.UpdateInvoiceAsync(model, id);
             return Ok(invoiceId);
         }
 
+<<<<<<< HEAD
         [HttpPost("Print/{id}")]
         public async Task<IActionResult> Print(Guid id)
         {
             var invoiceId = await _invoiceService.PrintInvoiceAsync(id);
+=======
+        [HttpPost("CancelInvoice")]
+        public async Task<IActionResult> CancelInvoice(Guid id)
+        {
+            var invoiceId = await _invoiceService.CancelInvoiceAsync(id);
+>>>>>>> bf1c1681b6e9b182c650a90cf298162b51999c18
             return Ok(invoiceId);
         }
+
+        [HttpPost("CancelInvoiceLine")]
+        public async Task<IActionResult> CancelInvoiceLine(Guid id, Guid idLine)
+        {
+            var invoiceId = await _invoiceService.CancelInvoiceLineAsync(id, idLine);
+            return Ok(invoiceId);
+        }
+
+        [HttpPost("RefundInvoice")]
+        public async Task<IActionResult> RefundInvoice(Guid id)
+        {
+            var invoiceId = await _invoiceService.RefundInvoiceAsync(id);
+            return Ok(invoiceId);
+        }
+
+        [HttpPost("RefundInvoiceLine")]
+        public async Task<IActionResult> RefundInvoiceLine(Guid id, Guid idLine)
+        {
+            var invoiceId = await _invoiceService.RefundInvoiceLineAsync(id, idLine);
+            return Ok(invoiceId);
+        }
+
+        //[HttpPost("Print")]
+        //public async Task<IActionResult> Print()
+        //{
+        //    //var invoiceId = await _invoiceService.CreateInvoiceAsync(model);
+        //    return Ok("");
+        //}
     }
 }
