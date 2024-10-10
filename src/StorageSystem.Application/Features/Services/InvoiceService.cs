@@ -135,6 +135,21 @@ namespace StorageSystem.Application.Features.Services
                 throw;
             }
         }
+        public Task<InvoiceForView> PrintInvoiceAsync(Guid id)
+        {
+            var invoice = _invoiceRepository.FindByCondition(i => i.Id.Equals(id),false,i => i.Lines).FirstOrDefault();
+            if (invoice == null) 
+            {
+                throw new NotImplementedException("Invoice id not found");
+            }
+            var invoiceForView = _mapper.Map<InvoiceForView>(invoice);
+            invoiceForView.StatusName = Enum.GetName(typeof(InvoiceStatus), invoiceForView.Status)!;
+            foreach (var line in invoiceForView.Items)
+            {
+                line.StatusName = Enum.GetName(typeof(InvoiceLineStatus), line.Status)!;
+            }
+            return Task.FromResult(invoiceForView);
+        }
 
         public async Task<bool> UpdateInvoiceAsync(InvoiceUpdateDto model, Guid id)
         {

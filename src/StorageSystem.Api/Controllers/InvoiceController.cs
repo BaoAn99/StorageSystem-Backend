@@ -36,6 +36,13 @@ namespace StorageSystem.Api.Controllers
             return Ok(invoiceId);
         }
 
+        [HttpPost("Print/{id}")]
+        public async Task<IActionResult> Print(Guid id)
+        {
+            var invoiceId = await _invoiceService.PrintInvoiceAsync(id);
+            return Ok(invoiceId);
+        }
+
         [HttpPost("CancelInvoiceLine")]
         public async Task<IActionResult> CancelInvoiceLine(Guid id, Guid idLine)
         {
@@ -56,12 +63,5 @@ namespace StorageSystem.Api.Controllers
             var invoiceId = await _invoiceService.RefundInvoiceLineAsync(id, idLine);
             return Ok(invoiceId);
         }
-
-        //[HttpPost("Print")]
-        //public async Task<IActionResult> Print()
-        //{
-        //    //var invoiceId = await _invoiceService.CreateInvoiceAsync(model);
-        //    return Ok("");
-        //}
     }
 }

@@ -15,8 +15,11 @@ namespace StorageSystem.Application.MappingProfiles.Invoices
         {
             CreateMap<InvoiceCreateDto, Invoice>();
             CreateMap<InvoiceUpdateDto, Invoice>();
-            //CreateMap<Invoice, InvoiceForView>();
-            
+            CreateMap<Invoice, InvoiceForView>()
+                .ForMember(
+                    dest => dest.Items,
+                    opt => opt.MapFrom(src => src.Lines));
+            CreateMap<InvoiceLine, InvoiceLineForView>();
         }
     }
 }

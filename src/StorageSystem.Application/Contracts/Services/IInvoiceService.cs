@@ -12,7 +12,7 @@ namespace StorageSystem.Application.Contracts.Services
         Task<bool> RefundInvoiceLineAsync(Guid id, Guid idLine);
 
         //bool DeleteInvoiceAsync(Guid id);
-        //Task<InvoiceForView> GetInvoiceLineByInvoiceIdAsync(Guid id);
+        Task<InvoiceForView> PrintInvoiceAsync(Guid id);
         //IEnumerable<InvoiceForView> GetAllInvoices();
     }
 }
