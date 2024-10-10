@@ -27,6 +27,7 @@ namespace StorageSystem.Domain.Entities.Invoices
         public Guid CashierId { get; set; }
         public virtual Cashier Cashier { get; set; }
         #endregion
+        public virtual ICollection<InvoiceLine> Lines { get; set; }
     }
 
     public class InvoiceLine : EntityAuditBase

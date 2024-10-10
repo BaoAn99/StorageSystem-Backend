@@ -2,11 +2,9 @@
 
 namespace StorageSystem.Application.Models.Invoices
 {
-    public class InvoiceCreateDto
-    {   public Guid Id { get; set; }
-        public string? CustomerName { get; set; }
-        public string? CustomerPhone { get; set; }
-        public string? CustomerAddress { get; set; }
+    public class InvoiceForView
+    {
+        public Guid Id { get; set; }
         public DateTimeOffset Time { get; set; }
         public double Amount { get; set; }
         public double NetAmount { get; set; }
@@ -15,15 +13,15 @@ namespace StorageSystem.Application.Models.Invoices
         public double? Deposit { get; set; }
         //public bool IsPaid { get; set; }
         public InvoiceStatus Status { get; set; }
-
+        public string StatusName { get; set; }
         #region Relationship
-        public Guid? CustomerId { set; get; }
         public Guid CashierId { get; set; }
-        public List<InvoiceLineCreateDto> Items { get; set; }
+        public string CashierName { get; set; }
+        public List<InvoiceLineForView> Items { get; set; }
         #endregion
     }
 
-    public class InvoiceLineCreateDto
+    public class InvoiceLineForView
     {
         //public double Price { get; set; }
         //public double NetPrice { get; set; }
@@ -33,9 +31,11 @@ namespace StorageSystem.Application.Models.Invoices
         public double? DiscountPercent { get; set; }
         public string? Description { get; set; }
         public InvoiceLineStatus Status { get; set; }
-
+        public string StatusName { get; set; }
         #region Relationship
         public Guid ProductId { set; get; }
+        public string ProductName { get; set; }
         #endregion
     }
 }
+

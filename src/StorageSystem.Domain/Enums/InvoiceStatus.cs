@@ -2,15 +2,15 @@
 {
     public enum InvoiceStatus
     {
-        Paid,
-        Unpaid,
-        Cancelled
+        Paid = 1,
+        Unpaid = 2,
+        Cancelled = 0
     }
 
     public enum InvoiceLineStatus
     {
-        Paid,
-        Unpaid,
-        Cancelled
+        Paid = 1,
+        Unpaid = 2,
+        Cancelled = 0
     }
 }
