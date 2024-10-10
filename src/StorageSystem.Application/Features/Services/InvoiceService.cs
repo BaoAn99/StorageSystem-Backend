@@ -137,8 +137,8 @@ namespace StorageSystem.Application.Features.Services
         }
         public Task<InvoiceForView> PrintInvoiceAsync(Guid id)
         {
-            var invoice = _invoiceRepository.FindByCondition(i => i.Id.Equals(id),false,i => i.Lines).FirstOrDefault();
-            if (invoice == null) 
+            var invoice = _invoiceRepository.FindByCondition(i => i.Id.Equals(id), false, i => i.Lines).FirstOrDefault();
+            if (invoice == null)
             {
                 throw new NotImplementedException("Invoice id not found");
             }
@@ -180,7 +180,7 @@ namespace StorageSystem.Application.Features.Services
                     var invoiceLine = invoice.Lines.FirstOrDefault(l => l.ProductId == item.ProductId);
                     if (invoiceLine != null)
                     {
-                        if(invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
+                        if (invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
                             throw new ArgumentException("Không được cập nhật giảm tiền hoặc giảm % trong chi tiết hóa đơn");
 
                         var updateInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
@@ -306,7 +306,7 @@ namespace StorageSystem.Application.Features.Services
                     if (currentInvoiceValue < invoice.Deposit)
                     {
                         var refundAmount = invoice.Deposit - currentInvoiceValue;
-                    }   
+                    }
 
                     var cancelInvoice = _invoiceRepository.FindByCondition(i => i.Id == invoice.Id && i.Status == InvoiceStatus.Cancelled).FirstOrDefault();
 
