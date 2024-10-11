@@ -422,7 +422,7 @@ namespace StorageSystem.Application.Features.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.ToString());
+                Console.WriteLine(ex.Message);
             }
             return false;
         }
