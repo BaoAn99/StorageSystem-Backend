@@ -29,7 +29,6 @@ namespace storagesystem.domain.commons
             foreach (FilterQuery filterquery in filterqueries)
             {
                 query = query.BuildQuery(filterquery);
-                var a = query.BuildQuery(filterquery).ToList();
             }
 
             return query;
@@ -51,10 +50,10 @@ namespace storagesystem.domain.commons
 
         private static IQueryable<TEntity> BuildQuery<TEntity>(this IQueryable<TEntity> query, SortQuery sortQuery)
         {
-            //ParameterExpression parameterExpression = Expression.Parameter(query.ElementType, "x");
-            //Expression<Func<TEntity, bool>> lamda = GetLambda<TEntity>(filterQuery, parameterExpression);
-            //query = query.Where(lamda);
+            ParameterExpression parameterExpression = Expression.Parameter(query.ElementType, "x");
+            Expression<Func<TEntity, object>> lamda = GetLambda<TEntity>(sortQuery, parameterExpression);
 
+            query = sortQuery.IsAscending ? query.OrderBy(lamda) : query.OrderByDescending(lamda);
             return query;
         }
 
@@ -77,6 +76,17 @@ namespace storagesystem.domain.commons
             return lambda;
 
             //Expression<Func<TEntity, bool>> expressionTree = Expression
+        }
+
+        public static Expression<Func<TEntity, object>> GetLambda<TEntity>(SortQuery sortQuery, ParameterExpression parameterExpression)
+        {
+            PropertyInfo propertyInfo = typeof(TEntity).GetProperties().Single((PropertyInfo x) => x.Name.Equals(sortQuery.Name, StringComparison.InvariantCultureIgnoreCase));
+
+            MemberExpression property = Expression.Property(parameterExpression, propertyInfo);
+
+            var converted = Expression.Convert(property, typeof(object));
+            var sortExpression = Expression.Lambda<Func<TEntity, object>>(converted, parameterExpression);
+            return sortExpression;
         }
     }
 }
