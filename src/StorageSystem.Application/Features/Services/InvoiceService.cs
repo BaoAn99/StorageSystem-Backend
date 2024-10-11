@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using StorageSystem.Application.Contracts.Repositories;
-using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Invoices;
-using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Customers;
 using StorageSystem.Domain.Entities.Invoices;
 using StorageSystem.Domain.Enums;

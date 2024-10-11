@@ -22,7 +22,6 @@ namespace StorageSystem.Infrastructure
             services.AddScoped(typeof(IInvoiceRepository<,>), typeof(InvoiceRepository<,>));
             services.AddScoped(typeof(IWarehouseRepository<,>), typeof(WarehouseRepository<,>));
             services.AddScoped(typeof(IWarehouseInboundRepository<,>), typeof(WarehouseInboundRepository<,>));
-            services.AddScoped(typeof(ICustomerRepository<,>), typeof(CustomerRepository<,>));
 
             return services;
         }
