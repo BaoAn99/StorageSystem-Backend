@@ -3,6 +3,7 @@ using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.ProductTypes;
+using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -91,6 +92,16 @@ namespace StorageSystem.Application.Features.Services
                 Console.WriteLine(ex.Message);
             }
             return false;
+        }
+
+        public IEnumerable<ProductTypeForView> GetAllProductTypes(QueryParams queryParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ProductTypeForView> GetAllProductTypesWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            throw new NotImplementedException();
         }
     }
 }

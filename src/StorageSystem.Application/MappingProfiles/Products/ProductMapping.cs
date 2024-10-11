@@ -19,7 +19,7 @@ namespace StorageSystem.Application.MappingProfiles.Products
 
             CreateMap<ProductImageCreateDto, ProductImage>();
             CreateMap<ProductImageUpdateDto, ProductImage>();
-            //CreateMap<ProductImage, ProductImageForView>();
+            CreateMap<ProductImage, ProductImageForView>();
         }
     }
 }

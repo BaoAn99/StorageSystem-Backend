@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using storagesystem.domain.commons;
 using StorageSystem.Application.Contracts.Repositories.Base;
+using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
 using System.Linq.Expressions;
@@ -168,12 +170,17 @@ namespace StorageSystem.Infrastructure.Repositories.Base
             return Task.CompletedTask;
         }
 
-        //public object GetAllLookup(QueryParams queryParams)
-        //{
-        //    IQueryable<TEntity> query = 
+        public IQueryable<TEntity> GetAll(QueryParams queryParams)
+        {
+            var query = GetAll();
+            query = query.Build(queryParams);
+            return query;
+        }
 
-        //    return query;
-        //}
+        public IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            throw new NotImplementedException();
+        }
 
         //public int SaveChanges() => _unitOfWork.Commit();
         //public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();
