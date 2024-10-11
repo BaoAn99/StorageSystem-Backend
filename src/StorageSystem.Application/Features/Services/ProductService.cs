@@ -3,6 +3,7 @@ using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Products;
+using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -62,12 +63,17 @@ namespace StorageSystem.Application.Features.Services
             return false;
         }
 
-        public IEnumerable<ProductForView> GetAllProducts()
+        public IEnumerable<ProductForView> GetAllProducts(QueryParams queryParams)
         {
-            var product = _productRepository.GetAll();
-            IEnumerable<ProductForView> productForView = new List<ProductForView>();
+            var products = _productRepository.GetAll(queryParams).ToList();
+            IEnumerable<ProductForView> productForView = _mapper.Map<List<ProductForView>>(products);
 
             return productForView;
+        }
+
+        public IEnumerable<ProductForView> GetAllProductsWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<ProductForView> GetProductByIdAsync(Guid id)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Products;
+using StorageSystem.Domain.Commons;
 
 namespace StorageSystem.Api.Controllers
 {
@@ -51,9 +52,9 @@ namespace StorageSystem.Api.Controllers
         }
 
         [HttpPost("GetAll")]
-        public ActionResult GetAll()
+        public ActionResult GetAll(QueryParams queryParams)
         {
-            var products = _productService.GetAllProducts();
+            var products = _productService.GetAllProducts(queryParams);
             return Ok(products);
         }
     }

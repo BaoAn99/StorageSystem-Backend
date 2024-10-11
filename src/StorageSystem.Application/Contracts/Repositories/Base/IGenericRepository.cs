@@ -1,4 +1,5 @@
-﻿using StorageSystem.Domain.Commons.Interfaces;
+﻿using StorageSystem.Domain.Commons;
+using StorageSystem.Domain.Commons.Interfaces;
 using System.Linq.Expressions;
 
 namespace StorageSystem.Application.Contracts.Repositories.Base
@@ -47,6 +48,10 @@ namespace StorageSystem.Application.Contracts.Repositories.Base
         IQueryable<TEntity> GetAll(bool trackChanges = false);
 
         IQueryable<TEntity> GetAll(bool trackChanges = false, params Expression<Func<TEntity, object>>[] includeProperties);
+
+        IQueryable<TEntity> GetAll(QueryParams queryParams);
+
+        IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams);
 
         IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression, bool trackChanges = false);
 
