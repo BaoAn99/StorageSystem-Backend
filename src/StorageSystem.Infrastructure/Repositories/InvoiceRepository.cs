@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Contracts.Repositories;
+using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
 using StorageSystem.Infrastructure.Repositories.Base;
@@ -9,6 +10,31 @@ namespace StorageSystem.Infrastructure.Repositories
     {
         public InvoiceRepository(IDbContextFactory dbContextFactory) : base(dbContextFactory)
         {
+        }
+
+        public async Task<TKey> CreateInvoiceAsync(TEntity entity)
+        {
+            return await CreateAsync(entity);
+        }
+
+        public async Task DeleteInvoiceAsync(TEntity entity)
+        {
+            await DeleteAsync(entity);
+        }
+
+        public async Task<TEntity?> FindInvoiceByIdAsync(TKey id)
+        {
+            return await GetByIdAsync(id);
+        }
+
+        public IQueryable<TEntity> GetAllInvoices()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<TKey> UpdateInvoiceAsync(TEntity entity)
+        {
+            return await UpdateAsync(entity);
         }
     }
 }

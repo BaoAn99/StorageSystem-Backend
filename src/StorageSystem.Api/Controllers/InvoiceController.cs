@@ -29,10 +29,10 @@ namespace StorageSystem.Api.Controllers
             return Ok(invoiceId);
         }
 
-        [HttpPost("CancelInvoice")]
-        public async Task<IActionResult> CancelInvoice(Guid id)
+        [HttpPost("Print/{id}")]
+        public async Task<IActionResult> Print(Guid id)
         {
-            var invoiceId = await _invoiceService.CancelInvoiceAsync(id);
+            var invoiceId = await _invoiceService.PrintInvoiceAsync(id);
             return Ok(invoiceId);
         }
 

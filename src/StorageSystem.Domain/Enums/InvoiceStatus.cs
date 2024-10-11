@@ -15,6 +15,6 @@
         Unpaid,
         Cancelled,
         Debited,
-        Refunded
+        RefundedB
     }
 }

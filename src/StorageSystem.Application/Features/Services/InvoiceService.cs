@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using StorageSystem.Application.Contracts.Repositories;
-using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Invoices;
-using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Customers;
 using StorageSystem.Domain.Entities.Invoices;
 using StorageSystem.Domain.Enums;
@@ -135,8 +133,22 @@ namespace StorageSystem.Application.Features.Services
                 throw;
             }
         }
-
-        public async Task<bool> UpdateInvoiceAsync(InvoiceUpdateDto model, Guid id)
+        public Task<InvoiceForView> PrintInvoiceAsync(Guid id)
+        {
+            var invoice = _invoiceRepository.FindByCondition(i => i.Id.Equals(id), false, i => i.Lines).FirstOrDefault();
+            if (invoice == null)
+            {
+                throw new NotImplementedException("Invoice id not found");
+            }
+            var invoiceForView = _mapper.Map<InvoiceForView>(invoice);
+            invoiceForView.StatusName = Enum.GetName(typeof(InvoiceStatus), invoiceForView.Status)!;
+            foreach (var line in invoiceForView.Items)
+            {
+                line.StatusName = Enum.GetName(typeof(InvoiceLineStatus), line.Status)!;
+            }
+            return Task.FromResult(invoiceForView);
+        }
+        public Task<Guid> UpdateInvoiceAsync(InvoiceUpdateDto model)
         {
             try
             {
@@ -165,7 +177,7 @@ namespace StorageSystem.Application.Features.Services
                     var invoiceLine = invoice.Lines.FirstOrDefault(l => l.ProductId == item.ProductId);
                     if (invoiceLine != null)
                     {
-                        if(invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
+                        if (invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
                             throw new ArgumentException("Không được cập nhật giảm tiền hoặc giảm % trong chi tiết hóa đơn");
 
                         var updateInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
@@ -291,7 +303,7 @@ namespace StorageSystem.Application.Features.Services
                     if (currentInvoiceValue < invoice.Deposit)
                     {
                         var refundAmount = invoice.Deposit - currentInvoiceValue;
-                    }   
+                    }
 
                     var cancelInvoice = _invoiceRepository.FindByCondition(i => i.Id == invoice.Id && i.Status == InvoiceStatus.Cancelled).FirstOrDefault();
 
