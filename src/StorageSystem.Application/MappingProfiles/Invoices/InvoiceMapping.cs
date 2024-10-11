@@ -20,8 +20,8 @@ namespace StorageSystem.Application.MappingProfiles.Invoices
                     dest => dest.Items,
                     opt => opt.MapFrom(src => src.Lines));
             CreateMap<InvoiceLine, InvoiceLineForView>();
-            //CreateMap<Invoice, InvoiceForView>();
-            
+            CreateMap<Invoice, InvoiceForView>();
+
         }
     }
 }
