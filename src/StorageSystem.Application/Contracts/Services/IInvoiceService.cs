@@ -10,6 +10,7 @@ namespace StorageSystem.Application.Contracts.Services
         Task<bool> CancelInvoiceLineAsync(Guid id, Guid idLine);
         Task<bool> RefundInvoiceAsync(Guid id);
         Task<bool> RefundInvoiceLineAsync(Guid id, Guid idLine);
+        Task<InvoiceForView> PrintInvoiceAsync(Guid id);
 
         //bool DeleteInvoiceAsync(Guid id);
         //Task<InvoiceForView> GetInvoiceLineByInvoiceIdAsync(Guid id);
