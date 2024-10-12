@@ -22,24 +22,24 @@ namespace StorageSystem.Api.Controllers
             return Ok(invoiceId);
         }
 
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] InvoiceUpdateDto model, Guid id)
         {
             var invoiceId = await _invoiceService.UpdateInvoiceAsync(model, id);
             return Ok(invoiceId);
         }
 
-        [HttpPost("CancelInvoice")]
-        public async Task<IActionResult> CancelInvoice(Guid id)
+        [HttpPost("CanceledInvoice")]
+        public async Task<IActionResult> CanceledInvoice(Guid id)
         {
-            var invoiceId = await _invoiceService.CancelInvoiceAsync(id);
+            var invoiceId = await _invoiceService.CanceledInvoiceAsync(id);
             return Ok(invoiceId);
         }
 
-        [HttpPost("CancelInvoiceLine")]
-        public async Task<IActionResult> CancelInvoiceLine(Guid id, Guid idLine)
+        [HttpPost("CanceledInvoiceLine")]
+        public async Task<IActionResult> CanceledInvoiceLine(Guid id, Guid idLine)
         {
-            var invoiceId = await _invoiceService.CancelInvoiceLineAsync(id, idLine);
+            var invoiceId = await _invoiceService.CanceledInvoiceLineAsync(id, idLine);
             return Ok(invoiceId);
         }
 

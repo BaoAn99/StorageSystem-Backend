@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StorageSystem.Application.Contracts.Repositories.Base;
+using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
 using System.Linq.Expressions;
@@ -166,6 +167,21 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         {
             _dbContext.Set<TEntity>().RemoveRange(entities);
             return Task.CompletedTask;
+        }
+
+        public IQueryable<TEntity> GetAll(QueryParams queryParams)
+        {
+            var query = GetAll();
+            Expression<Func<TEntity, bool>> predicate = null;
+            query.Where(p => p.Id == null);
+            return query;
+        }
+
+        public IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            var query = GetAll();
+
+            return query;
         }
 
         //public object GetAllLookup(QueryParams queryParams)

@@ -2,9 +2,9 @@
 {
     public class QueryParamsWithoutPaging
     {
-        public FilterQuery[] Filter { get; set; }
+        public FilterQuery[] Filters { get; set; }
         public SortQuery Sort { get; set; }
-        public bool? IsDeleted { get; set; }
-        public bool? IsPublished { get; set; }
+        //public bool? IsDeleted { get; set; }
+        //public bool? IsPublished { get; set; }
     }
 }
