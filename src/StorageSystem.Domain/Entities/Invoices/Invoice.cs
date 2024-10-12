@@ -26,7 +26,7 @@ namespace StorageSystem.Domain.Entities.Invoices
         public virtual Customer Customer { get; set; }
         public Guid CashierId { get; set; }
         public virtual Cashier Cashier { get; set; }
-        public virtual ICollection<InvoiceLine> InvoiceLines { get; set; }
+        public virtual ICollection<InvoiceLine> Lines { get; set; }
 
         #endregion
     }

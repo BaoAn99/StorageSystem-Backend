@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using storagesystem.domain.commons;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
@@ -172,6 +173,7 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public IQueryable<TEntity> GetAll(QueryParams queryParams)
         {
             var query = GetAll();
+
             Expression<Func<TEntity, bool>> predicate = null;
             query.Where(p => p.Id == null);
             return query;
@@ -183,13 +185,6 @@ namespace StorageSystem.Infrastructure.Repositories.Base
 
             return query;
         }
-
-        //public object GetAllLookup(QueryParams queryParams)
-        //{
-        //    IQueryable<TEntity> query = 
-
-        //    return query;
-        //}
 
         //public int SaveChanges() => _unitOfWork.Commit();
         //public Task<int> SaveChangesAsync() => _unitOfWork.CommitAsync();

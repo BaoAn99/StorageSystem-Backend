@@ -85,7 +85,7 @@ namespace StorageSystem.Application.Features.Services
                 double netAmount = 0;
 
                 var invoice = _mapper.Map<Invoice>(model);
-                invoice.InvoiceLines = new List<InvoiceLine>();
+                invoice.Lines = new List<InvoiceLine>();
                 invoice.CustomerId = customerId;
                 _invoiceManager.SetCreating(invoice);
 
@@ -119,7 +119,7 @@ namespace StorageSystem.Application.Features.Services
                         Status = item.Status,
                     };
                     _invoiceLineManager.SetCreating(invoiceLine);
-                    invoice.InvoiceLines.Add(invoiceLine);
+                    invoice.Lines.Add(invoiceLine);
                     amount += netPrice;
                 }
 
@@ -183,7 +183,7 @@ namespace StorageSystem.Application.Features.Services
 
                 foreach (var item in model.Items)
                 {
-                    var invoiceLine = invoice.InvoiceLines.FirstOrDefault(l => l.ProductId == item.ProductId);
+                    var invoiceLine = invoice.Lines.FirstOrDefault(l => l.ProductId == item.ProductId);
                     if (invoiceLine != null)
                     {
                         if(invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
@@ -197,7 +197,7 @@ namespace StorageSystem.Application.Features.Services
                     {
                         var newInoiveLine = _mapper.Map<InvoiceLine>(item);
 
-                        invoice.InvoiceLines.Add(newInoiveLine);
+                        invoice.Lines.Add(newInoiveLine);
 
                         _invoiceLineManager.SetCreating(newInoiveLine);
                     }
@@ -231,7 +231,7 @@ namespace StorageSystem.Application.Features.Services
                 {
                     invoice.Status = InvoiceStatus.Cancelled;
 
-                    foreach (var item in invoice.InvoiceLines)
+                    foreach (var item in invoice.Lines)
                     {
                         item.Status = InvoiceLineStatus.Cancelled;
 
@@ -247,7 +247,7 @@ namespace StorageSystem.Application.Features.Services
                     var canceledInvoice = _mapper.Map<Invoice>(invoice);
                     canceledInvoice.Status = InvoiceStatus.Cancelled;
 
-                    foreach (var item in invoice.InvoiceLines)
+                    foreach (var item in invoice.Lines)
                     {
                         var canceledInvoiceLine = _mapper.Map<InvoiceLine>(item);
                         canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
@@ -280,7 +280,7 @@ namespace StorageSystem.Application.Features.Services
                 if (invoice == null)
                     throw new ArgumentException("Không tìm thấy hóa đơn!");
 
-                var invoiceLine = invoice.InvoiceLines.FirstOrDefault(il => il.Id == idLine);
+                var invoiceLine = invoice.Lines.FirstOrDefault(il => il.Id == idLine);
 
                 if (invoiceLine == null)
                     throw new ArgumentException("Không tìm thấy thông tin chi tiết hóa đơn");
@@ -296,9 +296,9 @@ namespace StorageSystem.Application.Features.Services
 
                 if (invoice.Status == InvoiceStatus.Unpaid)
                 {
-                    invoice.InvoiceLines.Remove(invoiceLine);
+                    invoice.Lines.Remove(invoiceLine);
 
-                    if (!invoice.InvoiceLines.Any())
+                    if (!invoice.Lines.Any())
                     {
                         await _invoiceRepository.DeleteAsync(invoice);
                     }
@@ -312,7 +312,7 @@ namespace StorageSystem.Application.Features.Services
                 {
                     invoiceLine.Status = InvoiceLineStatus.Cancelled;
 
-                    double currentInvoiceValue = invoice.InvoiceLines.Sum(il => il.NetPrice);
+                    double currentInvoiceValue = invoice.Lines.Sum(il => il.NetPrice);
 
                     if (currentInvoiceValue < invoice.Deposit)
                     {
@@ -328,11 +328,11 @@ namespace StorageSystem.Application.Features.Services
 
                         _invoiceManager.SetCreating(canceledInvoice);
 
-                        var CanceledInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                        CanceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
+                        var canceledInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
+                        canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
 
-                        canceledInvoice.InvoiceLines.Add(CanceledInvoiceLine);
-                        _invoiceLineManager.SetCreating(CanceledInvoiceLine);
+                        canceledInvoice.Lines.Add(canceledInvoiceLine);
+                        _invoiceLineManager.SetCreating(canceledInvoiceLine);
 
                         await _invoiceRepository.CreateAsync(canceledInvoice);
                     }
@@ -341,10 +341,10 @@ namespace StorageSystem.Application.Features.Services
                         var canceledInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
                         canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
 
-                        canceledInvoice.InvoiceLines.Add(canceledInvoiceLine);
+                        canceledInvoice.Lines.Add(canceledInvoiceLine);
                         _invoiceLineManager.SetCreating(canceledInvoiceLine);
 
-                        await _invoiceRepository.UpdateAsync(canceledInvoice);
+                        await _invoiceRepository.UpdateAsync(canceledInvoice); 
                     }
                 }
 
@@ -375,7 +375,7 @@ namespace StorageSystem.Application.Features.Services
                 var refundInvoice = _mapper.Map<Invoice>(invoice);
                 refundInvoice.Status = InvoiceStatus.Refunded;
 
-                foreach (var item in invoice.InvoiceLines)
+                foreach (var item in invoice.Lines)
                 {
                     if(item.Status == InvoiceLineStatus.Paid)
                         throw new ArgumentException("Không thể hoàn trả hóa đơn");
@@ -411,7 +411,7 @@ namespace StorageSystem.Application.Features.Services
                 if (invoice.Status != InvoiceStatus.Paid)
                     throw new ArgumentException("Không thể hoàn trả hóa đơn");
 
-                var invoiceLine = invoice.InvoiceLines.FirstOrDefault(il => il.Id == idLine);
+                var invoiceLine = invoice.Lines.FirstOrDefault(il => il.Id == idLine);
                 if (invoiceLine == null)
                     throw new ArgumentException("Không tìm thấy thông tin chi tiết hóa đơn");
 
@@ -431,14 +431,14 @@ namespace StorageSystem.Application.Features.Services
                     _invoiceManager.SetCreating(refundInvoice);
 
                     var refundInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                    refundInvoice.InvoiceLines.Add(refundInvoiceLine);
+                    refundInvoice.Lines.Add(refundInvoiceLine);
 
                     await _invoiceRepository.CreateAsync(refundInvoice);
                 }
                 else
                 {
                     var RefundInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                    refundInvoice.InvoiceLines.Add(RefundInvoiceLine);
+                    refundInvoice.Lines.Add(RefundInvoiceLine);
 
                     await _invoiceRepository.UpdateAsync(refundInvoice);
                 }
