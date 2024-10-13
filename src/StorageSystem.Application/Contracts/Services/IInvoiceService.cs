@@ -7,9 +7,9 @@ namespace StorageSystem.Application.Contracts.Services
         Task<Guid> CreateInvoiceAsync(InvoiceCreateDto model);
         Task<Guid> UpdateInvoiceAsync(InvoiceUpdateDto model, Guid id);
         Task<Guid> CanceledInvoiceAsync(Guid id);
-        Task<Guid> CanceledInvoiceLineAsync(Guid id, Guid idLine);
+        Task<List<Guid>> CanceledInvoiceLineAsync(Guid id, List<Guid> idLines);
         Task<Guid> RefundInvoiceAsync(Guid id);
-        Task<Guid> RefundInvoiceLineAsync(Guid id, Guid idLine);
+        Task<List<Guid>> RefundInvoiceLineAsync(Guid id, List<Guid> idLines);
 
         //bool DeleteInvoiceAsync(Guid id);
         //Task<InvoiceForView> GetInvoiceLineByInvoiceIdAsync(Guid id);

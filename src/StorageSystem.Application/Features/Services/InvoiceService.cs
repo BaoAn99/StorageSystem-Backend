@@ -7,6 +7,8 @@ using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Customers;
 using StorageSystem.Domain.Entities.Invoices;
 using StorageSystem.Domain.Enums;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace StorageSystem.Application.Features.Services
@@ -20,9 +22,10 @@ namespace StorageSystem.Application.Features.Services
         private readonly IEntityManager<Customer> _customerManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IInvoiceRepository<InvoiceLine, Guid> _invoiceLineRepository;
 
         public InvoiceService(
-            IInvoiceRepository<Invoice, Guid> invoiceRepository, ICustomerRepository<Customer, Guid> customerRepository, IEntityManager<Invoice> invoiceManager, IEntityManager<InvoiceLine> invoiceLineManager, IEntityManager<Customer> customerManager, IUnitOfWork unitOfWork, IMapper mapper)
+            IInvoiceRepository<Invoice, Guid> invoiceRepository, ICustomerRepository<Customer, Guid> customerRepository, IEntityManager<Invoice> invoiceManager, IEntityManager<InvoiceLine> invoiceLineManager, IEntityManager<Customer> customerManager, IUnitOfWork unitOfWork, IMapper mapper, IInvoiceRepository<InvoiceLine, Guid> invoiceLineRepository)
         {
             _invoiceRepository = invoiceRepository;
             _customerRepository = customerRepository;
@@ -31,7 +34,9 @@ namespace StorageSystem.Application.Features.Services
             _customerManager = customerManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _invoiceLineRepository = invoiceLineRepository;
         }
+
         public async Task<Guid> CreateInvoiceAsync(InvoiceCreateDto model)
         {
             try
@@ -39,12 +44,12 @@ namespace StorageSystem.Application.Features.Services
                 if (!(model.Status == InvoiceStatus.Unpaid ||
                       model.Status == InvoiceStatus.Paid ||
                       model.Status == InvoiceStatus.Debited))
-                        throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
+                    throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
 
                 if (model.Status == InvoiceStatus.Paid && model.Deposit != null && model.Deposit > 0 ||
                     model.Status == InvoiceStatus.Unpaid && model.Deposit != null && model.Deposit > 0 ||
                     model.Status == InvoiceStatus.Debited && (model.Deposit == null || (model.Deposit != null && model.Deposit == 0)))
-                        throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
+                    throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
 
                 if (model == null || !model.Items.Any())
                     throw new ArgumentException("Thông tin hóa đơn không hợp lệ!");
@@ -91,7 +96,8 @@ namespace StorageSystem.Application.Features.Services
 
                 foreach (var item in model.Items)
                 {
-                    //if (invoice.Status == InvoiceStatus.)
+                    if ((InvoiceLineStatus)model.Status != item.Status)
+                        throw new ArgumentException("Trạng thái phiếu thu không hợp lệ");
 
                     double price = item.UnitPrice * item.Quantity;
                     double netPrice = price;
@@ -144,7 +150,6 @@ namespace StorageSystem.Application.Features.Services
                 invoice.Amount = amount;
                 invoice.NetAmount = netAmount;
 
-
                 await _invoiceRepository.CreateAsync(invoice);
 
                 await _unitOfWork.CommitAsync();
@@ -165,45 +170,109 @@ namespace StorageSystem.Application.Features.Services
                 if (!model.Items.Any())
                     throw new ArgumentException("Thông tin hóa đơn không hợp lệ!");
 
-                if (!(model.Status == InvoiceStatus.Unpaid ||
-                    model.Status == InvoiceStatus.Debited))
-                    throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
-
                 var invoice = await _invoiceRepository.GetByIdAsync(id);
 
                 if (invoice == null)
                     throw new ArgumentException("Không tìm thấy hóa đơn!");
 
+                if (!(invoice.Status == InvoiceStatus.Unpaid ||
+                     invoice.Status == InvoiceStatus.Debited))
+                    throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
+
                 if (invoice.Status == InvoiceStatus.Unpaid && model.Status == InvoiceStatus.Refunded ||
-                    invoice.Status == InvoiceStatus.Paid && model.Status != InvoiceStatus.Refunded ||
                     invoice.Status == InvoiceStatus.Debited && (model.Status == InvoiceStatus.Unpaid || model.Status == InvoiceStatus.Refunded))
                     throw new ArgumentException("Trạng thái phiếu thu không hợp lệ!");
 
                 var updateInvoice = _mapper.Map<Invoice>(model);
+                double amount = 0;
+                double netAmount = 0;
 
                 foreach (var item in model.Items)
                 {
+                    if ((InvoiceLineStatus)model.Status != item.Status)
+                        throw new ArgumentException("Trạng thái phiếu thu không hợp lệ");
+
                     var invoiceLine = invoice.Lines.FirstOrDefault(l => l.ProductId == item.ProductId);
+
+                    double price = item.UnitPrice * item.Quantity;
+                    double netPrice = price;
+
+                    if (item.DiscountPercent.HasValue)
+                    {
+                        netPrice -= netPrice * (item.DiscountPercent.Value / 100);
+                    }
+
+                    if (item.DiscountAmount.HasValue)
+                    {
+                        netPrice -= item.DiscountAmount.Value;
+                    }
+
                     if (invoiceLine != null)
                     {
-                        if(invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
-                            throw new ArgumentException("Không được cập nhật giảm tiền hoặc giảm % trong chi tiết hóa đơn");
+                        if (item.ProductId == invoiceLine.ProductId)
+                        {
+                            if (invoiceLine.DiscountPercent != item.DiscountPercent && invoiceLine.DiscountAmount != item.DiscountAmount)
+                                throw new ArgumentException("Không được cập nhật giảm tiền hoặc giảm % trong chi tiết hóa đơn");
+                        }
 
-                        var updateInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-
-                        _invoiceLineManager.SetUpdating(updateInvoiceLine);
+                        invoiceLine.Price = price;
+                        invoiceLine.NetPrice = netPrice;
+                        invoiceLine.UnitPrice = item.UnitPrice;
+                        invoiceLine.Quantity = item.Quantity;
+                        invoiceLine.DiscountAmount = item.DiscountAmount;
+                        invoice.DiscountPercent = item.DiscountPercent;
+                        invoiceLine.Description = item.Description;
+                        invoiceLine.ProductId = item.ProductId;
+                        invoiceLine.Status = item.Status;
+                        _invoiceLineManager.SetUpdating(invoiceLine);
                     }
                     else
                     {
-                        var newInoiveLine = _mapper.Map<InvoiceLine>(item);
+                        var newInoiveLine = new InvoiceLine
+                        {
+                            Price = price,
+                            NetPrice = netPrice,
+                            UnitPrice = item.UnitPrice,
+                            Quantity = item.Quantity,
+                            DiscountAmount = item.DiscountAmount,
+                            DiscountPercent = item.DiscountPercent,
+                            Description = item.Description,
+                            ProductId = item.ProductId,
+                            Status = item.Status,
+                        };
 
                         invoice.Lines.Add(newInoiveLine);
 
                         _invoiceLineManager.SetCreating(newInoiveLine);
                     }
+
+                    amount += netPrice;
                 }
 
+                if (amount != model.Amount)
+                    throw new ArgumentException("Tổng tiền không đúng");
+
+                netAmount = amount;
+
+                if (model.DiscountPercent.HasValue)
+                {
+                    netAmount -= netAmount * (model.DiscountPercent.Value / 100);
+                }
+
+                if (model.DiscountAmount.HasValue)
+                {
+                    netAmount -= model.DiscountAmount.Value;
+                }
+
+                if (netAmount != model.NetAmount)
+                    throw new ArgumentException("Tổng tiền không đúng");
+
+                invoice.Amount = amount;
+                invoice.NetAmount = netAmount;
+                invoice.Status = model.Status;
+
                 _invoiceManager.SetUpdating(invoice);
+                await _invoiceRepository.UpdateAsync(invoice);
                 await _unitOfWork.CommitAsync();
 
                 return id;
@@ -214,6 +283,7 @@ namespace StorageSystem.Application.Features.Services
                 throw;
             }
         }
+
         public async Task<Guid> CanceledInvoiceAsync(Guid id)
         {
             try
@@ -245,12 +315,23 @@ namespace StorageSystem.Application.Features.Services
                 if (invoice.Status == InvoiceStatus.Debited)
                 {
                     var canceledInvoice = _mapper.Map<Invoice>(invoice);
+                    canceledInvoice.Lines = new List<InvoiceLine>();
                     canceledInvoice.Status = InvoiceStatus.Cancelled;
 
                     foreach (var item in invoice.Lines)
                     {
-                        var canceledInvoiceLine = _mapper.Map<InvoiceLine>(item);
-                        canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
+                        var canceledInvoiceLine = new InvoiceLine
+                        {
+                            Price = item.Price,
+                            NetPrice = item.NetPrice,
+                            UnitPrice = item.UnitPrice,
+                            Quantity = item.Quantity,
+                            DiscountAmount = item.DiscountAmount,
+                            DiscountPercent = item.DiscountPercent,
+                            Description = item.Description,
+                            ProductId = item.ProductId,
+                            Status = InvoiceLineStatus.Cancelled,
+                        };
 
                         _invoiceLineManager.SetCreating(canceledInvoiceLine);
                     }
@@ -261,17 +342,15 @@ namespace StorageSystem.Application.Features.Services
 
                 await _unitOfWork.CommitAsync();
                 return id;
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
         }
 
-        public async Task<Guid> CanceledInvoiceLineAsync(Guid id, Guid idLine)
+        public async Task<List<Guid>> CanceledInvoiceLineAsync(Guid id, List<Guid> idLines)
         {
             try
             {
@@ -280,84 +359,147 @@ namespace StorageSystem.Application.Features.Services
                 if (invoice == null)
                     throw new ArgumentException("Không tìm thấy hóa đơn!");
 
-                var invoiceLine = invoice.Lines.FirstOrDefault(il => il.Id == idLine);
+                var invoiceLines = invoice.Lines.Where(il => idLines.Contains(il.Id)).ToList();
 
-                if (invoiceLine == null)
+                if (!invoiceLines.Any())
                     throw new ArgumentException("Không tìm thấy thông tin chi tiết hóa đơn");
 
                 if (!(invoice.Status == InvoiceStatus.Unpaid ||
                     invoice.Status == InvoiceStatus.Debited))
                     throw new ArgumentException("Không thể hủy hóa đơn");
 
-                if (!(invoiceLine.Status == InvoiceLineStatus.Unpaid ||
-                    invoiceLine.Status == InvoiceLineStatus.Debited))
-                    throw new ArgumentException("Không thể hủy hóa đơn");
+                double amount = invoice.Amount;
+                double netAmount = 0;
+                double amountCanceled = 0;
 
+                var checkExitsCanceledInvoice = _invoiceRepository.FindByCondition(i => i.OldInvoiceId == invoice.Id && i.Status == InvoiceStatus.Cancelled).FirstOrDefault();
 
-                if (invoice.Status == InvoiceStatus.Unpaid)
+                if (checkExitsCanceledInvoice != null)
                 {
-                    invoice.Lines.Remove(invoiceLine);
-
-                    if (!invoice.Lines.Any())
-                    {
-                        await _invoiceRepository.DeleteAsync(invoice);
-                    }
-                    else
-                    {
-                        await _invoiceRepository.UpdateAsync(invoice);
-                    }
+                    amountCanceled = checkExitsCanceledInvoice.Amount;
                 }
 
-                if (invoice.Status == InvoiceStatus.Debited)
+                var canceledInvoice = checkExitsCanceledInvoice;
+
+                if (canceledInvoice == null)
                 {
-                    invoiceLine.Status = InvoiceLineStatus.Cancelled;
-
-                    double currentInvoiceValue = invoice.Lines.Sum(il => il.NetPrice);
-
-                    if (currentInvoiceValue < invoice.Deposit)
+                    canceledInvoice = new Invoice()
                     {
-                        var refundAmount = invoice.Deposit - currentInvoiceValue;
-                    }   
+                        CustomerId = invoice.CustomerId,
+                        CustomerName = invoice.CustomerName,
+                        CustomerPhone = invoice.CustomerPhone,
+                        CustomerAddress = invoice.CustomerAddress,
+                        CashierId = invoice.CashierId,
+                        Time = DateTime.Now,
+                        Deposit = 0,
+                        DiscountAmount = 0,
+                        DiscountPercent = 0,
+                        Status = InvoiceStatus.Cancelled,
+                        Amount = amountCanceled,
+                        NetAmount = amountCanceled,
+                        IsPaid = invoice.IsPaid,
+                        OldInvoiceId = invoice.Id,
+                        Lines = new List<InvoiceLine>()
+                    };
 
-                    var canceledInvoice = _invoiceRepository.FindByCondition(i => i.Id == invoice.Id && i.Status == InvoiceStatus.Cancelled).FirstOrDefault();
+                    _invoiceManager.SetCreating(canceledInvoice);
 
-                    if (canceledInvoice == null)
+                    await _invoiceRepository.CreateAsync(canceledInvoice);
+                }
+
+                foreach (var invoiceLine in invoiceLines)
+                {
+                    if (invoiceLine.Status == InvoiceLineStatus.Cancelled)
+                        throw new ArgumentException("Thông tin chi tiết hóa đơn đã được hủy");
+
+                    double netPrice = invoiceLine.NetPrice;
+
+                    if (invoice.Status == InvoiceStatus.Unpaid)
                     {
-                        canceledInvoice = _mapper.Map<Invoice>(invoice);
-                        canceledInvoice.Status = InvoiceStatus.Cancelled;
+                        invoice.Lines.Remove(invoiceLine);
 
-                        _invoiceManager.SetCreating(canceledInvoice);
+                        if (!invoice.Lines.Any())
+                        {
+                            await _invoiceRepository.DeleteAsync(invoice);
+                            await _unitOfWork.CommitAsync();
 
-                        var canceledInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                        canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
+                            return idLines;
+                        }
+
+                        await _invoiceLineRepository.DeleteAsync(invoiceLine);
+                    }
+
+                    if (invoice.Status == InvoiceStatus.Debited)
+                    {
+                        invoiceLine.Status = InvoiceLineStatus.Cancelled;
+                        _invoiceLineManager.SetUpdating(invoiceLine);
+
+                        double currentInvoiceValue = invoice.Lines.Sum(il => il.NetPrice);
+
+                        if (currentInvoiceValue < invoice.Deposit)
+                        {
+                            var refundAmount = invoice.Deposit - currentInvoiceValue;
+                        }
+
+                        amountCanceled += netPrice;
+
+                        var canceledInvoiceLine = new InvoiceLine
+                        {
+                            Price = invoiceLine.Price,
+                            NetPrice = invoiceLine.NetPrice,
+                            UnitPrice = invoiceLine.UnitPrice,
+                            Quantity = invoiceLine.Quantity,
+                            DiscountAmount = invoiceLine.DiscountAmount,
+                            DiscountPercent = invoiceLine.DiscountPercent,
+                            Description = invoiceLine.Description,
+                            ProductId = invoiceLine.ProductId,
+                            Status = InvoiceLineStatus.Cancelled,
+                        };
+
+                        canceledInvoice.Amount = amountCanceled;
+                        canceledInvoice.NetAmount = amountCanceled;
 
                         canceledInvoice.Lines.Add(canceledInvoiceLine);
                         _invoiceLineManager.SetCreating(canceledInvoiceLine);
 
-                        await _invoiceRepository.CreateAsync(canceledInvoice);
+                        if (checkExitsCanceledInvoice != null)
+                        {
+                            await _invoiceRepository.UpdateAsync(canceledInvoice);
+                        }
                     }
-                    else
-                    {
-                        var canceledInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                        canceledInvoiceLine.Status = InvoiceLineStatus.Cancelled;
 
-                        canceledInvoice.Lines.Add(canceledInvoiceLine);
-                        _invoiceLineManager.SetCreating(canceledInvoiceLine);
-
-                        await _invoiceRepository.UpdateAsync(canceledInvoice); 
-                    }
+                    amount -= netPrice;
                 }
 
+                netAmount = amount;
+
+                if (invoice.DiscountPercent.HasValue)
+                {
+                    netAmount -= netAmount * (invoice.DiscountPercent.Value / 100);
+                }
+
+                if (invoice.DiscountAmount.HasValue)
+                {
+                    netAmount -= invoice.DiscountAmount.Value;
+                }
+
+                if (netAmount < 0)
+                    netAmount = 0;
+
+                invoice.Amount = amount;
+                invoice.NetAmount = netAmount;
+
+                _invoiceManager.SetUpdating(invoice);
+                await _invoiceRepository.UpdateAsync(invoice);
                 await _unitOfWork.CommitAsync();
-                return idLine;
 
+                return idLines;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 throw;
             }
-
         }
 
         public async Task<Guid> RefundInvoiceAsync(Guid id)
@@ -373,15 +515,23 @@ namespace StorageSystem.Application.Features.Services
                     throw new ArgumentException("Không thể hoàn trả hóa đơn");
 
                 var refundInvoice = _mapper.Map<Invoice>(invoice);
+                refundInvoice.Lines = new List<InvoiceLine>();
                 refundInvoice.Status = InvoiceStatus.Refunded;
 
                 foreach (var item in invoice.Lines)
                 {
-                    if(item.Status == InvoiceLineStatus.Paid)
-                        throw new ArgumentException("Không thể hoàn trả hóa đơn");
-
-                    var refundInvoiceLine = _mapper.Map<InvoiceLine>(item);
-                    refundInvoiceLine.Status = InvoiceLineStatus.Refunded;
+                    var refundInvoiceLine = new InvoiceLine
+                    {
+                        Price = item.Price,
+                        NetPrice = item.NetPrice,
+                        UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        DiscountAmount = item.DiscountAmount,
+                        DiscountPercent = item.DiscountPercent,
+                        Description = item.Description,
+                        ProductId = item.ProductId,
+                        Status = InvoiceLineStatus.Refunded,
+                    };
 
                     _invoiceLineManager.SetCreating(refundInvoiceLine);
                 }
@@ -399,7 +549,7 @@ namespace StorageSystem.Application.Features.Services
             }
         }
 
-        public async Task<Guid> RefundInvoiceLineAsync(Guid id, Guid idLine)
+        public async Task<List<Guid>> RefundInvoiceLineAsync(Guid id, List<Guid> idLines)
         {
             try
             {
@@ -411,42 +561,115 @@ namespace StorageSystem.Application.Features.Services
                 if (invoice.Status != InvoiceStatus.Paid)
                     throw new ArgumentException("Không thể hoàn trả hóa đơn");
 
-                var invoiceLine = invoice.Lines.FirstOrDefault(il => il.Id == idLine);
-                if (invoiceLine == null)
+                var invoiceLines = invoice.Lines.Where(il => idLines.Contains(il.Id)).ToList();
+
+                if (!invoiceLines.Any())
                     throw new ArgumentException("Không tìm thấy thông tin chi tiết hóa đơn");
 
-                if (invoiceLine.Status == InvoiceLineStatus.Refunded)
-                    throw new InvalidOperationException("Thông tin chi tiết hóa đơn này đã được hoàn trả trước đó");
+                double amount = invoice.Amount;
+                double netAmount = 0;
+                double amountRefund = 0;
 
-                invoiceLine.Status = InvoiceLineStatus.Refunded;
-                _invoiceLineManager.SetUpdating(invoiceLine);
+                var checkExitsRefundInvoice = _invoiceRepository.FindByCondition(i => i.OldInvoiceId == invoice.Id && i.Status == InvoiceStatus.Refunded).FirstOrDefault();
 
-                var refundInvoice = _invoiceRepository.FindByCondition(i => i.Id == invoice.Id && i.Status == InvoiceStatus.Refunded).FirstOrDefault();
+                if (checkExitsRefundInvoice != null)
+                {
+                    amountRefund = checkExitsRefundInvoice.Amount;
+                }
+
+                var refundInvoice = checkExitsRefundInvoice;
 
                 if (refundInvoice == null)
                 {
-                    refundInvoice = _mapper.Map<Invoice>(invoice);
-                    refundInvoice.Status = InvoiceStatus.Refunded;
+                    refundInvoice = new Invoice()
+                    {
+                        CustomerId = invoice.CustomerId,
+                        CustomerName = invoice.CustomerName,
+                        CustomerPhone = invoice.CustomerPhone,
+                        CustomerAddress = invoice.CustomerAddress,
+                        CashierId = invoice.CashierId,
+                        Time = DateTime.Now,
+                        Deposit = 0,
+                        DiscountAmount = 0,
+                        DiscountPercent = 0,
+                        Status = InvoiceStatus.Refunded,
+                        Amount = amountRefund,
+                        NetAmount = amountRefund,
+                        IsPaid = invoice.IsPaid,
+                        OldInvoiceId = invoice.Id,
+                        Lines = new List<InvoiceLine>()
+                    };
 
                     _invoiceManager.SetCreating(refundInvoice);
 
-                    var refundInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                    refundInvoice.Lines.Add(refundInvoiceLine);
-
                     await _invoiceRepository.CreateAsync(refundInvoice);
                 }
-                else
-                {
-                    var RefundInvoiceLine = _mapper.Map<InvoiceLine>(invoiceLine);
-                    refundInvoice.Lines.Add(RefundInvoiceLine);
 
-                    await _invoiceRepository.UpdateAsync(refundInvoice);
+                foreach (var invoiceLine in invoiceLines)
+                {
+                    if (invoiceLine.Status == InvoiceLineStatus.Refunded)
+                        throw new ArgumentException("Thông tin chi tiết hóa đơn đã được hoàn trả");
+
+                    double netPrice = invoiceLine.NetPrice;
+
+                    if (invoice.Status == InvoiceStatus.Paid)
+                    {
+                        invoiceLine.Status = InvoiceLineStatus.Refunded;
+                        _invoiceLineManager.SetUpdating(invoiceLine);
+
+                        amountRefund += netPrice;
+
+                        var refundInvoiceLine = new InvoiceLine
+                        {
+                            Price = invoiceLine.Price,
+                            NetPrice = invoiceLine.NetPrice,
+                            UnitPrice = invoiceLine.UnitPrice,
+                            Quantity = invoiceLine.Quantity,
+                            DiscountAmount = invoiceLine.DiscountAmount,
+                            DiscountPercent = invoiceLine.DiscountPercent,
+                            Description = invoiceLine.Description,
+                            ProductId = invoiceLine.ProductId,
+                            Status = InvoiceLineStatus.Refunded,
+                        };
+
+                        refundInvoice.Amount = amountRefund;
+                        refundInvoice.NetAmount = amountRefund;
+
+                        refundInvoice.Lines.Add(refundInvoiceLine);
+                        _invoiceLineManager.SetCreating(refundInvoiceLine);
+
+                        if (checkExitsRefundInvoice != null)
+                        {
+                            await _invoiceRepository.UpdateAsync(refundInvoice);
+                        }
+                    }
+
+                    amount -= netPrice;
                 }
 
+                netAmount = amount;
+
+                if (invoice.DiscountPercent.HasValue)
+                {
+                    netAmount -= netAmount * (invoice.DiscountPercent.Value / 100);
+                }
+
+                if (invoice.DiscountAmount.HasValue)
+                {
+                    netAmount -= invoice.DiscountAmount.Value;
+                }
+
+                if (netAmount < 0)
+                    netAmount = 0;
+
+                invoice.Amount = amount;
+                invoice.NetAmount = netAmount;
+
+                _invoiceManager.SetUpdating(invoice);
                 await _invoiceRepository.UpdateAsync(invoice);
                 await _unitOfWork.CommitAsync();
 
-                return idLine;
+                return idLines;
             }
             catch (Exception ex)
             {
