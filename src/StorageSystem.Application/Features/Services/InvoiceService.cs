@@ -7,9 +7,6 @@ using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Customers;
 using StorageSystem.Domain.Entities.Invoices;
 using StorageSystem.Domain.Enums;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json.Serialization;
 
 namespace StorageSystem.Application.Features.Services
 {
@@ -358,7 +355,6 @@ namespace StorageSystem.Application.Features.Services
 
                 if (invoice == null)
                     throw new ArgumentException("Không tìm thấy hóa đơn!");
-
                 var invoiceLines = invoice.Lines.Where(il => idLines.Contains(il.Id)).ToList();
 
                 if (!invoiceLines.Any())
@@ -395,8 +391,8 @@ namespace StorageSystem.Application.Features.Services
                         DiscountAmount = 0,
                         DiscountPercent = 0,
                         Status = InvoiceStatus.Cancelled,
-                        Amount = amountCanceled,
-                        NetAmount = amountCanceled,
+                        Amount = 0,
+                        NetAmount = 0,
                         IsPaid = invoice.IsPaid,
                         OldInvoiceId = invoice.Id,
                         Lines = new List<InvoiceLine>()
@@ -405,6 +401,7 @@ namespace StorageSystem.Application.Features.Services
                     _invoiceManager.SetCreating(canceledInvoice);
 
                     await _invoiceRepository.CreateAsync(canceledInvoice);
+
                 }
 
                 foreach (var invoiceLine in invoiceLines)
@@ -601,7 +598,6 @@ namespace StorageSystem.Application.Features.Services
                     };
 
                     _invoiceManager.SetCreating(refundInvoice);
-
                     await _invoiceRepository.CreateAsync(refundInvoice);
                 }
 
