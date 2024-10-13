@@ -5,11 +5,11 @@ namespace StorageSystem.Application.Contracts.Services
     public interface IInvoiceService
     {
         Task<Guid> CreateInvoiceAsync(InvoiceCreateDto model);
-        Task<bool> UpdateInvoiceAsync(InvoiceUpdateDto model, Guid id);
-        Task<bool> CancelInvoiceAsync(Guid id);
-        Task<bool> CancelInvoiceLineAsync(Guid id, Guid idLine);
-        Task<bool> RefundInvoiceAsync(Guid id);
-        Task<bool> RefundInvoiceLineAsync(Guid id, Guid idLine);
+        Task<Guid> UpdateInvoiceAsync(InvoiceUpdateDto model, Guid id);
+        Task<Guid> CanceledInvoiceAsync(Guid id);
+        Task<List<Guid>> CanceledInvoiceLineAsync(Guid id, List<Guid> idLines);
+        Task<Guid> RefundInvoiceAsync(Guid id);
+        Task<List<Guid>> RefundInvoiceLineAsync(Guid id, List<Guid> idLines);
 
         //bool DeleteInvoiceAsync(Guid id);
         //Task<InvoiceForView> GetInvoiceLineByInvoiceIdAsync(Guid id);

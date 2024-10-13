@@ -22,38 +22,38 @@ namespace StorageSystem.Api.Controllers
             return Ok(invoiceId);
         }
 
-        [HttpPost("Update")]
+        [HttpPut("Update/{id}")]
         public async Task<IActionResult> Update([FromBody] InvoiceUpdateDto model, Guid id)
         {
             var invoiceId = await _invoiceService.UpdateInvoiceAsync(model, id);
             return Ok(invoiceId);
         }
 
-        [HttpPost("CancelInvoice")]
-        public async Task<IActionResult> CancelInvoice(Guid id)
+        [HttpPost("CanceledInvoice/{id}")]
+        public async Task<IActionResult> CanceledInvoice(Guid id)
         {
-            var invoiceId = await _invoiceService.CancelInvoiceAsync(id);
+            var invoiceId = await _invoiceService.CanceledInvoiceAsync(id);
             return Ok(invoiceId);
         }
 
-        [HttpPost("CancelInvoiceLine")]
-        public async Task<IActionResult> CancelInvoiceLine(Guid id, Guid idLine)
+        [HttpPost("CanceledInvoiceLine/{id}")]
+        public async Task<IActionResult> CanceledInvoiceLine(Guid id, List<Guid> idLines)
         {
-            var invoiceId = await _invoiceService.CancelInvoiceLineAsync(id, idLine);
+            var invoiceId = await _invoiceService.CanceledInvoiceLineAsync(id, idLines);
             return Ok(invoiceId);
         }
 
-        [HttpPost("RefundInvoice")]
+        [HttpPost("RefundInvoice/{id}")]
         public async Task<IActionResult> RefundInvoice(Guid id)
         {
             var invoiceId = await _invoiceService.RefundInvoiceAsync(id);
             return Ok(invoiceId);
         }
 
-        [HttpPost("RefundInvoiceLine")]
-        public async Task<IActionResult> RefundInvoiceLine(Guid id, Guid idLine)
+        [HttpPost("RefundInvoiceLine/{id}")]
+        public async Task<IActionResult> RefundInvoiceLine(Guid id, List<Guid> idLines)
         {
-            var invoiceId = await _invoiceService.RefundInvoiceLineAsync(id, idLine);
+            var invoiceId = await _invoiceService.RefundInvoiceLineAsync(id, idLines);
             return Ok(invoiceId);
         }
 
