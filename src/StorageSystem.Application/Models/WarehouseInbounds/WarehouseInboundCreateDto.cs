@@ -11,8 +11,8 @@ namespace StorageSystem.Application.Models.WarehouseInbounds
         public double? DiscountPercent { get; set; }
         public WarehouseInboundStatus Status { get; set; }
         #region Relationship
-        public Guid StorekeeperId { get; set; }
-        public Guid SupplierId { get; set; }
+        public Guid? StorekeeperId { get; set; }
+        public Guid? SupplierId { get; set; }
         public List<WarehouseInboundLineCreateDto> Lines { get; set; }
         #endregion
 

@@ -2,6 +2,7 @@
 {
     public enum WarehouseInboundStatus
     {
+        Completed
     }
 
     public enum WarehouseInboundLineStatus
