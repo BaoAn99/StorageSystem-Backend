@@ -57,11 +57,11 @@ namespace StorageSystem.Api.Controllers
             return Ok(invoiceId);
         }
 
-        //[HttpPost("Print")]
-        //public async Task<IActionResult> Print()
-        //{
-        //    //var invoiceId = await _invoiceService.CreateInvoiceAsync(model);
-        //    return Ok("");
-        //}
+        [HttpPost("Print/{id}")]
+        public async Task<InvoiceForView> PrintInvoiceAsync(Guid id)
+        {
+            var printInvoice = await _invoiceService.PrintInvoiceAsync(id);
+            return (printInvoice);
+        }
     }
 }
