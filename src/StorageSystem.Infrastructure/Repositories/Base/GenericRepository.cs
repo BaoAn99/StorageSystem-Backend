@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using storagesystem.domain.commons;
 using StorageSystem.Application.Contracts.Repositories.Base;
+using StorageSystem.Application.Extensions;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
+using StorageSystem.Domain.Entities.Products;
+using StorageSystem.Infrastructure.Persistence;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
 using System.Linq.Expressions;
+using System.Transactions;
 
 namespace StorageSystem.Infrastructure.Repositories.Base
 {
@@ -97,12 +101,14 @@ namespace StorageSystem.Infrastructure.Repositories.Base
     public class RepositoryBaseAsync<TEntity, TKey> : IRepositoryBaseAsync<TEntity, TKey> where TEntity : class, IEntity<TKey>
     {
         private readonly IDbContextFactory _dbContextFactory;
-        private readonly DbContext _dbContext;
+        private DbContext _dbContext;
+        private ApplicationDbContext _context;
 
-        public RepositoryBaseAsync(IDbContextFactory dbContextFactory)
+        public RepositoryBaseAsync(IDbContextFactory dbContextFactory, ApplicationDbContext context)
         {
             _dbContextFactory = dbContextFactory;
             _dbContext = _dbContextFactory.Create();
+            _context = context;
         }
 
         public IQueryable<TEntity> GetAll(bool trackChanges = false) =>
@@ -180,6 +186,66 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
         {
             throw new NotImplementedException();
+        }
+
+        public void Test()
+        {
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required,
+                                   new System.TimeSpan(0, 15, 0)))
+            {
+                try
+                {
+                    //_context.ChangeTracker.AutoDetectChangesEnabled = false;
+
+                    int count = 0;
+                    foreach (var entityToInsert in CsvFileExtension.Import<TEntity>("D:\\Freelancer\\hai-thuan-store\\StorageSystem-Backend\\src\\StorageSystem.Api\\ProductType.csv"))
+                    {
+                        ++count;
+                        _dbContext = AddToContext(_dbContext, entityToInsert, count, 4900, true);
+                        //if (count % 500 == 0)
+                        //{
+                        //    _dbContext.Dispose();
+                        //    _dbContext = _context;
+                        //}
+                    }
+
+                    _dbContext.SaveChanges();
+                }
+                finally
+                {
+                    if (_dbContext != null)
+                        _dbContext.Dispose();
+                }
+
+                scope.Complete();
+            }
+        }
+
+        private DbContext AddToContext(DbContext context, TEntity entity, int count, int commitCount, bool recreateContext)
+        {
+            context.Set<TEntity>().Add(entity);
+            //context.SaveChanges();
+            if (count % commitCount == 0)
+            {
+                try
+                {
+                    context.SaveChanges();
+                    if (recreateContext)
+                    {
+                        //_context.ChangeTracker.AutoDetectChangesEnabled = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var a = ex.Message;
+                    var b = ex.StackTrace;
+                    var c = count;
+                    var d = commitCount;
+                    throw;
+                }
+            }
+
+            return context;
         }
 
         //public int SaveChanges() => _unitOfWork.Commit();

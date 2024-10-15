@@ -103,5 +103,18 @@ namespace StorageSystem.Application.Features.Services
         {
             throw new NotImplementedException();
         }
+
+        public void Test()
+        {
+            try
+            {
+                _productTypeRepository.Test();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

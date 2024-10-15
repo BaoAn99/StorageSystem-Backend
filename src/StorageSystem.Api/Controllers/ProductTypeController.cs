@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
+using StorageSystem.Application.Extensions;
 using StorageSystem.Application.Models.ProductTypes;
 using StorageSystem.Domain.Commons;
 
@@ -56,6 +57,20 @@ namespace StorageSystem.Api.Controllers
         {
             var productTypes = _productTypeService.GetAllProductTypes(queryParams);
             return Ok(productTypes);
+        }
+
+        [HttpPost("Export")]
+        public ActionResult Export()
+        {
+            CsvFileExtension.Export("ProductType.csv");
+            return Ok("Ok");
+        }
+
+        [HttpPost("Test")]
+        public ActionResult Test()
+        {
+            _productTypeService.Test();
+            return Ok("Ok");
         }
     }
 }

@@ -65,6 +65,7 @@ namespace StorageSystem.Application.Contracts.Repositories.Base
     public interface IRepositoryBaseAsync<TEntity, TKey> : IRepositoryQueryBase<TEntity, TKey>
         where TEntity : IEntity<TKey>
     {
+        public void Test();
         Task<TKey> CreateAsync(TEntity entity);
 
         Task CreateListAsync(IEnumerable<TEntity> entities);
