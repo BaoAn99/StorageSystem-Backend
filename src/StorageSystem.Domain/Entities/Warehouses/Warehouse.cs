@@ -22,9 +22,9 @@ namespace StorageSystem.Domain.Entities.Warehouses
         public double? DiscountPercent { get; set; }
         public WarehouseInboundStatus Status { get; set; }
         #region Relationship
-        public Guid StorekeeperId { get; set; }
+        public Guid? StorekeeperId { get; set; }
         public virtual Storekeeper Storekeeper { get; set; }
-        public Guid WarehouseId { get; set; }
+        public Guid? WarehouseId { get; set; }
         public virtual Warehouse Warehouse { get; set; }
         public virtual ICollection<WarehouseInboundLine> Lines { get; set; }
         #endregion

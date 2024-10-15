@@ -13,6 +13,7 @@ namespace StorageSystem.Application.Models.WarehouseInbounds
         #region Relationship
         public Guid? StorekeeperId { get; set; }
         public Guid? SupplierId { get; set; }
+        public Guid WarehouseId { get; set; }
         public List<WarehouseInboundLineCreateDto> Lines { get; set; }
         #endregion
 
