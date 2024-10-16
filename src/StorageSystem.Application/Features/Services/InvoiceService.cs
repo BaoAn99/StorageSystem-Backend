@@ -296,17 +296,18 @@ namespace StorageSystem.Application.Features.Services
 
                 if (invoice.Status == InvoiceStatus.Unpaid)
                 {
-                    invoice.Status = InvoiceStatus.Cancelled;
+                    //invoice.Status = InvoiceStatus.Cancelled;
 
-                    foreach (var item in invoice.Lines)
-                    {
-                        item.Status = InvoiceLineStatus.Cancelled;
+                    //foreach (var item in invoice.Lines)
+                    //{
+                    //    item.Status = InvoiceLineStatus.Cancelled;
 
-                        _invoiceLineManager.SetUpdating(item);
-                    }
+                    //    _invoiceLineManager.SetUpdating(item);
+                    //}
 
-                    _invoiceManager.SetUpdating(invoice);
-                    await _invoiceRepository.UpdateAsync(invoice);
+                    //_invoiceManager.SetUpdating(invoice);
+                    await _invoiceRepository.DeleteAsync(invoice);
+                   
                 }
 
                 if (invoice.Status == InvoiceStatus.Debited)
@@ -335,9 +336,14 @@ namespace StorageSystem.Application.Features.Services
 
                     _invoiceManager.SetCreating(canceledInvoice);
                     await _invoiceRepository.CreateAsync(canceledInvoice);
+
+                    await _unitOfWork.CommitAsync();
+
+                    return canceledInvoice.Id;
                 }
 
                 await _unitOfWork.CommitAsync();
+
                 return id;
             }
             catch (Exception ex)
@@ -347,7 +353,7 @@ namespace StorageSystem.Application.Features.Services
             }
         }
 
-        public async Task<List<Guid>> CanceledInvoiceLineAsync(Guid id, List<Guid> idLines)
+        public async Task<Guid> CanceledInvoiceLineAsync(Guid id, List<Guid> idLines)
         {
             try
             {
@@ -420,7 +426,7 @@ namespace StorageSystem.Application.Features.Services
                             await _invoiceRepository.DeleteAsync(invoice);
                             await _unitOfWork.CommitAsync();
 
-                            return idLines;
+                            return id;
                         }
 
                         await _invoiceLineRepository.DeleteAsync(invoiceLine);
@@ -490,7 +496,7 @@ namespace StorageSystem.Application.Features.Services
                 await _invoiceRepository.UpdateAsync(invoice);
                 await _unitOfWork.CommitAsync();
 
-                return idLines;
+                return canceledInvoice.Id;
             }
             catch (Exception ex)
             {
@@ -537,7 +543,7 @@ namespace StorageSystem.Application.Features.Services
                 await _invoiceRepository.CreateAsync(refundInvoice);
                 await _unitOfWork.CommitAsync();
 
-                return id;
+                return refundInvoice.Id;
             }
             catch (Exception ex)
             {
@@ -546,7 +552,7 @@ namespace StorageSystem.Application.Features.Services
             }
         }
 
-        public async Task<List<Guid>> RefundInvoiceLineAsync(Guid id, List<Guid> idLines)
+        public async Task<Guid> RefundInvoiceLineAsync(Guid id, List<Guid> idLines)
         {
             try
             {
@@ -665,7 +671,7 @@ namespace StorageSystem.Application.Features.Services
                 await _invoiceRepository.UpdateAsync(invoice);
                 await _unitOfWork.CommitAsync();
 
-                return idLines;
+                return refundInvoice.Id;
             }
             catch (Exception ex)
             {
