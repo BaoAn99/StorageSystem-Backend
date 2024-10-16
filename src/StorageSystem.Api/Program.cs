@@ -3,7 +3,8 @@ using StorageSystem.Infrastructure;
 using StorageSystem.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Console.WriteLine("Main thread: " + Environment.CurrentManagedThreadId);
+Console.WriteLine("");
 // Add services to the container.
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 var services = builder.Services;

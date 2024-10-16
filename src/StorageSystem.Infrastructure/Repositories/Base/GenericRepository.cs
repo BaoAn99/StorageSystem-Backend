@@ -139,7 +139,11 @@ namespace StorageSystem.Infrastructure.Repositories.Base
 
         public async Task<TKey> CreateAsync(TEntity entity)
         {
+            Console.WriteLine("3: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("");
             await _dbContext.Set<TEntity>().AddAsync(entity);
+            Console.WriteLine("4: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("");
             return entity.Id;
         }
 
@@ -191,7 +195,7 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public void Test()
         {
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required,
-                                   new System.TimeSpan(0, 15, 0)))
+                                   new System.TimeSpan(0, 60, 0)))
             {
                 try
                 {

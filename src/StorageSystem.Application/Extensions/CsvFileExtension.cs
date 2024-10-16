@@ -31,7 +31,7 @@ namespace StorageSystem.Application.Extensions
 
         public static void Export(string path)
         {
-            int totalRecords = 500_000;
+            int totalRecords = 600_000;
             //int totalRecords = 10_000_000;
             int batchSize = 100_000;
 

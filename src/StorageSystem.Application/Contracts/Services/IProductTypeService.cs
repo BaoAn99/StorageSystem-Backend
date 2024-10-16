@@ -13,5 +13,6 @@ namespace StorageSystem.Application.Contracts.Services
         IEnumerable<ProductTypeForView> GetAllProductTypes(QueryParams queryParams);
         IEnumerable<ProductTypeForView> GetAllProductTypesWithoutPaging(QueryParamsWithoutPaging queryParams);
         void Test();
+        Task Async();
     }
 }

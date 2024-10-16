@@ -28,11 +28,16 @@ namespace StorageSystem.Application.Features.Services
         {
             try
             {
+                Console.WriteLine("2: " + Environment.CurrentManagedThreadId);
+                Console.WriteLine("");
                 var productType = _mapper.Map<ProductType>(model);
                 _entityManager.SetCreating(productType);
                 await _productTypeRepository.CreateAsync(productType);
-
+                Console.WriteLine("5: " + Environment.CurrentManagedThreadId);
+                Console.WriteLine("");
                 await _unitOfWork.CommitAsync();
+                Console.WriteLine("6: " + Environment.CurrentManagedThreadId);
+                Console.WriteLine("");
                 return productType.Id;
             }
             catch (Exception ex)
@@ -115,6 +120,31 @@ namespace StorageSystem.Application.Features.Services
 
                 throw;
             }
+        }
+
+        public async Task Async()
+        {
+            Console.WriteLine("Thread Start 2: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("");
+            Async1();
+            await Async1();
+            Async2();
+            await Async2();
+            Console.WriteLine("");
+            Console.WriteLine("Thread Start 2: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("----------------------------------------------------------------------");
+        }
+
+        public async Task Async1()
+        {
+            Console.WriteLine("Async1: " + Environment.CurrentManagedThreadId);
+            await Async2();
+            Console.WriteLine("Async1: " + Environment.CurrentManagedThreadId);
+        }
+
+        public async Task Async2()
+        {
+            Console.WriteLine("Async2: " + Environment.CurrentManagedThreadId);
         }
     }
 }

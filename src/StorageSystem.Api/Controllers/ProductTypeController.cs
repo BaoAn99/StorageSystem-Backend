@@ -20,6 +20,8 @@ namespace StorageSystem.Api.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody] ProductTypeCreateDto model)
         {
+            Console.WriteLine("1: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("");
             var productTypeId = await _productTypeService.CreateProductTypeAsync(model);
             return Ok(productTypeId);
         }
@@ -70,6 +72,15 @@ namespace StorageSystem.Api.Controllers
         public ActionResult Test()
         {
             _productTypeService.Test();
+            return Ok("Ok");
+        }
+
+        [HttpPost("Async")]
+        public async Task<IActionResult> Async()
+        {
+            Console.WriteLine("Thread Start 1: " + Environment.CurrentManagedThreadId);
+            Console.WriteLine("");
+            await _productTypeService.Async();
             return Ok("Ok");
         }
     }
