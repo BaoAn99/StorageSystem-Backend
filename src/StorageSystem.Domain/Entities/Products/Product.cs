@@ -50,7 +50,7 @@ namespace StorageSystem.Domain.Entities.Products
     public class ProductSupplier : EntityAuditBase
     {
         public Guid SupplierId { set; get; }
-        public virtual Supplier Supplier { get; set; }
+        public virtual Supplier Supplier { get; set; }                            
         public Guid ProductId { set; get; }
         public virtual Product Product { get; set; }
     }

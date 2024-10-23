@@ -1,5 +1,8 @@
-﻿namespace StorageSystem.Domain.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace StorageSystem.Domain.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum InvoiceStatus
     {
         Paid,
@@ -8,7 +11,7 @@
         Debited,
         Refunded
     }
-
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum InvoiceLineStatus
     {
         Paid,
