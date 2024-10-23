@@ -1,0 +1,31 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using StorageSystem.Order.Application.Contracts.Services;
+using StorageSystem.Order.Application.Features.Services;
+using StorageSystem.Order.Domain.Commons;
+using StorageSystem.Order.Domain.Commons.Interfaces;
+
+namespace StorageSystem.Order.Application
+{
+    public static class ApplicationServiceRegistration
+    {
+        public static IServiceCollection AddApplicationServiceRegistration(this IServiceCollection services)
+        {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddScoped<ISessionStore, SessionStore>();
+            services.AddScoped(typeof(IEntityManager<>), typeof(EntityManager<>));
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IProductTypeService, ProductTypeService>();
+            services.AddScoped<IProductUnitService, ProductUnitService>();
+            services.AddScoped<IConversionSpecProductService, ConversionSpecProductService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IWarehouseService, WarehouseService>();
+            services.AddScoped<IWarehouseInboundService, WarehouseInboundService>();
+            services.AddScoped<ICustomerService, CustomerService>();            
+
+            return services;
+        }
+    }
+}
