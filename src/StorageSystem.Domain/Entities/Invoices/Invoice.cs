@@ -20,6 +20,7 @@ namespace StorageSystem.Domain.Entities.Invoices
         public double? Deposit { get; set; }
         public bool IsPaid { get; set; }
         public InvoiceStatus Status { get; set; }
+        public Guid? OldInvoiceId { get; set; }
 
         #region Relationship
         public Guid? CustomerId { set; get; }
