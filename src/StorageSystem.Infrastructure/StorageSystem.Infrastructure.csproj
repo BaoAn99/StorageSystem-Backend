@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StorageSystem.Application\StorageSystem.Application.csproj" />
+    <ProjectReference Include="..\StorageSystem.EventBus\StorageSystem.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

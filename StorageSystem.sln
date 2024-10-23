@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageSystem.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject1", "tests\TestProject1\TestProject1.csproj", "{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageSystem.EventBus", "src\StorageSystem.EventBus\StorageSystem.EventBus.csproj", "{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE370C86-1F4C-4385-96F7-EC034AAB3AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +65,7 @@ Global
 		{BC906D09-45EA-4434-88D0-A9EC54FCA7B3} = {AE9D1FC1-81EF-4897-9E95-45598DBACA39}
 		{1CFCB579-FFDB-49BA-AF0F-0E1DC1E24244} = {AE9D1FC1-81EF-4897-9E95-45598DBACA39}
 		{AE370C86-1F4C-4385-96F7-EC034AAB3AB5} = {3D070F7D-A3FE-4516-94F6-06964591EE64}
+		{5E5065A4-E5C2-4CA6-AF87-F2F6B90725CF} = {AE9D1FC1-81EF-4897-9E95-45598DBACA39}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C90E581-8A86-497A-8429-D0ED956D6F07}

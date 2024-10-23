@@ -205,7 +205,7 @@ namespace StorageSystem.Infrastructure.Repositories.Base
                     foreach (var entityToInsert in CsvFileExtension.Import<TEntity>("D:\\Freelancer\\hai-thuan-store\\StorageSystem-Backend\\src\\StorageSystem.Api\\ProductType.csv"))
                     {
                         ++count;
-                        _dbContext = AddToContext(_dbContext, entityToInsert, count, 4900, true);
+                        _dbContext = AddToContext(_dbContext, entityToInsert, count, 100000, true);
                         //if (count % 500 == 0)
                         //{
                         //    _dbContext.Dispose();

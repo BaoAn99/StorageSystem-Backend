@@ -140,6 +140,8 @@ namespace StorageSystem.Application.Features.Services
             Console.WriteLine("Async1: " + Environment.CurrentManagedThreadId);
             await Async2();
             Console.WriteLine("Async1: " + Environment.CurrentManagedThreadId);
+            await Async2();
+            Console.WriteLine("Async1: " + Environment.CurrentManagedThreadId);
         }
 
         public async Task Async2()
