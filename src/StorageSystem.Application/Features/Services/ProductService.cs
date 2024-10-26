@@ -2,6 +2,7 @@
 using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
+using StorageSystem.Application.Extensions;
 using StorageSystem.Application.Models.Products;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
@@ -107,9 +108,20 @@ namespace StorageSystem.Application.Features.Services
             return false;
         }
 
-        public Task<Guid> UpdateProductAsync(ProductUpdateDto model)
+        public async Task<Guid> UpdateProductAsync(ProductUpdateDto model, Guid id)
         {
-            throw new NotImplementedException();
+            var product =  _productRepository.FindByCondition(p => p.Id.Equals(id),false, p => p.Images).FirstOrDefault();
+            var p = _mapper.Map(model,product);
+            if (product == null)
+            {
+                throw new NotImplementedException("product id wrong");
+            }
+            var a = EntityDiffer<Product>.GetDifferences(p, product);
+            _productManager.SetUpdating(p);
+            // sau khi kiểm tra xong và thay đổi cập nhật thì cập nhật
+            await _productRepository.UpdateAsync(p);
+            await _unitOfWork.CommitAsync();
+            return product.Id;
         }
     }
 }

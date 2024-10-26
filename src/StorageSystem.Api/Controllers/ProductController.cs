@@ -23,10 +23,10 @@ namespace StorageSystem.Api.Controllers
             return Ok(productId);
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update([FromBody] ProductUpdateDto model)
+        [HttpPatch("Update/{id}")]
+        public async Task<IActionResult> Update([FromBody] ProductUpdateDto model, Guid id)
         {
-            var productId = await _productService.UpdateProductAsync(model);
+            var productId = await _productService.UpdateProductAsync(model, id);
             return Ok(productId);
         }
 

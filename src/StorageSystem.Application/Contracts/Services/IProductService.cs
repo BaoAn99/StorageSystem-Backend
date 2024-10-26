@@ -6,7 +6,7 @@ namespace StorageSystem.Application.Contracts.Services
     public interface IProductService
     {
         Task<Guid> CreateProductAsync(ProductCreateDto model);
-        Task<Guid> UpdateProductAsync(ProductUpdateDto model);
+        Task<Guid> UpdateProductAsync(ProductUpdateDto model, Guid id);
         Task<bool> DeleteProductAsync(Guid id);
         Task<bool> SoftDeleteProductAsync(Guid id);
         Task<ProductForView> GetProductByIdAsync(Guid id);
