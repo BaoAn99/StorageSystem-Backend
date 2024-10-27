@@ -13,7 +13,7 @@ namespace StorageSystem.Domain.Commons
 
         public void SetCreating(TEntity entity)
         {
-            entity.CreatedAt = DateTimeOffset.Now;
+            entity.CreatedAt = DateTime.UtcNow;
             entity.CreatedByUserId = _sessionStore.GetUserId();
             entity.CreatedByName = _sessionStore.GetUserName();
             entity.IsDeleted = false;
@@ -22,7 +22,7 @@ namespace StorageSystem.Domain.Commons
 
         public void SetUpdating(TEntity entity)
         {
-            entity.UpdatedAt = DateTimeOffset.Now;
+            entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedByUserId = _sessionStore.GetUserId();
             entity.UpdatedByName = _sessionStore.GetUserName();
         }

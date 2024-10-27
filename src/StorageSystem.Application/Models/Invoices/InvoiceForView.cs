@@ -5,7 +5,7 @@ namespace StorageSystem.Application.Models.Invoices
     public class InvoiceForView
     {
         public Guid Id { get; set; }
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
         public double Amount { get; set; }
         public double NetAmount { get; set; }
         public double? DiscountAmount { get; set; }

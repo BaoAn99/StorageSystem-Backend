@@ -10,7 +10,7 @@ namespace StorageSystem.Domain.Entities.Customers
         public string Phone { get; set; }
         public string Description { get; set; }
         public Gender? Gender { get; set; }
-        public DateTimeOffset? Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         #region Relationship
         //public Guid? OrderId { get; set; }

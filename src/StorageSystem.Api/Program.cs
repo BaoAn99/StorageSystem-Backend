@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 var services = builder.Services;
 
-services.AddSqlDbContext<ApplicationDbContext>(connection)
+services.AddPostgresDbContext<ApplicationDbContext>(connection)
     .AddDbContextFactory<ApplicationDbContext>();
 
 // Add service application

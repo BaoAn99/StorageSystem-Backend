@@ -6,7 +6,7 @@ namespace StorageSystem.Domain.Entities.Inventories
     public class Inventory : EntityAuditBase
     {
         public string Batch { get; set; }
-        public DateTimeOffset PeriodDate { get; set; }
+        public DateTime PeriodDate { get; set; }
         public Guid UnitId { get; set; }
         public string UnitName { get; set; }
         public Guid ProductId { get; set; }

@@ -173,10 +173,7 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public IQueryable<TEntity> GetAll(QueryParams queryParams)
         {
             var query = GetAll();
-
-            Expression<Func<TEntity, bool>> predicate = null;
-            query.Where(p => p.Id == null);
-            return query;
+            return query.Build(queryParams);
         }
 
         public IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)

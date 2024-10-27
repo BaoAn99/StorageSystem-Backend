@@ -5,6 +5,7 @@ using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Products;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
+using StorageSystem.Domain.Entities.PackageSpecs;
 using StorageSystem.Domain.Entities.Products;
 
 namespace StorageSystem.Application.Features.Services
@@ -14,15 +15,17 @@ namespace StorageSystem.Application.Features.Services
         private readonly IEntityManager<Product> _productManager;
         private readonly IEntityManager<ProductImage> _productImageManager;
         private readonly IProductRepository<Product, Guid> _productRepository;
+        private readonly IRepositoryBaseAsync<ConversionSpecProduct, Guid> _conversionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper)
+        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionRepository)
         {
             _productManager = productManager;
             _productImageManager = productImageManager;
             _unitOfWork = unitOfWork;
             _productRepository = productRepository;
             _mapper = mapper;
+            _conversionRepository = conversionRepository;
         }
 
         public async Task<Guid> CreateProductAsync(ProductCreateDto model)
@@ -66,8 +69,18 @@ namespace StorageSystem.Application.Features.Services
         public IEnumerable<ProductForView> GetAllProducts(QueryParams queryParams)
         {
             var products = _productRepository.GetAll(queryParams).ToList();
-            IEnumerable<ProductForView> productForView = _mapper.Map<List<ProductForView>>(products);
-
+            List<ProductForView> productForView = _mapper.Map<List<ProductForView>>(products);
+            foreach (var item in productForView)
+            {
+                var a = new ConvertUnitProductForView();
+                var b = products.FirstOrDefault(x => x.Id == item.Id);
+                if (b != null && b.ConversionSpecProducts.Any())
+                {
+                    a.UnitId = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitId;
+                    a.UnitName = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitName;
+                    item.Units.Add(a);
+                }
+            }
             return productForView;
         }
 
