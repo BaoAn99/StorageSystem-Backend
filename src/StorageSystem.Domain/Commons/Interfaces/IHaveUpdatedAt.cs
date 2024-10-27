@@ -2,6 +2,6 @@
 {
     public interface IHaveUpdatedAt
     {
-        DateTimeOffset? UpdatedAt { get; set;}
+        DateTime? UpdatedAt { get; set;}
     }
 }

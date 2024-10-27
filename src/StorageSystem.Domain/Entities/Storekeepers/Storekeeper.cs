@@ -10,7 +10,7 @@ namespace StorageSystem.Domain.Entities.Storekeepers
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
-        public DateTimeOffset Birthdate { get; set; }
+        public DateTime Birthdate { get; set; }
         public string IDCard { get; set; }
         public Gender Gender { get; set; }
         public string Description { get; set; }

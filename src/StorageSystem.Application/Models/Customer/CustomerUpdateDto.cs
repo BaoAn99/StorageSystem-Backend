@@ -9,6 +9,6 @@ namespace StorageSystem.Application.Models.Customer
         public string Phone { get; set; }
         public string Description { get; set; }
         public Gender? Gender { get; set; }
-        public DateTimeOffset? Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
     }
 }

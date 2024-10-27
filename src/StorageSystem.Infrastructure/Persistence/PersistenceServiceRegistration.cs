@@ -49,6 +49,15 @@ namespace StorageSystem.Infrastructure.Persistence
             return services;
         }
 
+        public static IServiceCollection AddPostgresDbContext<TDbContext>(this IServiceCollection services, string connectionString) where TDbContext : DbContext
+        {
+            services.AddDbContext<TDbContext>(delegate (DbContextOptionsBuilder options)
+            {
+                options.UseNpgsql(connectionString).UseLazyLoadingProxies();
+            });
+            return services;
+        }
+
         public static IServiceCollection AddDbContextFactory<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
         {
             services.AddTransient<IDbContextFactory, DbContextFactory<TDbContext>>();

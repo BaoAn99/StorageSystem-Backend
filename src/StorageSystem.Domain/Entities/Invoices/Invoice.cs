@@ -12,7 +12,7 @@ namespace StorageSystem.Domain.Entities.Invoices
         // public string CustomerEmail { get; set; }
         public string CustomerPhone { get; set; }
         public string CustomerAddress { get; set; }
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
         public double Amount { get; set; }
         public double NetAmount { get; set; }
         public double? DiscountAmount { get; set; }

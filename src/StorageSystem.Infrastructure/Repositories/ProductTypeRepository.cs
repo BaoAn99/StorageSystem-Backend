@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StorageSystem.Application.Contracts.Repositories;
+﻿using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Infrastructure.Persistence.Contracts.Interfaces;
 using StorageSystem.Infrastructure.Repositories.Base;
