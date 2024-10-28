@@ -2,38 +2,38 @@ version: '3.8'
 
 services:
   webapi:
-    #image: your-app-image:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: khuongpham1412/hai-thuan-store:v1
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     container_name: webapi
     ports:
       - "8888:8888"
-    depends_on:
-      - sqlserverdb
-    networks:
-      - application-network
+    # depends_on:
+    #   - sqlserverdb
+    # networks:
+    #   - application-network
     volumes:
       - webapi-data:/app/data
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=sqlserverdb;Database=StorageSystem;User=sa;Password=r00t.R00T"
+      ConnectionStrings__DefaultConnection: "Host=pg-1fc4a6b5-phamduykhuong1412-5b27.c.aivencloud.com;Port=28894;Database=StorageSystem;User ID=avnadmin;Password=AVNS_5BIFs2bNd0zYoX2ggTP;"
 
-  sqlserverdb:
-    image: mcr.microsoft.com/azure-sql-edge:latest
-    container_name: sqlserverdb
-    cap_add: [ 'SYS_PTRACE' ]
-    environment:
-      - "ACCEPT_EULA=1"
-      - "MSSQL_USER=sa"
-      - "MSSQL_SA_PASSWORD=r00t.R00T"
-    ports:
-      - "1435:1433"
-    networks:
-      - application-network
-    restart: always
-    volumes:
-      - "mssql-azuresql-edge-data:/var/opt/mssql"
+  # sqlserverdb:
+  #   image: mcr.microsoft.com/azure-sql-edge:latest
+  #   container_name: sqlserverdb
+  #   cap_add: [ 'SYS_PTRACE' ]
+  #   environment:
+  #     - "ACCEPT_EULA=1"
+  #     - "MSSQL_USER=sa"
+  #     - "MSSQL_SA_PASSWORD=r00t.R00T"
+  #   ports:
+  #     - "1435:1433"
+  #   networks:
+  #     - application-network
+  #   restart: always
+  #   volumes:
+  #     - "mssql-azuresql-edge-data:/var/opt/mssql"
 
   # elasticsearch:
   #   container_name: elasticsearch
@@ -62,11 +62,11 @@ services:
   #   depends_on:
   #     - elasticsearch
 
-networks:
-  application-network:
-    driver: bridge
+# networks:
+#   application-network:
+#     driver: bridge
     
 volumes:
   webapi-data:
-  mssql-azuresql-edge-data:
-  es-data:
+  # mssql-azuresql-edge-data:
+  # es-data:
