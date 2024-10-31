@@ -61,8 +61,6 @@ namespace StorageSystem.Application.Features.Services
             return false;
         }
 
-        public IEnumerable<ProductTypeForView> GetAllProductTypes() => throw new NotImplementedException();
-
         public Task<ProductTypeForView> GetProductTypeByIdAsync(Guid id)
         {
             throw new NotImplementedException();
@@ -96,12 +94,16 @@ namespace StorageSystem.Application.Features.Services
 
         public IEnumerable<ProductTypeForView> GetAllProductTypes(QueryParams queryParams)
         {
-            throw new NotImplementedException();
+            var types = _productTypeRepository.GetAll(queryParams).ToList();
+            IEnumerable<ProductTypeForView> productTypeForView = _mapper.Map<IEnumerable<ProductTypeForView>>(types);
+            return productTypeForView;
         }
 
         public IEnumerable<ProductTypeForView> GetAllProductTypesWithoutPaging(QueryParamsWithoutPaging queryParams)
         {
-            throw new NotImplementedException();
+            var types = _productTypeRepository.GetAllWithoutPaging(queryParams).ToList();
+            IEnumerable<ProductTypeForView> productTypeForView = _mapper.Map<IEnumerable<ProductTypeForView>>(types);
+            return productTypeForView;
         }
     }
 }

@@ -3,17 +3,17 @@
     public class ProductForView
     {
         public Guid Id { get; set; }
-        public string Name { set; get; }
-        public double Price { set; get; }
-        public string? Description { set; get; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public string? Description { get; set; }
         public string ThumbnailImage { get; set; }
 
         #region Relationship
         // public Guid TypeId { set; get; }
-        public Guid SmallestUnitId { set; get; }
-        public string SmallestUnitName { set; get; }
+        public Guid SmallestUnitId { get; set;}
+        public string SmallestUnitName { get; set; }
         public List<ConvertUnitProductForView> Units { get; set; }
-        public List<ProductImageForView> Images { set; get; }
+        public List<ProductImageForView> Images { get; set; }
         #endregion
     }
 

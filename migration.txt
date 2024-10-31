@@ -4,3 +4,14 @@ dotnet ef database update --context ApplicationDbContext --project StorageSystem
 
 ----- Revert Migration History ------
 dotnet ef database update 20241003220408_Intitial_App_v1_0_1 --context ApplicationDbContext --project StorageSystem.Infrastructure --startup-project StorageSystem.Api
+
+
+
+
+
+
+docker tag [OPTIONS] IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]
+docker push NAME[:TAG]
+Example:
+docker tag 518a41981a6a khuongpham1412/hai-thuan-store
+docker push khuongpham1412/hai-thuan-store

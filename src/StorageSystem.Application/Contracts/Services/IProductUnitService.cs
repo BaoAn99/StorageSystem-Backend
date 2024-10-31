@@ -1,4 +1,5 @@
 ﻿using StorageSystem.Application.Models.ProductUnits;
+using StorageSystem.Domain.Commons;
 
 namespace StorageSystem.Application.Contracts.Services
 {
@@ -9,6 +10,7 @@ namespace StorageSystem.Application.Contracts.Services
         Task<bool> DeleteProductUnitAsync(Guid id);
         Task<bool> SoftDeleteProductUnitAsync(Guid id);
         Task<ProductUnitForView> GetProductUnitByIdAsync(Guid id);
-        IEnumerable<ProductUnitForView> GetAllProductUnits();
+        IEnumerable<ProductUnitForView> GetAllProductUnits(QueryParams queryParams);
+        IEnumerable<ProductUnitForView> GetAllProductUnitsWithoutPaging(QueryParamsWithoutPaging queryParams);
     }
 }

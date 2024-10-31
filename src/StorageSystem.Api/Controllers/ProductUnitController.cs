@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.ProductUnits;
+using StorageSystem.Domain.Commons;
 
 namespace StorageSystem.Api.Controllers
 {
@@ -51,15 +52,20 @@ namespace StorageSystem.Api.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var productUnit = await _productUnitService.GetProductUnitByIdAsync(id);
-
             return Ok(productUnit);
         }
 
         [HttpPost("GetAll")]
-        public ActionResult GetAll()
+        public ActionResult GetAll(QueryParams queryParams)
         {
-            var productUnits = _productUnitService.GetAllProductUnits();
-
+            var productUnits = _productUnitService.GetAllProductUnits(queryParams);
+            return Ok(productUnits);
+        }
+        
+        [HttpPost("GetAllWithoutPaging")]
+        public ActionResult GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            var productUnits = _productUnitService.GetAllProductUnitsWithoutPaging(queryParams);
             return Ok(productUnits);
         }
     }

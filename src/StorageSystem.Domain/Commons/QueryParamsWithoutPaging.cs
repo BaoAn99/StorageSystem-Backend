@@ -1,6 +1,4 @@
-﻿using StorageSystem.Domain.Commons.Interfaces;
-
-namespace StorageSystem.Domain.Commons
+﻿namespace StorageSystem.Domain.Commons
 {
     public class QueryParamsWithoutPaging
     {
