@@ -57,5 +57,12 @@ namespace StorageSystem.Api.Controllers
             var productTypes = _productTypeService.GetAllProductTypes(queryParams);
             return Ok(productTypes);
         }
+        
+        [HttpPost("GetAllWithoutPaging")]
+        public ActionResult GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            var productTypes = _productTypeService.GetAllProductTypesWithoutPaging(queryParams);
+            return Ok(productTypes);
+        }
     }
 }

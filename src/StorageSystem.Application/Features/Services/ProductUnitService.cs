@@ -3,6 +3,7 @@ using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.ProductUnits;
+using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.Products;
 
@@ -58,14 +59,23 @@ namespace StorageSystem.Application.Features.Services
             return false;
         }
 
-        public IEnumerable<ProductUnitForView> GetAllProductUnits()
+        public Task<ProductUnitForView> GetProductUnitByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ProductUnitForView> GetProductUnitByIdAsync(Guid id)
+        public IEnumerable<ProductUnitForView> GetAllProductUnits(QueryParams queryParams)
         {
-            throw new NotImplementedException();
+            var units = _productUnitRepository.GetAll(queryParams).ToList();
+            IEnumerable<ProductUnitForView> productUnitForView = _mapper.Map<IEnumerable<ProductUnitForView>>(units);
+            return productUnitForView;
+        }
+
+        public IEnumerable<ProductUnitForView> GetAllProductUnitsWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            var units = _productUnitRepository.GetAllWithoutPaging(queryParams).ToList();
+            IEnumerable<ProductUnitForView> productUnitForView = _mapper.Map<IEnumerable<ProductUnitForView>>(units);
+            return productUnitForView;
         }
 
         public async Task<bool> SoftDeleteProductUnitAsync(Guid id)

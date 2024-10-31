@@ -145,7 +145,6 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public Task<TKey> UpdateAsync(TEntity entity)
         {
             //if (_dbContext.Entry(entity).State == EntityState.Unchanged) return Task.CompletedTask;
-
             //TEntity exist = _dbContext.Set<TEntity>().Find(entity.Id);
             //_dbContext.Entry(exist).CurrentValues.SetValues(entity);
             _dbContext.Set<TEntity>().Update(entity);
@@ -179,8 +178,7 @@ namespace StorageSystem.Infrastructure.Repositories.Base
         public IQueryable<TEntity> GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
         {
             var query = GetAll();
-
-            return query;
+            return query.BuildQueryWithoutPaging(queryParams);
         }
 
         //public int SaveChanges() => _unitOfWork.Commit();
