@@ -71,17 +71,6 @@ namespace StorageSystem.Application.Features.Services
         {
             var products = _productRepository.GetAll(queryParams).ToList();
             IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
-            foreach (var item in productForView)
-            {
-                var a = new ConvertUnitProductForView();
-                var b = products.FirstOrDefault(x => x.Id == item.Id);
-                if (b != null && b.ConversionSpecProducts.Any())
-                {
-                    a.UnitId = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitId;
-                    a.UnitName = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitName;
-                    item.Units.Add(a);
-                }
-            }
             return productForView;
         }
 
@@ -89,17 +78,6 @@ namespace StorageSystem.Application.Features.Services
         {
             var products = _productRepository.GetAllWithoutPaging(queryParams).ToList();
             IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
-            foreach (var item in productForView)
-            {
-                var a = new ConvertUnitProductForView();
-                var b = products.FirstOrDefault(x => x.Id == item.Id);
-                if (b != null && b.ConversionSpecProducts.Any())
-                {
-                    a.UnitId = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitId;
-                    a.UnitName = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitName;
-                    item.Units.Add(a);
-                }
-            }
             return productForView;
         }
 

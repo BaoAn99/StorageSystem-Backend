@@ -13,7 +13,7 @@ namespace StorageSystem.Application.MappingProfiles.ConversionSpecs
 
         private void Init()
         {
-            CreateMap<ConversionSpecProduct, ConvertUnitProductForView>();
+            //CreateMap<ConversionSpecProduct, ConvertUnitProductForView>();
         }
     }
 }
