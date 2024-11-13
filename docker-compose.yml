@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   webapi:
-    image: khuongpham1412/hai-thuan-store:v2
+    image: khuongpham1412/hai-thuan-store:v3
     # build:
     #   context: .
     #   dockerfile: Dockerfile
