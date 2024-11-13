@@ -3,6 +3,7 @@ using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Products;
+using StorageSystem.Application.Models.ProductTypes;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.PackageSpecs;
@@ -69,7 +70,7 @@ namespace StorageSystem.Application.Features.Services
         public IEnumerable<ProductForView> GetAllProducts(QueryParams queryParams)
         {
             var products = _productRepository.GetAll(queryParams).ToList();
-            List<ProductForView> productForView = _mapper.Map<List<ProductForView>>(products);
+            IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
             foreach (var item in productForView)
             {
                 var a = new ConvertUnitProductForView();
@@ -86,7 +87,20 @@ namespace StorageSystem.Application.Features.Services
 
         public IEnumerable<ProductForView> GetAllProductsWithoutPaging(QueryParamsWithoutPaging queryParams)
         {
-            throw new NotImplementedException();
+            var products = _productRepository.GetAllWithoutPaging(queryParams).ToList();
+            IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
+            foreach (var item in productForView)
+            {
+                var a = new ConvertUnitProductForView();
+                var b = products.FirstOrDefault(x => x.Id == item.Id);
+                if (b != null && b.ConversionSpecProducts.Any())
+                {
+                    a.UnitId = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitId;
+                    a.UnitName = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitName;
+                    item.Units.Add(a);
+                }
+            }
+            return productForView;
         }
 
         public Task<ProductForView> GetProductByIdAsync(Guid id)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StorageSystem.Application.Contracts.Services;
+using StorageSystem.Application.Features.Services;
 using StorageSystem.Application.Models.Products;
 using StorageSystem.Domain.Commons;
 
@@ -56,6 +57,13 @@ namespace StorageSystem.Api.Controllers
         {
             var products = _productService.GetAllProducts(queryParams);
             return Ok(products);
+        }
+
+        [HttpPost("GetAllWithoutPaging")]
+        public ActionResult GetAllWithoutPaging(QueryParamsWithoutPaging queryParams)
+        {
+            var productTypes = _productService.GetAllProductsWithoutPaging(queryParams);
+            return Ok(productTypes);
         }
     }
 }
