@@ -25,4 +25,12 @@
         //public Guid ProductId { get; set; }
         #endregion
     }
+
+    public class CalculatePriceWithUnitConversionDto
+    {
+        public Guid UnitId { set; get; }
+        public Guid ProductId { set; get; }
+        public int Quantity { set; get; }
+        //public double Price { set; get; }
+    }
 }

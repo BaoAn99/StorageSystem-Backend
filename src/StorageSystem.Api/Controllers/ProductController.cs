@@ -65,5 +65,12 @@ namespace StorageSystem.Api.Controllers
             var productTypes = _productService.GetAllProductsWithoutPaging(queryParams);
             return Ok(productTypes);
         }
+
+        [HttpPost("CalculatePriceWithUnitConversion")]
+        public async Task<IActionResult> CalculatePriceWithUnitConversion(CalculatePriceWithUnitConversionDto model)
+        {
+            var price = await _productService.CalculatePriceWithUnitConversion(model);
+            return Ok(price);
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace StorageSystem.Application.Features.Services
                     x => (x.UnitId == model.UnitId && x.ConvertUnitId == model.ConvertUnitId)
                         || (x.UnitId == model.ConvertUnitId && x.ConvertUnitId == model.UnitId))) throw new ArgumentException("");
 
-                var conversionSpecProduct = _mapper.Map<ConversionSpecProduct>(product);
+                var conversionSpecProduct = _mapper.Map<ConversionSpecProduct>(model);
                 _entityManager.SetCreating(conversionSpecProduct);
                 await _repository.CreateAsync(conversionSpecProduct);
 

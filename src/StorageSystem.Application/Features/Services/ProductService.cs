@@ -3,7 +3,6 @@ using StorageSystem.Application.Contracts.Repositories;
 using StorageSystem.Application.Contracts.Repositories.Base;
 using StorageSystem.Application.Contracts.Services;
 using StorageSystem.Application.Models.Products;
-using StorageSystem.Application.Models.ProductTypes;
 using StorageSystem.Domain.Commons;
 using StorageSystem.Domain.Commons.Interfaces;
 using StorageSystem.Domain.Entities.PackageSpecs;
@@ -19,7 +18,8 @@ namespace StorageSystem.Application.Features.Services
         private readonly IRepositoryBaseAsync<ConversionSpecProduct, Guid> _conversionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionRepository)
+        private readonly IRepositoryBaseAsync<ConversionSpecProduct, Guid> _conversionSpecProductRepository;
+        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionRepository, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionSpecProductRepository)
         {
             _productManager = productManager;
             _productImageManager = productImageManager;
@@ -27,6 +27,33 @@ namespace StorageSystem.Application.Features.Services
             _productRepository = productRepository;
             _mapper = mapper;
             _conversionRepository = conversionRepository;
+            _conversionSpecProductRepository = conversionSpecProductRepository;
+        }
+
+        public async Task<double> CalculatePriceWithUnitConversion(CalculatePriceWithUnitConversionDto model)
+        {
+            var unitIdReq = model.UnitId;
+            var quantityReq = model.Quantity;
+            var product = await _productRepository.GetByIdAsync(model.ProductId);
+            if (product != null)
+            {
+                if (product.SmallestUnitId != unitIdReq)
+                {
+                    do
+                    {
+                        var packageSpecConsumable = _conversionSpecProductRepository.FindByCondition(x => x.ProductId == model.ProductId && x.UnitId == unitIdReq).FirstOrDefault();
+                        if (packageSpecConsumable == null) throw new AggregateException("Invalid UnitId!");
+
+                        unitIdReq = packageSpecConsumable.ConvertUnitId;
+                        quantityReq = quantityReq * packageSpecConsumable.Quantity;
+                    } while (unitIdReq != product.SmallestUnitId);
+                    return quantityReq * product.Price;
+                }
+                
+                return product.Price;
+            }
+
+            return -1;
         }
 
         public async Task<Guid> CreateProductAsync(ProductCreateDto model)
