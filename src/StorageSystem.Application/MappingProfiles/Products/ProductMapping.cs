@@ -16,8 +16,8 @@ namespace StorageSystem.Application.MappingProfiles.Products
             CreateMap<ProductCreateDto, Product>();
             CreateMap<ProductUpdateDto, Product>();
             CreateMap<Product, ProductForView>()
-                .ForMember(x => x.SmallestUnitName, src => src.MapFrom(x => x.SmallestUnit.Name))
-                .ForMember(x => x.Units, src => src.MapFrom(x => x.ConversionSpecProducts));
+                .ForMember(x => x.SmallestUnitName, src => src.MapFrom(x => x.SmallestUnit.Name));
+                //.ForMember(x => x.Units, src => src.MapFrom(x => x.ConversionSpecProducts));
 
             CreateMap<ProductImageCreateDto, ProductImage>();
             CreateMap<ProductImageUpdateDto, ProductImage>();

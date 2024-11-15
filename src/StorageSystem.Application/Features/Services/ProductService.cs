@@ -18,7 +18,8 @@ namespace StorageSystem.Application.Features.Services
         private readonly IRepositoryBaseAsync<ConversionSpecProduct, Guid> _conversionRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionRepository)
+        private readonly IRepositoryBaseAsync<ConversionSpecProduct, Guid> _conversionSpecProductRepository;
+        public ProductService(IEntityManager<Product> productManager, IEntityManager<ProductImage> productImageManager, IUnitOfWork unitOfWork, IProductRepository<Product, Guid> productRepository, IMapper mapper, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionRepository, IRepositoryBaseAsync<ConversionSpecProduct, Guid> conversionSpecProductRepository)
         {
             _productManager = productManager;
             _productImageManager = productImageManager;
@@ -26,6 +27,33 @@ namespace StorageSystem.Application.Features.Services
             _productRepository = productRepository;
             _mapper = mapper;
             _conversionRepository = conversionRepository;
+            _conversionSpecProductRepository = conversionSpecProductRepository;
+        }
+
+        public async Task<double> CalculatePriceWithUnitConversion(CalculatePriceWithUnitConversionDto model)
+        {
+            var unitIdReq = model.UnitId;
+            var quantityReq = model.Quantity;
+            var product = await _productRepository.GetByIdAsync(model.ProductId);
+            if (product != null)
+            {
+                if (product.SmallestUnitId != unitIdReq)
+                {
+                    do
+                    {
+                        var packageSpecConsumable = _conversionSpecProductRepository.FindByCondition(x => x.ProductId == model.ProductId && x.UnitId == unitIdReq).FirstOrDefault();
+                        if (packageSpecConsumable == null) throw new AggregateException("Invalid UnitId!");
+
+                        unitIdReq = packageSpecConsumable.ConvertUnitId;
+                        quantityReq = quantityReq * packageSpecConsumable.Quantity;
+                    } while (unitIdReq != product.SmallestUnitId);
+                    return quantityReq * product.Price;
+                }
+                
+                return product.Price;
+            }
+
+            return -1;
         }
 
         public async Task<Guid> CreateProductAsync(ProductCreateDto model)
@@ -69,24 +97,15 @@ namespace StorageSystem.Application.Features.Services
         public IEnumerable<ProductForView> GetAllProducts(QueryParams queryParams)
         {
             var products = _productRepository.GetAll(queryParams).ToList();
-            List<ProductForView> productForView = _mapper.Map<List<ProductForView>>(products);
-            foreach (var item in productForView)
-            {
-                var a = new ConvertUnitProductForView();
-                var b = products.FirstOrDefault(x => x.Id == item.Id);
-                if (b != null && b.ConversionSpecProducts.Any())
-                {
-                    a.UnitId = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitId;
-                    a.UnitName = b.ConversionSpecProducts[b.ConversionSpecProducts.Count - 1].ConvertUnitName;
-                    item.Units.Add(a);
-                }
-            }
+            IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
             return productForView;
         }
 
         public IEnumerable<ProductForView> GetAllProductsWithoutPaging(QueryParamsWithoutPaging queryParams)
         {
-            throw new NotImplementedException();
+            var products = _productRepository.GetAllWithoutPaging(queryParams).ToList();
+            IEnumerable<ProductForView> productForView = _mapper.Map<IEnumerable<ProductForView>>(products);
+            return productForView;
         }
 
         public Task<ProductForView> GetProductByIdAsync(Guid id)

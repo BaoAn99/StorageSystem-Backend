@@ -1,5 +1,4 @@
 ﻿using StorageSystem.Domain.Commons;
-using StorageSystem.Domain.Entities.PackageSpecs;
 using StorageSystem.Domain.Entities.Suppliers;
 
 namespace StorageSystem.Domain.Entities.Products
@@ -20,7 +19,7 @@ namespace StorageSystem.Domain.Entities.Products
         public Guid SmallestUnitId { set; get; }
         public virtual ProductUnit SmallestUnit { get; set; }
         public virtual ICollection<ProductImage> Images { get; set; }
-        public virtual List<ConversionSpecProduct> ConversionSpecProducts { get; set; }
+        //public virtual List<ConversionSpecProduct> ConversionSpecProducts { get; set; }
         #endregion
     }
 

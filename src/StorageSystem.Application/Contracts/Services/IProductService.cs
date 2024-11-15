@@ -12,5 +12,6 @@ namespace StorageSystem.Application.Contracts.Services
         Task<ProductForView> GetProductByIdAsync(Guid id);
         IEnumerable<ProductForView> GetAllProducts(QueryParams queryParams);
         IEnumerable<ProductForView> GetAllProductsWithoutPaging(QueryParamsWithoutPaging queryParams);
+        Task<double> CalculatePriceWithUnitConversion(CalculatePriceWithUnitConversionDto model);
     }
 }
